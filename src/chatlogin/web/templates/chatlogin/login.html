@@ -8,29 +8,37 @@
   {% if stylesheet_url %}<link rel="stylesheet" href="{{ stylesheet_url }}">{% endif %}
   <script defer src="{{ assets_path }}/login.js"></script>
 </head>
-<body>
-  <main class="chatlogin" data-palette="{{ palette }}" data-layout="{{ layout }}" data-login-url="{{ login_url }}" data-next="{{ next }}">
+<body class="chatlogin-page">
+  <main class="chatlogin" data-palette="{{ palette }}" data-layout="{{ layout }}" data-appearance="{{ appearance }}" data-login-url="{{ login_url }}" data-session-url="{{ session_url }}" data-next="{{ next }}">
     <section class="chatlogin__panel">
-      {% block branding %}
-      <p class="chatlogin__eyebrow">ChatArch login</p>
-      <h1>{{ title }}</h1>
-      <p class="chatlogin__subtitle">{{ subtitle }}</p>
-      {% endblock %}
-      {% block form %}
-      <form class="chatlogin__form" method="post" action="{{ login_url }}">
-        <input type="hidden" name="next" value="{{ next }}">
-        <label>
-          <span>账号</span>
-          <input name="username" autocomplete="username" required maxlength="256">
-        </label>
-        <label>
-          <span>密码</span>
-          <input name="password" type="password" autocomplete="current-password" required maxlength="1024">
-        </label>
-        <button type="submit">登录</button>
-        <p class="chatlogin__status" role="status" aria-live="polite"></p>
-      </form>
-      {% endblock %}
+      <div class="chatlogin__branding">
+        {% block branding %}
+        <p class="chatlogin__eyebrow">欢迎回来</p>
+        <h1>{{ title }}</h1>
+        <p class="chatlogin__subtitle">{{ subtitle }}</p>
+        {% endblock %}
+      </div>
+      <div class="chatlogin__form-panel">
+        {% block form %}
+        <form class="chatlogin__form" method="post" action="{{ login_url }}">
+          <input type="hidden" name="next" value="{{ next }}">
+          <label>
+            <span>账号</span>
+            <input name="username" autocomplete="username" required maxlength="256">
+          </label>
+          <label>
+            <span>密码</span>
+            <input name="password" type="password" autocomplete="current-password" required maxlength="1024">
+          </label>
+          <button type="submit">登录</button>
+          <p class="chatlogin__status" role="status" aria-live="polite" aria-atomic="true"></p>
+        </form>
+        <noscript><p>请启用 JavaScript 后登录。</p></noscript>
+        {% endblock %}
+        {% block guest %}
+        {% if guest_url %}<a class="chatlogin__guest" href="{{ guest_url }}">{{ guest_label }}</a>{% endif %}
+        {% endblock %}
+      </div>
     </section>
   </main>
 </body>
