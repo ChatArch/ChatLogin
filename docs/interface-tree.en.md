@@ -87,7 +87,7 @@ Host templates in `template_dirs` take precedence over packaged templates. A hos
 ## Minimal Host Backend
 
 ```python
-from chatlogin import CallbackBackend, Principal
+from chatlogin import CallbackBackend, Principal, Role, verify_pbkdf2
 
 def authenticate(username: str, password: str) -> Principal | None:
     row = my_user_database.find(username)

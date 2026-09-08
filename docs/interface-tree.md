@@ -87,7 +87,7 @@ chatlogin.ui
 ## 最小后端接入
 
 ```python
-from chatlogin import CallbackBackend, Principal
+from chatlogin import CallbackBackend, Principal, Role, verify_pbkdf2
 
 def authenticate(username: str, password: str) -> Principal | None:
     row = my_user_database.find(username)
