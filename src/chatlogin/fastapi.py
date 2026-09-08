@@ -98,14 +98,24 @@ class FastAPIAuth:
 
     def _check_host(self, request: Request) -> None:
         hosts = request.headers.getlist("host")
-        if len(hosts) != 1 or hosts[0].lower() != self.host:
+        try:
+            host_origin = _validated_origin(
+                f"{urlsplit(self.origin).scheme}://{hosts[0]}", allow_trailing_slash=False,
+            ) if len(hosts) == 1 else None
+        except ValueError:
+            host_origin = None
+        if host_origin != self.origin:
             raise _http(status_code=400, detail="Invalid Host header")
 
     def _check_same_origin(self, request: Request, *, native_login: bool = False) -> None:
         self._check_host(request)
         origin = request.headers.get("origin")
         fetch_site = request.headers.get("sec-fetch-site")
-        if len(request.headers.getlist("origin")) == 1 and origin == self.origin and fetch_site in {None, "same-origin", "none"}:
+        try:
+            normalized_origin = _validated_origin(origin, allow_trailing_slash=False)
+        except ValueError:
+            normalized_origin = None
+        if len(request.headers.getlist("origin")) == 1 and normalized_origin == self.origin and fetch_site in {None, "same-origin", "none"}:
             return
         if (native_login and self.allow_native and origin is None
                 and self.cookie.name not in request.cookies
@@ -239,11 +249,13 @@ class FastAPIAuth:
 
     async def login_page(self, request: Request, next: str | None = None) -> HTMLResponse:
         assert self.ui is not None
+        # ASGI mount/deployment metadata is trusted; forwarded headers are not.
+        prefix = request.scope.get("root_path", "").rstrip("/") + self.prefix
         context = {
-            "login_url": f"{self.prefix}/login",
-            "session_url": f"{self.prefix}/session",
-            "logout_url": f"{self.prefix}/logout",
-            "assets_path": f"{self.prefix}/assets",
+            "login_url": f"{prefix}/login",
+            "session_url": f"{prefix}/session",
+            "logout_url": f"{prefix}/logout",
+            "assets_path": f"{prefix}/assets",
             "next": safe_next(next),
         }
         response = HTMLResponse(self.ui.render(context))
@@ -259,13 +271,14 @@ class FastAPIAuth:
         return Response(data, media_type=content_type, headers={"Cache-Control": "public, max-age=3600"})
 
 
-def _validated_origin(origin: str) -> str:
+def _validated_origin(origin: str, *, allow_trailing_slash: bool = True) -> str:
     if (not isinstance(origin, str) or not origin
             or any(ord(c) < 33 or ord(c) > 126 for c in origin)
             or any(c in origin for c in "\\?#%@")):
         raise ValueError("origin must be a concrete ASCII http(s) origin")
     parsed = urlsplit(origin)
-    if parsed.scheme not in {"http", "https"} or not parsed.netloc or parsed.path not in {"", "/"}:
+    paths = {"", "/"} if allow_trailing_slash else {""}
+    if parsed.scheme not in {"http", "https"} or not parsed.netloc or parsed.path not in paths:
         raise ValueError("origin must be an http(s) origin without path")
     if parsed.username or parsed.password or parsed.query or parsed.fragment or parsed.hostname in {None, "*"}:
         raise ValueError("origin must not contain credentials, query, fragment or wildcard host")
@@ -284,6 +297,9 @@ def _validated_origin(origin: str) -> str:
         authority += f":{port}"
     if parsed.netloc.lower() != authority:
         raise ValueError("origin authority must be canonical")
+    # Validate the supplied authority before applying browser origin equivalence.
+    if port == {"http": 80, "https": 443}[parsed.scheme]:
+        authority = authority.rsplit(":", 1)[0]
     return f"{parsed.scheme}://{authority}"
 
 
