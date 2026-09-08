@@ -1,35 +1,29 @@
 # 能力地图
 
-这个页面用于校对 `ChatLogin` 当前有哪些一等能力、哪些能力已经验证，以及哪些事情不属于当前包。
+## 已实现能力
 
-## 能力分组
-
-<div class="grid cards" markdown>
-
-- **命令行入口**
-
-    `chatlogin --help`、`chatlogin --version`、`chatlogin --tree` 和 `chatlogin --tree-brief` 是默认可验证入口。
-
-- **Python 接口**
-
-    实质能力应放到可 import 的 Python 函数、类或 service 层，而不是只写在 Click 回调里。
-
-- **配置与环境**
-
-    默认接入 ChatEnv；长期、常用、跨命令共享的配置放入 `config.py`。
-
-</div>
-
-## 当前边界
-
-| 能力 | 状态 | 说明 |
+| 能力 | 状态 | 边界 |
 | --- | --- | --- |
-| 命令行基础入口 | 已实现 | 模板生成 Click group、`--version`、ChatStyle 共享树选项和基础测试。 |
-| ChatEnv 配置提供者 | 已实现 | 默认生成 `config.py` 和 `chatenv.configs` 入口点。 |
-| 业务命令 | 未实现 | 按当前包真实需求补充，不能在模板里伪造未来命令。 |
+| 身份与授权 | 已实现 | `Principal`、`Role`、401/403、`require_role`、`require_owner`；admin 不自动绕过 owner |
+| 认证后端 | 已实现 | `PasswordBackend` 支持一个或多个显式账号；`CallbackBackend` 接入宿主用户库 |
+| 旧密码材料校验 | 已实现 | `verify_pbkdf2` 可验证宿主已有的 PBKDF2-HMAC-SHA256 salt/digest，不强制改密码 |
+| 会话 | 已实现 | opaque token、仅存 SHA-256、TTL、轮换、撤销、CSRF secret；内存 store 仅用于测试/演示 |
+| SQLite store | 已实现 | 按实例命名空间隔离，数据库文件 `0600`，新建私有目录且不 chmod 共享父目录 |
+| FastAPI adapter | 已实现（`web` extra） | 可配置前缀、cookie、Origin/Host、请求体限制、限流、JSON/headless 路由和依赖 |
+| 默认登录 UI | 已实现（`web` extra） | `indigo/forest/amber` 色系与 `card/split` 布局，包内模板/CSS/JS 可从 wheel 读取 |
+| 宿主模板覆盖 | 已实现 | 模板目录优先、区块继承、整页 renderer、本地自定义 stylesheet |
+| ChatEnv 命名空间 | 已实现 | 保留 `ChatLogin` typed profile；本版本不新增 API key 字段 |
+
+## 接入选择
+
+1. **新网站**：默认 UI + `PasswordBackend` 或宿主回调即可起步。
+2. **需要自有视觉**：保留 FastAPI adapter，替换 `LoginUI` 的模板目录、模板名或 renderer。
+3. **已有原生前端（ChatVoice）**：不传 `LoginUI`，保留原 HTML/CSS/JS 和用户库，通过 `CallbackBackend` 与 headless JSON API 复用安全后端。
 
 ## 不在当前范围
 
-- 不生成计划类占位页。
-- 不把未实现能力写成用户可执行教程。
-- 不在 README、docs、issue、PR 评论或 CI log 中输出 secret、token、cookie 或 Authorization header。
+- 不提供独立常驻登录服务、SSO、OAuth/邮箱登录、MFA 或账户管理后台。
+- 不接管会议、文件、卡片等业务数据；每个宿主继续定义资源 owner 和 policy。
+- 不把 guest 当成数据库账户；访客体验由宿主显式声明。
+- 不复制未知上游项目代码；ChatVoice 接入先提炼行为契约。
+- 不输出 secret、cookie、CSRF token、Authorization header 或生产凭据。

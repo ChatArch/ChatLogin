@@ -17,49 +17,44 @@
 
 # ChatLogin
 
-ChatLogin: ChatArch Python package scaffold; login features are not implemented yet.
+ChatLogin provides reusable login primitives for Python-backed websites. The backend owns identity, credential verification, sessions, CSRF, safe redirects, and role boundaries. The frontend can use the packaged templates, override templates/CSS, or keep the host's original HTML/JavaScript against a headless JSON API.
 
-
-Documentation entry: <https://arch.gh.wzhecnu.cn/ChatLogin/en/>
-
-Choose documentation by scenario:
+Documentation: <https://arch.gh.wzhecnu.cn/ChatLogin/en/>
 
 | Scenario | Document |
 | --- | --- |
-| Install the package, run the CLI, and confirm it works | `docs/cli-tree.en.md` |
-| Check first-class capabilities and current boundaries | `docs/capability-map.en.md` |
-| Call package behavior directly from Python | `docs/interface-tree.md` |
+| FastAPI quick start | [Interface Tree](docs/interface-tree.en.md) |
+| Default UI, overrides, and headless mode | [Capability Map](docs/capability-map.en.md) |
+| CLI version and command tree | `docs/cli-tree.en.md` |
 
-## Quick Start
+## Install
 
 ```bash
-pip install -e ".[dev]"
-chatlogin --help
-chatlogin --version
-chatlogin --tree
-chatlogin --tree-brief
-python -m pytest -q
-python -m build
+pip install "ChatLogin[web]"
 ```
 
-## CLI Contract
+The core package does not require adopting the packaged page. An existing static HTML/vanilla-JS site can mount only JSON routes and retain its current entry page and user database.
 
-This template depends on `chatstyle>=0.2.0,<0.3.0` and `chatenv>=0.2.11,<0.3.0`. New commands should prefer:
+## Boundaries
 
-- `add_tree_option()` for shared `--tree` / `--tree-brief` flags and `render_click_tree()` to render registered Click metadata.
-- `CommandSchema` / `CommandField` for inputs.
-- `add_interactive_option()` for the shared `-i/-I` switch.
-- `resolve_command_inputs()` for missing args, defaults, TTY behavior, and validation.
-- Generate `config.py` and a `chatenv.configs` entry point by default so the package is ChatEnv-discoverable; use `--without-chatenv-provider` only when ChatEnv integration is intentionally not needed.
+- `guest`, `user`, and `admin` are server-trusted identities and cannot be selected from a request body.
+- Fixed credentials, multiple accounts, and host callbacks are supported; existing PBKDF2 material can be verified without forced migration.
+- Session tokens are persisted only as SHA-256 digests, with TTL, rotation, revocation, CSRF, and instance isolation.
+- The FastAPI adapter enforces same-site Origin/Host checks, body-size limits, rate limiting, and safe local `next` values.
+- Packaged templates provide independent palettes, layouts and light/dark/system appearance. Hosts can override part or all of the page, or keep their existing HTML/JS and use headless integration.
+- Admin does not bypass resource ownership; host applications retain business-data authorization.
+- There is no default production password, standalone login microservice, SSO/OAuth, MFA, or admin console.
 
-## Layout
+## Development and Verification
 
-- `src/`: package source code
-- `tests/code-tests/`: code tests and migrated historical tests
-- `tests/cli-tests/`: real CLI tests, doc-first
-- `tests/mock-cli-tests/`: mock/fake CLI tests, doc-first
-- `docs/`: long-lived project docs built by mkdocs
+```bash
+python -m pip install -e ".[dev,docs]"
+chatlogin --version
+chatlogin --tree
+python -m pytest -q
+python -m build
+python -m twine check dist/*
+mkdocs build --strict
+```
 
-## Development Notes
-
-See `DEVELOP.md` and `AGENTS.md` before expanding the scaffold.
+A runnable FastAPI demo with a synthetic account is available in `examples/demo_fastapi.py`.

@@ -17,59 +17,44 @@
 
 # ChatLogin
 
-ChatLogin 是面向网站集成的 ChatArch Python 包。当前版本只提供标准包结构、命令行和配置扩展入口，尚未实现登录、用户管理或鉴权功能。
-
+ChatLogin 是面向 Python-backed 网站的可复用登录能力包：后端统一处理身份、认证、会话、CSRF、回跳和角色边界；前端可以使用默认模板、覆盖模板/CSS，或保留网站原有 HTML/JS 走 headless JSON API。
 
 文档入口：<https://arch.gh.wzhecnu.cn/ChatLogin/>
 
-按场景选择文档：
-
 | 场景 | 文档 |
 | --- | --- |
-| 第一次安装、运行命令行、确认包可用 | [CLI 树](docs/cli-tree.md) |
-| 校对当前包有哪些一等能力和边界 | [能力地图](docs/capability-map.md) |
-| 从 Python 代码调用包能力 | [接口树](docs/interface-tree.md) |
+| FastAPI 快速接入 | [Python 接口树](docs/interface-tree.md) |
+| 默认 UI、模板覆盖与 headless | [能力地图](docs/capability-map.md) |
+| CLI 版本和命令树 | [CLI 树](docs/cli-tree.md) |
 
-## 快速开始
-
-安装已发布的初始模板：
+## 安装
 
 ```bash
-pip install ChatLogin
-chatlogin --version
-chatlogin --tree
+pip install "ChatLogin[web]"
 ```
 
-开发安装与测试：
+核心包不要求网站采用包内页面。已有静态 HTML/原生 JS 的网站可以只挂载 JSON 路由，继续保留原登录入口和用户数据库。
+
+## 设计边界
+
+- `guest` / `user` / `admin` 是服务端可信身份，角色不能由请求体指定。
+- 固定账号、多账号和宿主回调均可；已有 PBKDF2 密码材料可验证，不强制迁移。
+- 会话 token 只以 SHA-256 摘要持久化，支持 TTL、轮换、撤销、CSRF 和实例隔离。
+- FastAPI adapter 默认同站 Origin/Host 校验、请求体大小限制、限流和安全 `next`。
+- 默认模板提供色系、布局与浅色/深色/跟随系统选项；宿主可覆盖局部或整页，也可保留原 HTML/JS 走 headless。
+- Admin 不自动绕过资源 owner；业务数据授权仍由宿主决定。
+- 不提供默认生产密码、独立登录微服务、SSO/OAuth、MFA 或账户管理后台。
+
+## 开发与验证
 
 ```bash
-pip install -e ".[dev]"
-chatlogin --help
+python -m pip install -e ".[dev,docs]"
 chatlogin --version
 chatlogin --tree
-chatlogin --tree-brief
 python -m pytest -q
 python -m build
+python -m twine check dist/*
+mkdocs build --strict
 ```
 
-## 命令行规范
-
-这个模板默认依赖 `chatstyle>=0.2.0,<0.3.0` 和 `chatenv>=0.2.11,<0.3.0`，新增命令应优先使用：
-
-- `add_tree_option()` 提供共享的 `--tree` / `--tree-brief`，`render_click_tree()` 从已注册 Click 元数据生成命令树。
-- `CommandSchema` / `CommandField` 描述输入。
-- `add_interactive_option()` 提供统一 `-i/-I`。
-- `resolve_command_inputs()` 统一缺参补问、默认值、TTY 与校验。
-- 默认生成 `config.py` 和 `chatenv.configs` 入口点，使包可被 ChatEnv 发现；只有明确不需要 ChatEnv 接入时才使用 `--without-chatenv-provider`。
-
-## 目录结构
-
-- `src/`：包源码
-- `tests/code-tests/`：代码测试和历史测试迁移
-- `tests/cli-tests/`：真实 CLI 测试，doc-first
-- `tests/mock-cli-tests/`：mock/fake CLI 测试，doc-first
-- `docs/`：长期维护文档，由 mkdocs 构建
-
-## 开发说明
-
-扩展脚手架前，先阅读 `DEVELOP.md` 和 `AGENTS.md`。
+可运行的 FastAPI 合成账号示例：`examples/demo_fastapi.py`。
