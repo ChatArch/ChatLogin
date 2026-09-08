@@ -26,6 +26,12 @@ class PasswordHash:
     digest: bytes = field(repr=False)
     iterations: int = 600_000
 
+    def __post_init__(self):
+        if (not isinstance(self.salt, bytes) or not 16 <= len(self.salt) <= 1024
+                or not isinstance(self.digest, bytes) or len(self.digest) != 32
+                or type(self.iterations) is not int or not 1 <= self.iterations <= 10_000_000):
+            raise ValueError("Invalid trusted PasswordHash configuration")
+
 
 def hash_password(password: str) -> PasswordHash:
     if not valid_credentials("account", password):
@@ -41,7 +47,7 @@ def verify_pbkdf2(password: str, salt: bytes, digest: bytes, *, iterations: int 
     """
     if not valid_credentials("account", password):
         return False
-    if not isinstance(iterations, int) or not 1 <= iterations <= 10_000_000:
+    if type(iterations) is not int or not 1 <= iterations <= 10_000_000:
         raise ValueError("Invalid trusted PBKDF2 iteration count")
     if not isinstance(salt, bytes) or not isinstance(digest, bytes) or len(digest) != 32:
         return False
@@ -82,7 +88,8 @@ class PasswordBackend:
         for username, (principal, password) in self._accounts.items():
             if not valid_credentials(username, "check") or not isinstance(password, PasswordHash):
                 raise ValueError("Invalid account configuration")
-            _checked(principal)
+            if _checked(principal) is None:
+                raise ValueError("Configured accounts require an authenticated Principal")
         self._dummy = PasswordHash(secrets.token_bytes(16), secrets.token_bytes(32))
 
     def authenticate(self, username: str, password: str) -> Principal | None:

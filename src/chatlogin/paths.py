@@ -1,6 +1,7 @@
 """Resolve owned runtime paths without creating files."""
 from dataclasses import dataclass
 from pathlib import Path
+import os
 import re
 
 
@@ -19,6 +20,13 @@ class StatePaths:
 def state_paths(instance: str, *, home: str | Path | None = None) -> StatePaths:
     from chatenv import get_paths
     validate_instance(instance)
-    root = Path(home) if home is not None else Path(get_paths().home_dir)
+    selected = home if home is not None else get_paths().home_dir
+    expanded = os.path.expandvars(os.fspath(selected))
+    if "$" in expanded or "\x00" in expanded or not expanded:
+        raise ValueError("Home must be nonempty and contain no unresolved variables or NUL")
+    try:
+        root = Path(expanded).expanduser()
+    except RuntimeError as exc:
+        raise ValueError("Cannot expand home user") from exc
     directory = root / "chatlogin" / "instances" / instance
     return StatePaths(directory, directory / "sessions.sqlite3")

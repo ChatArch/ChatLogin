@@ -4,6 +4,7 @@ from pathlib import Path
 import json
 import os
 import sqlite3
+import stat
 
 from .identity import Principal
 from .paths import state_paths
@@ -25,9 +26,11 @@ class SQLiteSessionStore:
 
     Supply a dedicated database or call for_instance(). Existing parent modes are
     not changed. Use a trusted, local filesystem (not a shared/network drive).
+    max_sessions bounds the entire database across instances, not each namespace.
+    All handles sharing a database must configure the same capacity.
     """
     def __init__(self, database: str | Path, *, max_sessions: int = 100_000):
-        if max_sessions < 1:
+        if type(max_sessions) is not int or max_sessions < 1:
             raise ValueError("max_sessions must be positive")
         self.database = Path(database)
         self.max_sessions = max_sessions
@@ -37,6 +40,8 @@ class SQLiteSessionStore:
         except FileExistsError:
             if self.database.is_symlink() or not self.database.is_file():
                 raise ValueError("Session database must be a regular, non-symlink file")
+            if stat.S_IMODE(self.database.stat().st_mode) & 0o066:
+                raise ValueError("Session database must not grant group/other read or write access")
         else:
             os.close(fd)
         with self._connection() as conn:
@@ -60,11 +65,15 @@ class SQLiteSessionStore:
             conn.close()
 
     def put(self, instance, digest, session, *, previous_digest=None):
+        if not isinstance(session, Session):
+            raise ValueError("Session store requires a validated Session")
         with self._connection() as conn:
             conn.execute("BEGIN IMMEDIATE")
+            if conn.execute("SELECT 1 FROM chatlogin_sessions WHERE instance=? AND digest=?", (instance, digest)).fetchone():
+                raise ValueError("Session digest already exists")
             if previous_digest:
                 conn.execute("DELETE FROM chatlogin_sessions WHERE instance=? AND digest=?", (instance, previous_digest))
-            count = conn.execute("SELECT count(*) FROM chatlogin_sessions WHERE instance=?", (instance,)).fetchone()[0]
+            count = conn.execute("SELECT count(*) FROM chatlogin_sessions").fetchone()[0]
             if count >= self.max_sessions:
                 raise StoreFull("Session capacity exhausted")
             conn.execute("INSERT INTO chatlogin_sessions VALUES (?, ?, ?, ?, ?)",

@@ -46,7 +46,8 @@ class LoginRateLimiter:
     """
     def __init__(self, *, limit: int = 10, window: float = 60, max_keys: int = 1024,
                  clock: Callable[[], float] = time.monotonic):
-        if limit < 1 or max_keys < 1 or not math.isfinite(window) or window <= 0:
+        if (type(limit) is not int or limit < 1 or type(max_keys) is not int or max_keys < 1
+                or type(window) not in (int, float) or not math.isfinite(window) or window <= 0):
             raise ValueError("Invalid rate limit")
         self.limit, self.window, self.max_keys = limit, window, max_keys
         self._clock = clock
@@ -54,8 +55,19 @@ class LoginRateLimiter:
         self._lock = threading.Lock()
 
     def allow(self, key: str) -> bool:
+        # Bound characters before encoding, then bytes before retaining the key.
+        if not isinstance(key, str) or not 1 <= len(key) <= 1024:
+            raise ValueError("Rate-limit key must be 1..1024 UTF-8 bytes")
+        try:
+            if len(key.encode("utf-8")) > 1024:
+                raise ValueError("Rate-limit key must be 1..1024 UTF-8 bytes")
+        except UnicodeError as exc:
+            raise ValueError("Rate-limit key must be valid UTF-8") from exc
         with self._lock:
             now = self._clock()
+            if (type(now) not in (int, float) or not math.isfinite(now)
+                    or not math.isfinite(now + self.window)):
+                raise ValueError("Rate-limit clock and window expiry must be finite numbers")
             self._buckets = {k: v for k, v in self._buckets.items() if now < v[0] + self.window}
             start, count = self._buckets.get(key, (now, 0))
             if count >= self.limit or (key not in self._buckets and len(self._buckets) >= self.max_keys):

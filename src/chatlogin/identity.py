@@ -45,7 +45,7 @@ class AccessDenied(Exception):
 
 
 def require_user(principal: Principal) -> Principal:
-    if not principal.authenticated:
+    if not isinstance(principal, Principal) or not principal.authenticated:
         raise AccessDenied(401, "Authentication required")
     return principal
 
