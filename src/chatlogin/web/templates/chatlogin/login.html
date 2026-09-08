@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ title }}</title>
+  <link rel="stylesheet" href="{{ assets_path }}/login.css">
+  {% if stylesheet_url %}<link rel="stylesheet" href="{{ stylesheet_url }}">{% endif %}
+  <script defer src="{{ assets_path }}/login.js"></script>
+</head>
+<body>
+  <main class="chatlogin" data-palette="{{ palette }}" data-layout="{{ layout }}" data-login-url="{{ login_url }}" data-next="{{ next }}">
+    <section class="chatlogin__panel">
+      {% block branding %}
+      <p class="chatlogin__eyebrow">ChatArch login</p>
+      <h1>{{ title }}</h1>
+      <p class="chatlogin__subtitle">{{ subtitle }}</p>
+      {% endblock %}
+      {% block form %}
+      <form class="chatlogin__form" method="post" action="{{ login_url }}">
+        <input type="hidden" name="next" value="{{ next }}">
+        <label>
+          <span>账号</span>
+          <input name="username" autocomplete="username" required maxlength="256">
+        </label>
+        <label>
+          <span>密码</span>
+          <input name="password" type="password" autocomplete="current-password" required maxlength="1024">
+        </label>
+        <button type="submit">登录</button>
+        <p class="chatlogin__status" role="status" aria-live="polite"></p>
+      </form>
+      {% endblock %}
+    </section>
+  </main>
+</body>
+</html>

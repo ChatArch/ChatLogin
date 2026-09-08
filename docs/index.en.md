@@ -1,60 +1,83 @@
-# ChatLogin Docs
+# ChatLogin Documentation
 
-ChatLogin is a ChatArch Python package intended for website integration. This initial version provides the package structure, real CLI tree and ChatEnv extension point. Login, user management and authorization are not implemented yet.
+ChatLogin makes the backend security contract for website login reusable in Python while leaving presentation under host control. Use the packaged page, override templates/CSS, or keep an existing HTML/vanilla-JS frontend and use the headless JSON API.
 
 Site entry: <https://arch.gh.wzhecnu.cn/ChatLogin/en/>
 
 ## Choose Documentation by Scenario
 
-| Scenario | Document |
-| --- | --- |
-| Install the package, run the CLI, and confirm it works | [CLI Tree](cli-tree.md) |
-| Check first-class capabilities and current boundaries | [Capability Map](capability-map.md) |
-| Call package behavior directly from Python | [Python Interface Tree](interface-tree.md) |
-
-## Documentation Organization
-
-This template keeps only durable documentation entry points; it does not generate a plan placeholder:
-
-- **CLI tree**: the most direct command entry point, including the real command tree, status, and update checklist.
-- **Capability map**: first-class capabilities, boundaries, and out-of-scope areas.
-- **Interface tree**: importable Python APIs behind the CLI.
-
-## Primary Entry Points
-
 <div class="grid cards" markdown>
 
-- **CLI Tree**
+- **FastAPI integration**
 
-    Start from the CLI entry point and record implemented commands, command status, and interactive conventions.
-
-    [Open CLI Tree](cli-tree.md)
-
-- **Capability Map**
-
-    Review current package boundaries and avoid presenting planned work as implemented behavior.
-
-    [Open Capability Map](capability-map.md)
-
-- **Python Interface Tree**
-
-    Keep the CLI thin and put substantive behavior in importable Python APIs.
+    Install the `web` extra and mount configurable auth routes, dependencies, and an optional page.
 
     [Open Interface Tree](interface-tree.md)
 
+- **Keep an existing visual style**
+
+    Choose packaged UI, host template overrides, or a fully headless host-owned frontend.
+
+    [Open Capability Map](capability-map.md)
+
+- **Review CLI and package boundaries**
+
+    The CLI exposes version and standard command trees; authentication is first an importable Python API.
+
+    [Open CLI Tree](cli-tree.md)
+
 </div>
 
-## Documentation Status
-
-- **Implemented**: code, tests, or CLI routes exist.
-- **Verified**: covered by local smoke, CI, or real-service practice.
-- **Not implemented**: keep as boundary and planning notes only; turn into operation docs after implementation and validation.
-
-## Local Preview
+## Install
 
 ```bash
-python -m pip install -e ".[docs]"
-mkdocs serve
+python -m pip install "ChatLogin[web]"
 ```
 
-The Chinese home page is available at <https://arch.gh.wzhecnu.cn/ChatLogin/>. Topic pages without English translations fall back to the default Chinese content through the i18n plugin.
+The smallest FastAPI integration uses either synthetic accounts or a host-provided callback. There is no built-in production password.
+
+```python
+from fastapi import Depends, FastAPI
+from chatlogin import CallbackBackend, MemorySessionStore, Principal, SessionManager
+from chatlogin.fastapi import CookieSettings, FastAPIAuth
+from chatlogin.ui import LoginUI
+
+def verify(username: str, password: str) -> Principal | None:
+    return Principal("usr_1", "Synthetic user") if (username, password) == ("one", "secret") else None
+
+auth = FastAPIAuth(
+    CallbackBackend(verify),
+    SessionManager(MemorySessionStore(), instance="my-site"),
+    origin="https://www.example.com",
+    prefix="/api/auth",
+    ui=LoginUI(title="My site"),
+    cookie=CookieSettings(name="my_site_session"),
+)
+app = FastAPI()
+app.include_router(auth.router)
+
+@app.get("/private")
+def private(principal=Depends(auth.current_user)):
+    return principal.as_dict()
+```
+
+See `examples/demo_fastapi.py` for a runnable synthetic-account demo.
+
+## Three Frontend Levels
+
+| Level | Best for | Security boundary |
+| --- | --- | --- |
+| Default UI | New sites | Packaged HTML/CSS/JS, palettes, and layouts with the same opaque-cookie backend |
+| Host override | Brand or partial/full page customization | Jinja choice loading, block inheritance, and local custom CSS without editing site-packages |
+| Headless | Existing static HTML/vanilla-JS apps such as ChatVoice | No default page or assets; only `/login`, `/session`, and `/logout` JSON contracts |
+
+Themes affect presentation only. They cannot weaken CSRF, cookies, roles, or owner checks. Default resources use scoped `.chatlogin` classes and CSS variables rather than global resets.
+
+## Secure Defaults
+
+- Server-trusted identities are `guest`, `user`, and `admin`; login payloads cannot escalate role.
+- Credential verification is injectable: fixed account, multiple accounts, or a host callback. Existing PBKDF2 material can be verified without forced migration.
+- Session tokens are random; only SHA-256 digests are stored. Expiry, rotation, revocation, and instance isolation are supported.
+- Cookies default to `HttpOnly`, `Secure`, and `SameSite=Lax`; cookie-authenticated writes require same-site Origin and CSRF.
+- `next` accepts only local absolute paths; login bodies are bounded and rate limited.
+- Roles do not bypass resource ownership, including admin.
