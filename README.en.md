@@ -41,7 +41,7 @@ The core package does not require adopting the packaged page. An existing static
 - Fixed credentials, multiple accounts, and host callbacks are supported; existing PBKDF2 material can be verified without forced migration.
 - Session tokens are persisted only as SHA-256 digests, with TTL, rotation, revocation, CSRF, and instance isolation.
 - The FastAPI adapter enforces same-site Origin/Host checks, body-size limits, rate limiting, and safe local `next` values.
-- Packaged templates provide palettes/layouts and can be partially or fully overridden. The first ChatVoice acceptance case will keep its frontend and use headless integration.
+- Packaged templates provide independent palettes, layouts and light/dark/system appearance. Hosts can override part or all of the page, or keep their existing HTML/JS and use headless integration.
 - Admin does not bypass resource ownership; host applications retain business-data authorization.
 - There is no default production password, standalone login microservice, SSO/OAuth, MFA, or admin console.
 

@@ -41,7 +41,7 @@ pip install "ChatLogin[web]"
 - 固定账号、多账号和宿主回调均可；已有 PBKDF2 密码材料可验证，不强制迁移。
 - 会话 token 只以 SHA-256 摘要持久化，支持 TTL、轮换、撤销、CSRF 和实例隔离。
 - FastAPI adapter 默认同站 Origin/Host 校验、请求体大小限制、限流和安全 `next`。
-- 默认模板提供色系/布局，宿主也可局部或整页覆盖；ChatVoice 首个验收案例将保留原前端走 headless。
+- 默认模板提供色系、布局与浅色/深色/跟随系统选项；宿主可覆盖局部或整页，也可保留原 HTML/JS 走 headless。
 - Admin 不自动绕过资源 owner；业务数据授权仍由宿主决定。
 - 不提供默认生产密码、独立登录微服务、SSO/OAuth、MFA 或账户管理后台。
 

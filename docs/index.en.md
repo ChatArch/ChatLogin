@@ -38,15 +38,16 @@ The smallest FastAPI integration uses either synthetic accounts or a host-provid
 
 ```python
 from fastapi import Depends, FastAPI
-from chatlogin import CallbackBackend, MemorySessionStore, Principal, SessionManager
+import os
+from chatlogin import PasswordBackend, MemorySessionStore, Principal, SessionManager, hash_password
 from chatlogin.fastapi import CookieSettings, FastAPIAuth
 from chatlogin.ui import LoginUI
 
-def verify(username: str, password: str) -> Principal | None:
-    return Principal("usr_1", "Synthetic user") if (username, password) == ("one", "secret") else None
-
+backend = PasswordBackend({
+    "demo": (Principal("usr_1", "Demo user"), hash_password(os.environ["EXAMPLE_LOGIN_PASSWORD"]))
+})
 auth = FastAPIAuth(
-    CallbackBackend(verify),
+    backend,
     SessionManager(MemorySessionStore(), instance="my-site"),
     origin="https://www.example.com",
     prefix="/api/auth",

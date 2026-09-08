@@ -40,7 +40,7 @@ class SQLiteSessionStore:
         except FileExistsError:
             if self.database.is_symlink() or not self.database.is_file():
                 raise ValueError("Session database must be a regular, non-symlink file")
-            if stat.S_IMODE(self.database.stat().st_mode) & 0o066:
+            if os.name == "posix" and stat.S_IMODE(self.database.stat().st_mode) & 0o066:
                 raise ValueError("Session database must not grant group/other read or write access")
         else:
             os.close(fd)
