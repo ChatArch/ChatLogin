@@ -35,6 +35,16 @@ pip install "ChatLogin[web]"
 
 核心包不要求网站采用包内页面。已有静态 HTML/原生 JS 的网站可以只挂载 JSON 路由，继续保留原登录入口和用户数据库。
 
+## 选择认证后端（0.1.2）
+
+| 账户来源 | 可选后端 | 会话与宿主边界 |
+| --- | --- | --- |
+| 固定账号 / 多个显式账号 | `PasswordBackend(accounts)` | 一个 / 多个哈希条目；搭配 `SessionManager` 与所选 store |
+| 其他宿主用户库 | `CallbackBackend(authenticate)` + 宿主 `SessionStore` | 宿主定义密码验证、schema 和会话映射 |
+| 已有 ChatVoice 账户/会话 schema | `chatlogin.backends.ChatVoiceAuth` | 现成兼容后端；固定 `chatvoice` 命名空间，不建表或迁移 |
+
+`ChatVoiceAuth` 随核心包提供，按需导入；不依赖 ChatVoice 包或 `web` extra，不是任意 SQLite 账户系统的通用 ORM。默认 UI、宿主覆盖和 headless 三种模式与后端选择相互独立。账户创建、业务 owner 权限与宿主 HTTP 契约仍由网站负责。见 [接入与安全](docs/integration.md)。
+
 ## 设计边界
 
 - `guest` / `user` / `admin` 是服务端可信身份，角色不能由请求体指定。
@@ -51,6 +61,7 @@ pip install "ChatLogin[web]"
 python -m pip install -e ".[dev,docs]"
 chatlogin --version
 chatlogin --tree
+chatlogin --tree-brief
 python -m pytest -q
 python -m build
 python -m twine check dist/*

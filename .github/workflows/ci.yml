@@ -26,4 +26,14 @@ jobs:
       - run: python -m chatlogin.cli --tree
       - run: python -m chatlogin.cli --tree-brief
       - run: python -m build
+      - run: python -m twine check dist/*
+      - name: Verify installed wheel with a real login server
+        run: |
+          python -m venv "$RUNNER_TEMP/chatlogin-wheel"
+          "$RUNNER_TEMP/chatlogin-wheel/bin/python" -m pip install "$(printf '%s' dist/*.whl)[web,demo]" pytest "httpx>=0.27,<1.0"
+          "$RUNNER_TEMP/chatlogin-wheel/bin/chatlogin" --version
+          "$RUNNER_TEMP/chatlogin-wheel/bin/chatlogin" --tree
+          "$RUNNER_TEMP/chatlogin-wheel/bin/chatlogin" --tree-brief
+          "$RUNNER_TEMP/chatlogin-wheel/bin/python" -c "import chatlogin; from chatlogin.backends import ChatVoiceAuth; assert 'site-packages' in chatlogin.__file__; print(ChatVoiceAuth.__module__)"
+          PYTHONPATH= "$RUNNER_TEMP/chatlogin-wheel/bin/python" -m pytest --noconftest tests/code-tests/test_live_login_service.py -q
       - run: mkdocs build --strict

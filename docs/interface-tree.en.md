@@ -38,6 +38,26 @@ chatlogin
 └── LoginRateLimiter(limit, window, max_keys)
 ```
 
+## Built-in Optional ChatVoice Backend
+
+```text
+chatlogin.backends.chatvoice
+├── ChatVoiceAuth(connect, lock, clock, *, ttl)
+│   ├── login(account, password) -> IssuedSession | None
+│   ├── resolve_row(token) -> dict | None
+│   ├── check_csrf(auth, submitted)
+│   ├── logout(token)
+│   └── store / backend / manager
+└── ChatVoiceSessionStore(connect, lock, clock, *, max_sessions=10000)
+    ├── put(instance, digest, session, *, previous_digest=None)
+    ├── get(instance, digest) / read_row(instance, digest)
+    ├── session_from_row(row)
+    ├── delete(instance, digest)
+    └── purge_expired(instance, now)
+```
+
+Available in the core package, also exported from `chatlogin.backends`. Fixed ChatVoice schema / `chatvoice` namespace, USER identities only; no table creation, migration, account management, HTTP or owner policy. See [Integration](integration.en.md) for all three UI modes.
+
 ## FastAPI Adapter
 
 Available with `ChatLogin[web]`:

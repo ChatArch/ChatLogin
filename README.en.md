@@ -35,6 +35,16 @@ pip install "ChatLogin[web]"
 
 The core package does not require adopting the packaged page. An existing static HTML/vanilla-JS site can mount only JSON routes and retain its current entry page and user database.
 
+## Choose an Authentication Backend (0.1.2)
+
+| Account source | Optional backend | Session and host boundary |
+| --- | --- | --- |
+| Fixed account / multiple explicit accounts | `PasswordBackend(accounts)` | One / multiple hash entries, with `SessionManager` and a chosen store |
+| Other host user database | `CallbackBackend(authenticate)` + host `SessionStore` | Host defines password verification, schema and session mapping |
+| Existing ChatVoice account/session schema | `chatlogin.backends.ChatVoiceAuth` | Ready-made compatibility backend; fixed `chatvoice` namespace, no table creation or migration |
+
+`ChatVoiceAuth` ships in the core package for opt-in import; it requires neither ChatVoice nor the `web` extra. It is not a generic ORM for arbitrary SQLite account systems. Default UI, host overrides and headless mode remain independent of backend selection. Account creation, business owner permissions and host HTTP contracts remain host responsibilities. See [Integration and Security](docs/integration.en.md).
+
 ## Boundaries
 
 - `guest`, `user`, and `admin` are server-trusted identities and cannot be selected from a request body.
@@ -51,6 +61,7 @@ The core package does not require adopting the packaged page. An existing static
 python -m pip install -e ".[dev,docs]"
 chatlogin --version
 chatlogin --tree
+chatlogin --tree-brief
 python -m pytest -q
 python -m build
 python -m twine check dist/*
