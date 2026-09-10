@@ -38,6 +38,26 @@ chatlogin
 └── LoginRateLimiter(limit, window, max_keys)
 ```
 
+## 内建可选 ChatVoice 后端
+
+```text
+chatlogin.backends.chatvoice
+├── ChatVoiceAuth(connect, lock, clock, *, ttl)
+│   ├── login(account, password) -> IssuedSession | None
+│   ├── resolve_row(token) -> dict | None
+│   ├── check_csrf(auth, submitted)
+│   ├── logout(token)
+│   └── store / backend / manager
+└── ChatVoiceSessionStore(connect, lock, clock, *, max_sessions=10000)
+    ├── put(instance, digest, session, *, previous_digest=None)
+    ├── get(instance, digest) / read_row(instance, digest)
+    ├── session_from_row(row)
+    ├── delete(instance, digest)
+    └── purge_expired(instance, now)
+```
+
+核心包即可导入，两类也从 `chatlogin.backends` 导出。固定 ChatVoice schema / `chatvoice` 命名空间，只产生 USER 身份；不建表、不迁移、不负责账号创建、HTTP 或 owner 权限。接入与三种 UI 模式见 [接入文档](integration.md)。
+
 ## FastAPI 适配层
 
 安装 `ChatLogin[web]` 后可用：

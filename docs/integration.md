@@ -11,6 +11,59 @@
 
 Headless 不等于另起认证微服务。可以在同一个 FastAPI 进程挂载 JSON 路由，也可以只调用核心 Python API，保留既有 HTTP handler 与 JSON 字段。普通 Python 包即可携带 HTML/CSS/JS；安装位置不是定制入口，宿主模板目录优先于包内模板。
 
+## 选择认证后端
+
+| 账户来源 | 入口 | 责任 |
+| --- | --- | --- |
+| 固定账号 / 多账号 | `PasswordBackend(accounts)` | 配置一个 / 多个显式 `Principal` 与 `PasswordHash`，搭配所选 `SessionStore` |
+| 其他宿主用户库 | `CallbackBackend(authenticate)` + 宿主 `SessionStore` | 宿主定义验证和映射；不要套用 ChatVoice schema |
+| 既有 ChatVoice 账户与会话 | `ChatVoiceAuth` | 内建、可选的现成兼容后端，不依赖 ChatVoice 包或 `web` extra |
+
+### ChatVoice schema 兼容后端
+
+```python
+from chatlogin.backends import ChatVoiceAuth
+
+# host 是宿主对象；回调每次解析当前连接、锁与时钟，不捕获数据库路径。
+auth = ChatVoiceAuth(
+    lambda: host.open_auth_connection(),
+    lambda: host.auth_lock,
+    lambda: host.utc_now().timestamp(),
+    ttl=86400,
+)
+# 已有 HTTP handler 可直接使用：
+# auth.login(account, password) -> IssuedSession | None
+# auth.resolve_row(token) -> dict | None
+# auth.check_csrf(auth_row, submitted) -> None，失败抛 AccessDenied
+# auth.logout(token) -> None
+```
+
+连接工厂必须返回新的 `sqlite3.Connection`（`row_factory=sqlite3.Row`，启用 `PRAGMA foreign_keys=ON`，无未提交事务）；每次操作会关闭连接。宿主负责初始化既有 schema、文件权限与账号创建：
+
+- `accounts(id TEXT PRIMARY KEY, account TEXT NOT NULL UNIQUE, display_name TEXT NOT NULL, password_salt BLOB NOT NULL, password_hash BLOB NOT NULL, created_at TEXT NOT NULL)`。
+- `auth_sessions(token_hash TEXT PRIMARY KEY, user_id TEXT NOT NULL, csrf_token TEXT NOT NULL, created_at TEXT NOT NULL, expires_at TEXT NOT NULL)`，`user_id` 外键指向 `accounts(id) ON DELETE CASCADE`。
+
+这是 **ChatVoice schema 专用兼容**，不是任意 SQLite 账户系统的通用 ORM。账户名精确匹配，宿主若已有大小写/空白规范化须在调用前保留。密码保持 PBKDF2-HMAC-SHA256、310000 次与原有 salt/digest；保留原账号 ID、ISO expiry（含时区偏移）、32 字符旧 CSRF 与 SHA-256 token 摘要。匿名、失效或错误凭据不会创建身份。每次解析重新 join 账号，不缓存用户快照。
+
+`ChatVoiceSessionStore(connect, lock, clock, *, max_sessions=10000)` 只接受 `chatvoice` 命名空间与 `Role.USER` 会话，拒绝 guest/admin。容量按整个数据库计算，跨 store 实例由 SQLite 事务串行化；不驱逐有效会话，满时抛 `StoreFull`。`SessionManager.issue(..., previous_token=...)` 原子替换，插入失败会回滚并保留旧会话。`ChatVoiceAuth` 保留原构造签名，store 默认上限为 10000；需要自定义上限时可单独组合该 store 与 manager。
+
+### 与三种 UI 模式组合
+
+安装 `ChatLogin[web]` 后，直接把 `auth.backend` 与 `auth.manager` 交给通用适配层：
+
+```python
+from chatlogin.fastapi import FastAPIAuth
+from chatlogin.ui import LoginUI
+
+web = FastAPIAuth(auth.backend, auth.manager, origin="https://example.test",
+                 ui=LoginUI())  # 默认 UI
+# ui=LoginUI(template_dirs=("templates",), template_name="host/login.html")  # 宿主覆盖
+# ui=None  # headless JSON；也可仅用上面的 Python 方法保留原 HTTP handler
+app.include_router(web.router)
+```
+
+通用 HTTP adapter 保留原 JSON 字段与 Origin/Host、cookie、CSRF、限流策略，不自动变成 ChatVoice HTTP 接口。保留旧 HTTP 时，宿主继续负责 cookie 与响应映射、Origin/CSRF 检查、账户创建和所有业务 owner/policy；`resolve_row` 的 `_chatlogin_session` 供服务端 CSRF 校验，不能整行序列化或记录敏感字段。
+
 ## 浏览器 HTTP 契约
 
 默认前缀是 `/auth`，可显式改为 `/api/auth` 等固定本地前缀。
