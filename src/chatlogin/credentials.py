@@ -2,8 +2,9 @@
 from dataclasses import dataclass, field
 import hashlib
 import hmac
+import inspect
 import secrets
-from typing import Callable, Mapping, Protocol
+from typing import Awaitable, Callable, Mapping, Protocol
 
 from .identity import Principal
 
@@ -59,6 +60,10 @@ class CredentialBackend(Protocol):
     def authenticate(self, username: str, password: str) -> Principal | None: ...
 
 
+class AsyncCredentialBackend(Protocol):
+    async def authenticate(self, username: str, password: str) -> Principal | None: ...
+
+
 def _checked(principal: Principal | None) -> Principal | None:
     if principal is not None and (not isinstance(principal, Principal) or not principal.authenticated):
         raise ValueError("Backend must return a trusted authenticated Principal or None")
@@ -73,6 +78,19 @@ class CallbackBackend:
         if not valid_credentials(username, password):
             return None
         return _checked(self._authenticate(username, password))
+
+
+class AsyncCallbackBackend:
+    def __init__(self, authenticate: Callable[[str, str], Awaitable[Principal | None]]):
+        self._authenticate = authenticate
+
+    async def authenticate(self, username: str, password: str) -> Principal | None:
+        if not valid_credentials(username, password):
+            return None
+        result = self._authenticate(username, password)
+        if not inspect.isawaitable(result):
+            raise TypeError("Async backend callback must return an awaitable")
+        return _checked(await result)
 
 
 class PasswordBackend:

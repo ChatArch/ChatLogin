@@ -5,13 +5,14 @@
 | 能力 | 状态 | 边界 |
 | --- | --- | --- |
 | 身份与授权 | 已实现 | `Principal`、`Role`、401/403、`require_role`、`require_owner`；admin 不自动绕过 owner |
-| 认证后端 | 已实现 | `PasswordBackend` 支持一个或多个显式账号；`CallbackBackend` 接入宿主用户库 |
+| 认证后端 | 已实现 | `PasswordBackend` 支持一个或多个显式账号；`CallbackBackend` 接入宿主用户库；`AsyncCallbackBackend` await 异步上游校验 |
 | ChatVoice 兼容后端 | 已实现（核心包，按需导入） | `ChatVoiceAuth` / `ChatVoiceSessionStore`；仅现有 ChatVoice schema、固定命名空间与 USER，不建表/迁移，无 ChatVoice/web 依赖 |
 | 旧密码材料校验 | 已实现 | `verify_pbkdf2` 可验证宿主已有的 PBKDF2-HMAC-SHA256 salt/digest，不强制改密码 |
-| 会话 | 已实现 | opaque token、仅存 SHA-256、TTL、轮换、撤销、CSRF secret；内存 store 仅用于测试/演示 |
+| 会话 | 已实现 | opaque token、仅存 SHA-256、TTL、轮换、撤销、CSRF secret、公开 `purge_expired()`；内存 store 仅用于测试/演示 |
 | SQLite store | 已实现 | 按实例命名空间隔离，数据库文件 `0600`，新建私有目录且不 chmod 共享父目录 |
 | FastAPI adapter | 已实现（`web` extra） | 可配置前缀、cookie、Origin/Host、请求体限制、限流、JSON/headless 路由和依赖 |
-| 默认登录 UI | 已实现（`web` extra） | `indigo/forest/amber` 色系与 `card/split` 布局，包内模板/CSS/JS 可从 wheel 读取 |
+| 默认登录 UI | 已实现（`ui` 或 `web` extra） | `ui` 仅安装 Jinja2；`web` 额外安装 FastAPI/Starlette，包内模板/CSS/JS 可从 wheel 读取 |
+| Web 依赖兼容门禁 | 已实现 | `web`/`dev` 声明 `starlette>=0.40,<2.0`；兼容性测试覆盖 Starlette 0.x、1.3.1、1.6.0，CI 固定 0.x 与 1.3.x 线路 |
 | 宿主模板覆盖 | 已实现 | 模板目录优先、区块继承、整页 renderer、本地自定义 stylesheet |
 | ChatEnv 命名空间 | 已实现 | 保留 `ChatLogin` typed profile；本版本不新增 API key 字段 |
 
@@ -21,7 +22,7 @@
 2. **需要自有视觉**：保留 FastAPI adapter，替换 `LoginUI` 的模板目录、模板名或 renderer。
 3. **已有 ChatVoice schema**：直接选用 `ChatVoiceAuth`；保留原 HTTP/前端，或将 `backend` / `manager` 交给通用 FastAPI adapter。默认 UI、宿主覆盖和 headless 均可使用。
 
-后端选择：固定/多账号 `PasswordBackend`；其他宿主库 `CallbackBackend` + 宿主 `SessionStore`；ChatVoice schema 用现成 `ChatVoiceAuth`。详见 [选择矩阵](integration.md)。
+后端选择：固定/多账号 `PasswordBackend`；同步宿主库 `CallbackBackend`；异步宿主库 `AsyncCallbackBackend`；ChatVoice schema 用现成 `ChatVoiceAuth`。详见 [选择矩阵](integration.md)。
 
 ## 不在当前范围
 

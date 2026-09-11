@@ -75,6 +75,18 @@ def test_json_login_cookie_session_csrf_logout_and_permissions(web):
     assert client.get("/api/auth/session").json()["authenticated"] is False
 
 
+def test_json_login_accepts_async_credential_backend(web):
+    user = cl.Principal("async-web-user", "Async Web")
+
+    async def authenticate(username, password):
+        return user if (username, password) == ("one", "test-password") else None
+
+    _, client = application(web, backend=cl.AsyncCallbackBackend(authenticate))
+    result = login(client)
+    assert result.status_code == 200
+    assert result.json()["user"]["user_id"] == "async-web-user"
+
+
 def test_login_rotation_requires_csrf_for_existing_cookie(web):
     auth, client = application(web)
     first = login(client)

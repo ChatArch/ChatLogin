@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import json
 import re
+import inspect
 from dataclasses import dataclass
 from importlib import resources
 from ipaddress import IPv6Address
@@ -12,7 +13,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 from fastapi.responses import HTMLResponse, JSONResponse, Response
 from starlette.concurrency import run_in_threadpool
 
-from .credentials import CredentialBackend, valid_credentials
+from .credentials import AsyncCredentialBackend, CredentialBackend, valid_credentials
 from .identity import AccessDenied, Principal, Role, require_role
 from .security import LoginRateLimiter, require_csrf, safe_next
 from .sessions import SessionManager
@@ -58,7 +59,7 @@ class FastAPIAuth:
 
     def __init__(
         self,
-        backend: CredentialBackend,
+        backend: CredentialBackend | AsyncCredentialBackend,
         sessions: SessionManager,
         *,
         origin: str,
@@ -324,9 +325,14 @@ def _invalid_json(value: str):
 
 
 async def _call(function, *args, **kwargs):
-    """Run the synchronous core off-loop without exposing backend exceptions."""
+    """Run sync core off-loop and await async adapters without exposing exceptions."""
     try:
-        return await run_in_threadpool(function, *args, **kwargs)
+        if inspect.iscoroutinefunction(function):
+            return await function(*args, **kwargs)
+        result = await run_in_threadpool(function, *args, **kwargs)
+        if inspect.isawaitable(result):
+            return await result
+        return result
     except Exception:
         raise _http(500, "Authentication service unavailable") from None
 
