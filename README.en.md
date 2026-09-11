@@ -33,14 +33,21 @@ Documentation: <https://arch.gh.wzhecnu.cn/ChatLogin/en/>
 pip install "ChatLogin[web]"
 ```
 
-The core package does not require adopting the packaged page. An existing static HTML/vanilla-JS site can mount only JSON routes and retain its current entry page and user database.
+For packaged template rendering without FastAPI, install only:
 
-## Choose an Authentication Backend (0.1.2)
+```bash
+pip install "ChatLogin[ui]"
+```
+
+The core package does not require adopting the packaged page. An existing static HTML/vanilla-JS site can mount only JSON routes and retain its current entry page and user database; a standard-library HTTP host can use `LoginUI` for rendering without installing FastAPI.
+
+## Choose an Authentication Backend (0.1.3)
 
 | Account source | Optional backend | Session and host boundary |
 | --- | --- | --- |
 | Fixed account / multiple explicit accounts | `PasswordBackend(accounts)` | One / multiple hash entries, with `SessionManager` and a chosen store |
 | Other host user database | `CallbackBackend(authenticate)` + host `SessionStore` | Host defines password verification, schema and session mapping |
+| Async upstream verification | `AsyncCallbackBackend(authenticate)` | Callback is awaited in the event loop; invalid input is not called and invalid results fail closed |
 | Existing ChatVoice account/session schema | `chatlogin.backends.ChatVoiceAuth` | Ready-made compatibility backend; fixed `chatvoice` namespace, no table creation or migration |
 
 `ChatVoiceAuth` ships in the core package for opt-in import; it requires neither ChatVoice nor the `web` extra. It is not a generic ORM for arbitrary SQLite account systems. Default UI, host overrides and headless mode remain independent of backend selection. Account creation, business owner permissions and host HTTP contracts remain host responsibilities. See [Integration and Security](docs/integration.en.md).
@@ -49,8 +56,9 @@ The core package does not require adopting the packaged page. An existing static
 
 - `guest`, `user`, and `admin` are server-trusted identities and cannot be selected from a request body.
 - Fixed credentials, multiple accounts, and host callbacks are supported; existing PBKDF2 material can be verified without forced migration.
-- Session tokens are persisted only as SHA-256 digests, with TTL, rotation, revocation, CSRF, and instance isolation.
+- Session tokens are persisted only as SHA-256 digests, with TTL, rotation, revocation, CSRF, instance isolation, and public `SessionManager.purge_expired()` cleanup.
 - The FastAPI adapter enforces same-site Origin/Host checks, body-size limits, rate limiting, and safe local `next` values.
+- `ChatLogin[web]` declares `starlette>=0.40,<2.0`; compatibility tests cover Starlette 0.x, 1.3.1, and 1.6.0, while CI keeps explicit 0.x and 1.3.x gates.
 - Packaged templates provide independent palettes, layouts and light/dark/system appearance. Hosts can override part or all of the page, or keep their existing HTML/JS and use headless integration.
 - Admin does not bypass resource ownership; host applications retain business-data authorization.
 - There is no default production password, standalone login microservice, SSO/OAuth, MFA, or admin console.

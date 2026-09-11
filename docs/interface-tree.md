@@ -17,8 +17,10 @@ chatlogin
 ├── hash_password(password)
 ├── verify_pbkdf2(password, salt, digest, iterations=310000)
 ├── CredentialBackend                 # Protocol: authenticate(username, password)
+├── AsyncCredentialBackend            # Protocol: async authenticate(username, password)
 ├── PasswordBackend(accounts)         # 固定单账号或多账号
-└── CallbackBackend(authenticate)     # 宿主用户库/已有哈希验证
+├── CallbackBackend(authenticate)     # 宿主用户库/已有哈希验证
+└── AsyncCallbackBackend(authenticate) # 异步宿主用户库/上游验证
 
 chatlogin
 ├── SessionStore                      # Protocol
@@ -29,6 +31,7 @@ chatlogin
 └── SessionManager(store, instance, ttl)
     ├── issue(principal, previous_token=None)
     ├── resolve(token)
+    ├── purge_expired()
     ├── revoke(token)
     └── digest(token)
 
@@ -60,7 +63,7 @@ chatlogin.backends.chatvoice
 
 ## FastAPI 适配层
 
-安装 `ChatLogin[web]` 后可用：
+安装 `ChatLogin[web]` 后可用。`FastAPIAuth` 可接收同步 `CredentialBackend` 或异步 `AsyncCredentialBackend`；同步调用会在线程池执行，异步调用会被 await。
 
 ```text
 chatlogin.fastapi
@@ -87,6 +90,8 @@ GET {prefix}/assets/login.js
 不传 `LoginUI` 时没有页面和静态资源，适合宿主保留原前端的 headless 接入。
 
 ## UI 层
+
+仅渲染 UI 时安装 `ChatLogin[ui]` 即可；它只引入 Jinja2，不要求 FastAPI。`ChatLogin[web]` 包含 UI 与 FastAPI/Starlette 适配层。
 
 ```text
 chatlogin.ui
@@ -121,6 +126,20 @@ def authenticate(username: str, password: str) -> Principal | None:
 backend = CallbackBackend(authenticate)
 ```
 
+异步上游使用 `AsyncCallbackBackend`：
+
+```python
+from chatlogin import AsyncCallbackBackend, Principal
+
+async def authenticate(username: str, password: str) -> Principal | None:
+    row = await upstream.verify(username, password)
+    return Principal(row.id, row.display_name) if row else None
+
+backend = AsyncCallbackBackend(authenticate)
+```
+
+同步和异步 callback 都会先验证 username/password 的 UTF-8 字节上限。非法输入不会调用宿主回调；宿主必须返回已认证 `Principal` 或 `None`，guest/其他对象会失败关闭。
+
 宿主仍拥有账户表、密码材料、业务资源 owner 和权限策略。ChatLogin 不创建默认生产账号，也不把 `admin` 角色解释成可访问所有业务数据。
 
 ## 运行态路径
@@ -133,3 +152,5 @@ store = SQLiteSessionStore.for_instance("my-site")
 ```
 
 默认路径为 `<ChatArch home>/chatlogin/instances/<instance>/sessions.sqlite3`。导入包和仅计算路径都不会创建目录；store 初始化时只创建自己的私有目录与 `0600` 数据库，不修改共享父目录权限。
+
+宿主需要清理私有上下文索引时，调用 `SessionManager.purge_expired()`，由 manager 使用已验证 instance 与 clock 委托给 store；不要复制 TTL 计算或访问 store 私有成员。

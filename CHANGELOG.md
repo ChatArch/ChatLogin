@@ -1,5 +1,14 @@
 # 更新日志
 
+## 0.1.3 — 2026-09-11
+
+- 新增 `AsyncCredentialBackend` 协议与 `AsyncCallbackBackend`，复用同步 `CallbackBackend` 的用户名/密码字节上限和受信任 `Principal` 校验；非法输入不会调用宿主回调，非法返回值失败关闭。
+- `SessionManager.purge_expired()` 成为公开 API，通过当前 manager 的已验证 instance 与 clock 委托给 store，不改变 issue/resolve/revoke 语义。
+- 新增 `ui` optional dependency group，仅包含有界 `Jinja2`；`web` extra 继续包含 FastAPI/Starlette/Jinja2 完整栈，核心导入保持轻量。
+- 基于跨版本兼容性测试，将 `web`/`dev` 的 Starlette 窗口扩展为 `starlette>=0.40,<2.0`；测试覆盖 Starlette 0.x、`FastAPI==0.133.1` + `Starlette==1.3.1`、`FastAPI==0.141.1` + `Starlette==1.6.0`。
+- `dev` extra 为 Python 3.10 测试加入有界条件依赖 `tomli>=2.0,<3.0; python_version<"3.11"`；运行时核心依赖不包含 tomli。
+- 文档补充异步宿主验证、标准库 HTTP + `LoginUI`、会话清理和兼容性门禁边界。
+
 ## 0.1.2 — 2026-09-11
 
 - 将自有 ChatVoice 认证桥接提升为内建可选 `ChatVoiceAuth` / `ChatVoiceSessionStore`，核心包可直接导入，无需 ChatVoice 或 web 依赖。

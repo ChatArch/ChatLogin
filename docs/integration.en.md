@@ -8,6 +8,7 @@
 | Custom brand or layout | `LoginUI(template_dirs=..., template_name=...)` or `renderer` | Custom HTML/CSS and renderer safety |
 | Existing HTML/JS frontend | `FastAPIAuth(..., ui=None)` | Existing page, frontend state, all business data |
 | Existing HTTP/database contract | `CallbackBackend`, `SessionManager`, host `SessionStore` | Stable account IDs, password data, session mapping and response compatibility |
+| Standard-library HTTP page | `LoginUI(...).render(context)` + `ChatLogin[ui]` | HTTP handler, cookies, Origin/CSRF and response fields |
 
 Headless does not require another auth microservice. Mount JSON routes in the existing FastAPI process, or call the core Python API while keeping existing HTTP handlers and response fields. Python packages can carry HTML/CSS/JS; host templates take priority over package templates, without editing site-packages.
 
@@ -17,7 +18,10 @@ Headless does not require another auth microservice. Mount JSON routes in the ex
 | --- | --- | --- |
 | Fixed account / multiple accounts | `PasswordBackend(accounts)` | One / multiple explicit `Principal` and `PasswordHash` entries, with a chosen `SessionStore` |
 | Other host user database | `CallbackBackend(authenticate)` + host `SessionStore` | Host verification and mapping; do not assume the ChatVoice schema |
+| Async upstream service | `AsyncCallbackBackend(authenticate)` + `SessionManager` | Await host verification; invalid input is not sent upstream and invalid results fail closed |
 | Existing ChatVoice accounts and sessions | `ChatVoiceAuth` | Ready-made, opt-in compatibility backend; no ChatVoice or `web` dependency |
+
+`CallbackBackend` and `AsyncCallbackBackend` share the same input bounds: usernames are 1..256 UTF-8 bytes and passwords are 1..1024 UTF-8 bytes. Results must be an authenticated `Principal` or `None`; do not place private upstream Authorization, model keys, Dufs/Overleaf credentials or relay context into `Principal` metadata, session JSON or UI payloads.
 
 ### ChatVoice Schema Compatibility Backend
 
@@ -50,7 +54,7 @@ This is **ChatVoice schema compatibility**, not a generic ORM for arbitrary SQLi
 
 ### Compose with All Three UI Modes
 
-With `ChatLogin[web]`, pass `auth.backend` and `auth.manager` to the generic adapter:
+With `ChatLogin[web]`, pass a sync or async backend and its manager to the generic adapter:
 
 ```python
 from chatlogin.fastapi import FastAPIAuth
@@ -64,6 +68,8 @@ app.include_router(web.router)
 ```
 
 The generic HTTP adapter keeps its existing JSON fields, Origin/Host, cookie, CSRF and rate-limit behavior; it does not automatically become the ChatVoice HTTP API. When retaining existing HTTP, the host still owns cookie/response mapping, Origin/CSRF checks, account creation and every business owner/policy decision. The `_chatlogin_session` entry in `resolve_row` is for server-side CSRF checks, not whole-row JSON serialization or sensitive-field logging.
+
+Without FastAPI, install `ChatLogin[ui]` and call `LoginUI.render()`. That mode only renders templates; secure HTTP behavior remains the host's responsibility.
 
 ## Browser HTTP Contract
 
@@ -88,8 +94,20 @@ Use browser fetch with `credentials: 'same-origin'`. Read CSRF from session JSON
 - User/admin roles come only from a trusted backend. Use multiple explicit `PasswordBackend` entries or connect an existing database with `CallbackBackend`.
 - `require_owner` applies equally to admins. Any admin access to other users' data must be a separate host policy.
 - Random session tokens are delivered only through HttpOnly cookies; `SessionStore` receives digests. CSRF is a separate sensitive value, intentionally returned to same-origin clients but never logged.
+- Expiry cleanup is triggered through `SessionManager.purge_expired()`. The manager calls the store with its own validated instance and clock. Hosts that maintain private context indexes should clean them at this boundary instead of duplicating TTL math or touching store internals.
 - Bounded memory storage is for single-process tests/demos. SQLite is durable local storage; multi-host deployments need a shared `SessionStore`. Login limiting is a process-local backstop, not distributed abuse prevention.
 - Configure a fixed trusted `origin`. Never infer it from arbitrary Host or forwarded headers. Proxy trust, TLS and process lifecycle belong to the host.
+
+## Dependency Compatibility Gate
+
+`ChatLogin[web]` now declares `starlette>=0.40,<2.0`. Compatibility tests cover:
+
+- Current 0.x line: 338 passed / 6 browser-opt-in skipped.
+- ChatShare target line: installed wheel with `FastAPI==0.133.1` + `Starlette==1.3.1`, 338 passed / 6 skipped.
+- New 1.x probe: installed wheel with `FastAPI==0.141.1` + `Starlette==1.6.0`, 338 passed / 6 skipped.
+- Clean `ChatLogin[ui]` wheel install without FastAPI/Starlette rendered `LoginUI` successfully.
+
+The repository's `Web Compatibility` workflow still installs explicit 0.x and 1.3.x lines through the normal resolver for the `web` extra. The 1.x functional probes demonstrate runtime compatibility; run standard dependency resolution and the minimum-Python wheel gate before release.
 
 ## Runnable Demo
 

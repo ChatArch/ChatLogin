@@ -17,8 +17,10 @@ chatlogin
 ├── hash_password(password)
 ├── verify_pbkdf2(password, salt, digest, iterations=310000)
 ├── CredentialBackend                 # Protocol: authenticate(username, password)
+├── AsyncCredentialBackend            # Protocol: async authenticate(username, password)
 ├── PasswordBackend(accounts)         # fixed single account or multiple accounts
-└── CallbackBackend(authenticate)     # host user database / existing hash verification
+├── CallbackBackend(authenticate)     # host user database / existing hash verification
+└── AsyncCallbackBackend(authenticate) # async host database / upstream verification
 
 chatlogin
 ├── SessionStore                      # Protocol
@@ -29,6 +31,7 @@ chatlogin
 └── SessionManager(store, instance, ttl)
     ├── issue(principal, previous_token=None)
     ├── resolve(token)
+    ├── purge_expired()
     ├── revoke(token)
     └── digest(token)
 
@@ -60,7 +63,7 @@ Available in the core package, also exported from `chatlogin.backends`. Fixed Ch
 
 ## FastAPI Adapter
 
-Available with `ChatLogin[web]`:
+Available with `ChatLogin[web]`. `FastAPIAuth` accepts a sync `CredentialBackend` or an async `AsyncCredentialBackend`; sync calls run in the threadpool and async calls are awaited.
 
 ```text
 chatlogin.fastapi
@@ -87,6 +90,8 @@ GET {prefix}/assets/login.js
 Without `LoginUI`, no page or asset route is registered. This is the headless mode for hosts that keep their own HTML and JavaScript.
 
 ## UI Layer
+
+Install `ChatLogin[ui]` when only UI rendering is needed; it installs Jinja2 without FastAPI. `ChatLogin[web]` includes the UI dependency plus FastAPI/Starlette.
 
 ```text
 chatlogin.ui
@@ -121,6 +126,20 @@ def authenticate(username: str, password: str) -> Principal | None:
 backend = CallbackBackend(authenticate)
 ```
 
+Use `AsyncCallbackBackend` for async upstreams:
+
+```python
+from chatlogin import AsyncCallbackBackend, Principal
+
+async def authenticate(username: str, password: str) -> Principal | None:
+    row = await upstream.verify(username, password)
+    return Principal(row.id, row.display_name) if row else None
+
+backend = AsyncCallbackBackend(authenticate)
+```
+
+Both sync and async callbacks validate username/password UTF-8 byte limits before calling host code. Invalid input is not passed to the callback; host code must return an authenticated `Principal` or `None`, and guest/other objects fail closed.
+
 The host continues to own its account table, password material, resource owners, and policies. ChatLogin creates no default production account and never treats `admin` as permission to read every resource.
 
 ## Runtime Paths
@@ -133,3 +152,5 @@ store = SQLiteSessionStore.for_instance("my-site")
 ```
 
 The default path is `<ChatArch home>/chatlogin/instances/<instance>/sessions.sqlite3`. Importing the package or calculating paths creates nothing. Store initialization creates only its own private directory and a `0600` database; shared parent modes are unchanged.
+
+When a host needs to clean a private context index, call `SessionManager.purge_expired()`. The manager delegates to the store with its validated instance and clock; do not duplicate TTL calculations or access store internals.

@@ -131,6 +131,9 @@ class SessionManager:
             return None
         return session
 
+    def purge_expired(self) -> None:
+        self.store.purge_expired(self.instance, self._now())
+
     def revoke(self, token: str | None) -> None:
         digest = self.digest(token)
         if digest is not None:
