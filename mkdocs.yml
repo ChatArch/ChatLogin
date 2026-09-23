@@ -40,6 +40,8 @@ plugins:
             能力地图: Capability Map
             Python 接口树: Python Interface Tree
             接入与安全: Integration and Security
+            快速接入: Quick Integration
+            演示站与快速开始: Demo and Quick Start
 markdown_extensions:
   - admonition
   - attr_list
@@ -63,6 +65,8 @@ extra:
       lang: en
 nav:
   - 首页: index.md
+  - 演示站与快速开始: demo.md
+  - 快速接入: quickstart.md
   - 接入与安全: integration.md
   - 命令与接口:
       - CLI 树: cli-tree.md

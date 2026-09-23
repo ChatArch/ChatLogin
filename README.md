@@ -23,7 +23,7 @@ ChatLogin 是面向 Python-backed 网站的可复用登录能力包：后端统�
 
 | 场景 | 文档 |
 | --- | --- |
-| FastAPI 快速接入 | [Python 接口树](docs/interface-tree.md) |
+| FastAPI 快速接入 | [完整可运行应用](docs/quickstart.md) |
 | 默认 UI、模板覆盖与 headless | [能力地图](docs/capability-map.md) |
 | CLI 版本和命令树 | [CLI 树](docs/cli-tree.md) |
 
@@ -39,9 +39,25 @@ pip install "ChatLogin[web]"
 pip install "ChatLogin[ui]"
 ```
 
+要直接体验包内产品演示（`demo` extra 已自包含 `web` 依赖与 Uvicorn）：
+
+```bash
+pip install "ChatLogin[demo]"
+chatlogin serve
+# 打开 http://127.0.0.1:8765/
+```
+
+反向代理时仍建议只绑定 loopback，并明确写出浏览器实际访问的可信源：
+
+```bash
+chatlogin serve --host 127.0.0.1 --port 8765 --origin https://login.example.com
+```
+
+`serve` 只运行隔离产品演示：公开合成身份、5 分钟有界内存会话与一次性 ChatVoice schema fixture。它不读取 ChatEnv 账号或生产数据库，不提供默认生产凭据，也不是可供多业务共享的登录微服务。详见[演示站与快速开始](docs/demo.md)。
+
 核心包不要求网站采用包内页面。已有静态 HTML/原生 JS 的网站可以只挂载 JSON 路由，继续保留原登录入口和用户数据库；标准库 HTTP 宿主也可以只使用 `LoginUI` 渲染登录页。
 
-## 选择认证后端（0.1.4）
+## 选择认证后端（0.1.5）
 
 | 账户来源 | 可选后端 | 会话与宿主边界 |
 | --- | --- | --- |
@@ -77,4 +93,4 @@ python -m twine check dist/*
 mkdocs build --strict
 ```
 
-可运行的 FastAPI 合成账号示例：`examples/demo_fastapi.py`。
+可运行的 FastAPI 合成账号示例：`examples/demo_fastapi.py`；包内交互演示：`chatlogin serve`。

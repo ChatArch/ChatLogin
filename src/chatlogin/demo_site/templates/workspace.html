@@ -1,0 +1,7 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>安全工作区 · {{BACKEND}}</title><link rel="stylesheet" href="/assets/demo.css"><script defer src="/assets/demo.js"></script></head>
+<body class="workspace-page"><header class="lab-header"><a class="brand" target="_top" href="/"><span>CL</span> ChatLogin</a><p>{{BACKEND}} / {{UI}}</p></header>
+<main class="workspace" data-workspace data-mode="{{MODE}}" data-state="{{STATE}}"><section class="identity-card"><p class="eyebrow">SAFE PRINCIPAL</p><h1>{{DISPLAY_NAME}}</h1>
+<dl><div><dt>user_id</dt><dd>{{USER_ID}}</dd></div><div><dt>role</dt><dd>{{ROLE}}</dd></div><div><dt>backend</dt><dd>{{BACKEND}}</dd></div><div><dt>frontend</dt><dd>{{UI}}</dd></div></dl>
+<p class="safe-note">页面只显示安全 principal 与模式标签；session token、cookie、CSRF 和密码材料永不渲染或记录。</p></section>
+<section class="action-card"><p class="eyebrow">BOUNDARY CHECKS</p><h2>真实会话操作</h2><div class="action-list"><button class="button" data-protected>受保护读取</button><button class="button" data-csrf>CSRF 保护检查</button><button class="button" data-bad-csrf>故意失败的 CSRF</button><button class="button danger" data-logout>退出</button></div><pre class="action-output" aria-live="polite">等待操作…</pre><a target="_top" href="{{LOGIN_ROUTE}}">返回登录页</a></section></main></body></html>

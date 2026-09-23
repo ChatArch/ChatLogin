@@ -171,6 +171,20 @@ def test_backend_errors_are_safe_no_store(operation):
     assert "set-cookie" not in response.headers
 
 
+def test_bounded_session_capacity_is_a_controlled_retryable_failure():
+    auth, _, client = application()
+
+    def full(*args, **kwargs):
+        raise cl.StoreFull("internal capacity detail")
+
+    auth.sessions.issue = full
+    response = login(client)
+    assert response.status_code == 503
+    assert response.headers["cache-control"] == "no-store"
+    assert response.json() == {"detail": "Session capacity exhausted; retry after active sessions expire"}
+    assert "internal" not in response.text and "set-cookie" not in response.headers
+
+
 @pytest.mark.parametrize("persistent", [False, True])
 def test_all_sync_auth_and_session_calls_leave_event_loop(tmp_path, persistent):
     options = {}

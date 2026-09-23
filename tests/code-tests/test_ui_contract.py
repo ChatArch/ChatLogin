@@ -11,7 +11,7 @@ CONTEXT = {"assets_path": "/auth/assets", "login_url": "/auth/login",
 ASSETS = Path(__file__).resolve().parents[2] / "src/chatlogin/web/assets"
 
 
-@pytest.mark.parametrize("field", ["stylesheet_url", "guest_url"])
+@pytest.mark.parametrize("field", ["stylesheet_url", "script_url", "guest_url"])
 @pytest.mark.parametrize("value", ["//evil.test/a", "/\\evil.test/a", "/%2fevil.test",
                                   "/%255cevil.test", "/a\n.css", "https://evil.test",
                                   "relative.css", "/a/../b", "/%2e%2e/b"])
@@ -46,6 +46,9 @@ def test_defaults_and_guest_contract():
     assert 'class="chatlogin__form-panel"' in html
     assert "登录后继续" in html
     assert 'class="chatlogin__guest"' not in html
+    assert 'src="/host.js"' not in html
+    html = LoginUI(script_url="/host.js").render(CONTEXT)
+    assert '<script defer src="/host.js"></script>' in html
     html = LoginUI(guest_url="/guest?mode=read", guest_label="访客 <查看>").render(CONTEXT)
     assert 'href="/guest?mode=read"' in html
     assert "访客 &lt;查看&gt;" in html

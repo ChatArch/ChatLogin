@@ -37,3 +37,15 @@ def test_tree_brief_option_prints_registered_cli_tree():
     assert result.output.startswith("chatlogin\n")
     assert "├── --tree" in result.output
     assert "├── --tree-brief" in result.output
+
+
+def test_serve_is_registered_without_importing_optional_web_stack():
+    help_result = CliRunner().invoke(main, ["serve", "--help"])
+    assert help_result.exit_code == 0, help_result.output
+    assert "--host" in help_result.output
+    assert "--port" in help_result.output
+    assert "--origin" in help_result.output
+
+    tree_result = CliRunner().invoke(main, ["--tree"])
+    assert tree_result.exit_code == 0
+    assert "serve" in tree_result.output

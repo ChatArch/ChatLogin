@@ -1,5 +1,7 @@
 # Integration and Security Boundaries
 
+Start with the [complete quick integration](quickstart.md). To explore the components first, install `ChatLogin[demo]` and run `chatlogin serve`; see [Demo](demo.md).
+
 ## Choose an Integration Level
 
 | Requirement | Entry point | Host responsibilities |
@@ -12,7 +14,7 @@
 
 Headless does not require another auth microservice. Mount JSON routes in the existing FastAPI process, or call the core Python API while keeping existing HTTP handlers and response fields. Python packages can carry HTML/CSS/JS; host templates take priority over package templates, without editing site-packages.
 
-## Choose an Authentication Backend
+## Choose an Authentication Backend {#backends}
 
 | Account source | Entry point | Responsibility |
 | --- | --- | --- |
@@ -50,7 +52,7 @@ The factory must return a fresh `sqlite3.Connection` with `row_factory=sqlite3.R
 
 This is **ChatVoice schema compatibility**, not a generic ORM for arbitrary SQLite account systems. Account matching is exact; retain host case/whitespace normalization before calling. Passwords keep PBKDF2-HMAC-SHA256 at 310000 iterations and existing salt/digest material. Account IDs, ISO expiry (including offsets), legacy 32-character CSRF and SHA-256 token digests are preserved. Anonymous, expired and invalid requests create no identity. Resolution rejoins the account instead of caching a user snapshot.
 
-`ChatVoiceSessionStore(connect, lock, clock, *, max_sessions=10000)` accepts only the `chatvoice` namespace and `Role.USER` sessions, never guest/admin. Capacity is database-wide and SQLite transactions serialize it across store instances. Live sessions are not evicted; a full store raises `StoreFull`. `SessionManager.issue(..., previous_token=...)` replaces atomically, rolling back to the old session on insert failure. `ChatVoiceAuth` retains the original constructor and a default capacity of 10000; compose the store and manager separately for a custom capacity.
+`ChatVoiceSessionStore(connect, lock, clock, *, max_sessions=10000)` accepts only the `chatvoice` namespace and `Role.USER` sessions, never guest/admin. Capacity is database-wide and SQLite transactions serialize it across store instances. Live sessions are not evicted; a full store raises `StoreFull`. `SessionManager.issue(..., previous_token=...)` replaces atomically, rolling back to the old session on insert failure. `ChatVoiceAuth` preserves existing constructor calls and adds optional keyword `max_sessions=10000`; the store and manager can also be composed separately.
 
 ### Compose with All Three UI Modes
 
@@ -71,7 +73,7 @@ The generic HTTP adapter keeps its existing JSON fields, Origin/Host, cookie, CS
 
 Without FastAPI, install `ChatLogin[ui]` and call `LoginUI.render()`. That mode only renders templates; secure HTTP behavior remains the host's responsibility.
 
-## Browser HTTP Contract
+## Browser HTTP Contract {#browser-contract}
 
 The default prefix is `/auth`; it can be explicitly configured as `/api/auth` or another fixed local prefix.
 
@@ -113,6 +115,10 @@ Use browser fetch with `credentials: 'same-origin'`. Read CSRF from session JSON
 The repository's `Web Compatibility` workflow still installs explicit 0.x and 1.3.x lines through the normal resolver for the `web` extra. The 1.x functional probes demonstrate runtime compatibility; run standard dependency resolution and the minimum-Python wheel gate before release.
 
 ## Runnable Demo
+
+The packaged demo needs no checkout: install `ChatLogin[demo]` and run `chatlogin serve`. It uses an explicitly labelled public synthetic identity; see [Demo](demo.md).
+
+The following separate source example demonstrates host-supplied credentials; it is not required by `serve`.
 
 From the source distribution or repository root. The demo has no default password and uses synthetic accounts rather than production data:
 

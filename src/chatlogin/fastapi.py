@@ -16,7 +16,7 @@ from starlette.concurrency import run_in_threadpool
 from .credentials import AsyncCredentialBackend, CredentialBackend, valid_credentials
 from .identity import AccessDenied, Principal, Role, require_role
 from .security import LoginRateLimiter, require_csrf, safe_next
-from .sessions import SessionManager
+from .sessions import SessionManager, StoreFull
 from .ui import LoginUI
 
 _COOKIE_RE = re.compile(r"^[A-Za-z0-9_][A-Za-z0-9_.-]{0,127}$")
@@ -333,6 +333,8 @@ async def _call(function, *args, **kwargs):
         if inspect.isawaitable(result):
             return await result
         return result
+    except StoreFull:
+        raise _http(503, "Session capacity exhausted; retry after active sessions expire") from None
     except Exception:
         raise _http(500, "Authentication service unavailable") from None
 
