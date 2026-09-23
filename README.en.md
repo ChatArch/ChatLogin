@@ -41,7 +41,7 @@ pip install "ChatLogin[ui]"
 
 The core package does not require adopting the packaged page. An existing static HTML/vanilla-JS site can mount only JSON routes and retain its current entry page and user database; a standard-library HTTP host can use `LoginUI` for rendering without installing FastAPI.
 
-## Choose an Authentication Backend (0.1.3)
+## Choose an Authentication Backend (0.1.4)
 
 | Account source | Optional backend | Session and host boundary |
 | --- | --- | --- |
@@ -57,6 +57,7 @@ The core package does not require adopting the packaged page. An existing static
 - `guest`, `user`, and `admin` are server-trusted identities and cannot be selected from a request body.
 - Fixed credentials, multiple accounts, and host callbacks are supported; existing PBKDF2 material can be verified without forced migration.
 - Session tokens are persisted only as SHA-256 digests, with TTL, rotation, revocation, CSRF, instance isolation, and public `SessionManager.purge_expired()` cleanup.
+- Public `PrivateSQLite` is reusable by dependent packages. On POSIX it protects the main database and SQLite sidecars with a trusted `0700` data directory and real-path `mode=rw` connections, rejecting unsafe existing paths without chmodding historical files. Same-UID processes are inside the local-filesystem trust boundary; non-POSIX mode bits are not presented as ACL checks.
 - The FastAPI adapter enforces same-site Origin/Host checks, body-size limits, rate limiting, and safe local `next` values.
 - `ChatLogin[web]` declares `starlette>=0.40,<2.0`; compatibility tests cover Starlette 0.x, 1.3.1, and 1.6.0, while CI keeps explicit 0.x and 1.3.x gates.
 - Packaged templates provide independent palettes, layouts and light/dark/system appearance. Hosts can override part or all of the page, or keep their existing HTML/JS and use headless integration.

@@ -25,6 +25,8 @@ chatlogin
 chatlogin
 ├── SessionStore                      # Protocol
 ├── MemorySessionStore(max_sessions)  # demo/test only
+├── PrivateSQLite(database, timeout=5)
+│   └── connect(immediate=False)
 ├── SQLiteSessionStore(database)
 ├── SQLiteSessionStore.for_instance(instance, home=None)
 ├── Session / IssuedSession
@@ -145,12 +147,17 @@ backend = AsyncCallbackBackend(authenticate)
 ## 运行态路径
 
 ```python
-from chatlogin import SQLiteSessionStore, state_paths
+from chatlogin import PrivateSQLite, SQLiteSessionStore, state_paths
 
 paths = state_paths("my-site")
 store = SQLiteSessionStore.for_instance("my-site")
+private = PrivateSQLite(paths.directory / "leaf-package.sqlite3")
 ```
 
-默认路径为 `<ChatArch home>/chatlogin/instances/<instance>/sessions.sqlite3`。导入包和仅计算路径都不会创建目录；store 初始化时只创建自己的私有目录与 `0600` 数据库，不修改共享父目录权限。
+默认 session 路径为 `<ChatArch home>/chatlogin/instances/<instance>/sessions.sqlite3`。导入包和仅计算路径不会创建对象；初始化 `PrivateSQLite` 或 store 时才安全创建缺失的私有目录与主库。叶子包可以用 `with private.connect() as connection:` 复用相同边界，并在上下文正常退出时提交、异常时回滚；`immediate=True` 会在交付连接前执行 `BEGIN IMMEDIATE`。
+
+POSIX 实现逐级 no-follow 校验祖先 owner 与写权限，要求最终数据目录由服务 UID 拥有且恰为 `0700`。主库以真实 file URI 的 `mode=rw` 打开；已有主库和 sidecar 必须是服务 UID 拥有、单链接、恰为 `0600` 的普通文件，绝不 chmod 历史对象。SQLite 在可信父目录中新建的安全 sidecar 才可按需规范为 `0600`。这套边界不依赖 fd alias，也不排除同 UID 进程；同 UID 与 root 在信任边界内。
+
+缺少所需 dir-fd/no-follow 原语的 POSIX 平台失败关闭。非 POSIX 保留隔离的旧路径行为，不把 mode bits 当作 Windows ACL 保证；宿主仍需用平台 ACL 保护目录。此 API 面向可信本地文件系统，不支持网络/共享文件系统。
 
 宿主需要清理私有上下文索引时，调用 `SessionManager.purge_expired()`，由 manager 使用已验证 instance 与 clock 委托给 store；不要复制 TTL 计算或访问 store 私有成员。

@@ -95,6 +95,9 @@ app.include_router(web.router)
 - 会话随机 token 只交付 HttpOnly cookie；`SessionStore` 接收摘要，不接收原 token。CSRF 是单独的敏感值，允许传给同源客户端但不得记录。
 - 过期清理通过 `SessionManager.purge_expired()` 触发，manager 会使用自身已验证的 instance 和 clock 调用 store。宿主需要维护私有上下文索引时，应以此为边界清理，不复制 TTL 或访问 store 私有字段。
 - 内存 store 有容量上限，仅用于单进程演示/测试。SQLite 是持久本地方案；多主机部署需提供共享的 `SessionStore`。登录频率限制是进程级后备保护，不是分布式抗滥用服务。
+- `SQLiteSessionStore` 复用公共 `PrivateSQLite`。POSIX 上逐级 no-follow 校验真实目录：祖先必须由 root（含用户命名空间映射）或服务 UID 拥有，且不得由不受信任的 group/other 写入；只有 sticky 语义确实保护可信 owner 条目时例外。最终数据目录必须由服务 UID 拥有且恰为 `0700`。
+- 主库通过真实路径 `mode=rw` 打开，初始化时以排他方式安全创建一次。已有主库与 `-journal`/`-wal`/`-shm` 必须是服务 UID 拥有、单链接、恰为 `0600` 的普通文件；绝不 chmod 已有路径。SQLite 在可信父目录中新建的安全 sidecar 会在连接及事务后校验，并仅在本次新建时按需规范为 `0600`。这里不依赖 fd alias，也不声称排除同 UID 恶意进程；同 UID 与 root 均在本地文件系统信任边界内。
+- 缺少 dir-fd/no-follow 原语的 POSIX 平台失败关闭；非 POSIX 保留旧兼容路径，不提供 POSIX no-follow/mode 保证，部署方必须用平台 ACL 保护目录。此原语只面向可信本地文件系统，不面向网络或共享文件系统。
 - `origin` 应是部署的固定可信源；不从任意 Host 或 forwarded 头自动推断。反代信任、TLS 与宿主服务进程由网站负责。
 
 ## 依赖兼容门禁
