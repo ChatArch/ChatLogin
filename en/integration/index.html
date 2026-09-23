@@ -11,7 +11,7 @@
         <link rel="canonical" href="https://arch.gh.wzhecnu.cn/ChatLogin/en/integration/">
       
       
-        <link rel="prev" href="../">
+        <link rel="prev" href="../quickstart/">
       
       
         <link rel="next" href="../cli-tree/">
@@ -231,6 +231,44 @@
   
   
   
+  
+    <li class="md-tabs__item">
+      <a href="../demo/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Demo and Quick Start
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../quickstart/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Quick Integration
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
     
   
   
@@ -339,6 +377,50 @@
       
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../demo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Demo and Quick Start
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Quick Integration
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
     
   
   
@@ -401,7 +483,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#choose-an-authentication-backend" class="md-nav__link">
+  <a href="#backends" class="md-nav__link">
     <span class="md-ellipsis">
       Choose an Authentication Backend
     </span>
@@ -434,7 +516,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#browser-http-contract" class="md-nav__link">
+  <a href="#browser-contract" class="md-nav__link">
     <span class="md-ellipsis">
       Browser HTTP Contract
     </span>
@@ -508,10 +590,10 @@
         
           
         
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
         
           
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
             
   
   
@@ -524,8 +606,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             Commands and APIs
           </label>
@@ -643,7 +725,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#choose-an-authentication-backend" class="md-nav__link">
+  <a href="#backends" class="md-nav__link">
     <span class="md-ellipsis">
       Choose an Authentication Backend
     </span>
@@ -676,7 +758,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#browser-http-contract" class="md-nav__link">
+  <a href="#browser-contract" class="md-nav__link">
     <span class="md-ellipsis">
       Browser HTTP Contract
     </span>
@@ -745,6 +827,7 @@
 
 
 <h1 id="integration-and-security-boundaries">Integration and Security Boundaries<a class="headerlink" href="#integration-and-security-boundaries" title="Permanent link">&para;</a></h1>
+<p>Start with the <a href="../quickstart/">complete quick integration</a>. To explore the components first, install <code>ChatLogin[demo]</code> and run <code>chatlogin serve</code>; see <a href="../demo/">Demo</a>.</p>
 <h2 id="choose-an-integration-level">Choose an Integration Level<a class="headerlink" href="#choose-an-integration-level" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -783,7 +866,7 @@
 </tbody>
 </table>
 <p>Headless does not require another auth microservice. Mount JSON routes in the existing FastAPI process, or call the core Python API while keeping existing HTTP handlers and response fields. Python packages can carry HTML/CSS/JS; host templates take priority over package templates, without editing site-packages.</p>
-<h2 id="choose-an-authentication-backend">Choose an Authentication Backend<a class="headerlink" href="#choose-an-authentication-backend" title="Permanent link">&para;</a></h2>
+<h2 id="backends">Choose an Authentication Backend<a class="headerlink" href="#backends" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
@@ -839,7 +922,7 @@
 <li><code>auth_sessions(token_hash TEXT PRIMARY KEY, user_id TEXT NOT NULL, csrf_token TEXT NOT NULL, created_at TEXT NOT NULL, expires_at TEXT NOT NULL)</code>, with a foreign key from <code>user_id</code> to <code>accounts(id) ON DELETE CASCADE</code>.</li>
 </ul>
 <p>This is <strong>ChatVoice schema compatibility</strong>, not a generic ORM for arbitrary SQLite account systems. Account matching is exact; retain host case/whitespace normalization before calling. Passwords keep PBKDF2-HMAC-SHA256 at 310000 iterations and existing salt/digest material. Account IDs, ISO expiry (including offsets), legacy 32-character CSRF and SHA-256 token digests are preserved. Anonymous, expired and invalid requests create no identity. Resolution rejoins the account instead of caching a user snapshot.</p>
-<p><code>ChatVoiceSessionStore(connect, lock, clock, *, max_sessions=10000)</code> accepts only the <code>chatvoice</code> namespace and <code>Role.USER</code> sessions, never guest/admin. Capacity is database-wide and SQLite transactions serialize it across store instances. Live sessions are not evicted; a full store raises <code>StoreFull</code>. <code>SessionManager.issue(..., previous_token=...)</code> replaces atomically, rolling back to the old session on insert failure. <code>ChatVoiceAuth</code> retains the original constructor and a default capacity of 10000; compose the store and manager separately for a custom capacity.</p>
+<p><code>ChatVoiceSessionStore(connect, lock, clock, *, max_sessions=10000)</code> accepts only the <code>chatvoice</code> namespace and <code>Role.USER</code> sessions, never guest/admin. Capacity is database-wide and SQLite transactions serialize it across store instances. Live sessions are not evicted; a full store raises <code>StoreFull</code>. <code>SessionManager.issue(..., previous_token=...)</code> replaces atomically, rolling back to the old session on insert failure. <code>ChatVoiceAuth</code> preserves existing constructor calls and adds optional keyword <code>max_sessions=10000</code>; the store and manager can also be composed separately.</p>
 <h3 id="compose-with-all-three-ui-modes">Compose with All Three UI Modes<a class="headerlink" href="#compose-with-all-three-ui-modes" title="Permanent link">&para;</a></h3>
 <p>With <code>ChatLogin[web]</code>, pass a sync or async backend and its manager to the generic adapter:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">chatlogin.fastapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">FastAPIAuth</span>
@@ -853,7 +936,7 @@
 </code></pre></div>
 <p>The generic HTTP adapter keeps its existing JSON fields, Origin/Host, cookie, CSRF and rate-limit behavior; it does not automatically become the ChatVoice HTTP API. When retaining existing HTTP, the host still owns cookie/response mapping, Origin/CSRF checks, account creation and every business owner/policy decision. The <code>_chatlogin_session</code> entry in <code>resolve_row</code> is for server-side CSRF checks, not whole-row JSON serialization or sensitive-field logging.</p>
 <p>Without FastAPI, install <code>ChatLogin[ui]</code> and call <code>LoginUI.render()</code>. That mode only renders templates; secure HTTP behavior remains the host's responsibility.</p>
-<h2 id="browser-http-contract">Browser HTTP Contract<a class="headerlink" href="#browser-http-contract" title="Permanent link">&para;</a></h2>
+<h2 id="browser-contract">Browser HTTP Contract<a class="headerlink" href="#browser-contract" title="Permanent link">&para;</a></h2>
 <p>The default prefix is <code>/auth</code>; it can be explicitly configured as <code>/api/auth</code> or another fixed local prefix.</p>
 <table>
 <thead>
@@ -921,6 +1004,8 @@
 </ul>
 <p>The repository's <code>Web Compatibility</code> workflow still installs explicit 0.x and 1.3.x lines through the normal resolver for the <code>web</code> extra. The 1.x functional probes demonstrate runtime compatibility; run standard dependency resolution and the minimum-Python wheel gate before release.</p>
 <h2 id="runnable-demo">Runnable Demo<a class="headerlink" href="#runnable-demo" title="Permanent link">&para;</a></h2>
+<p>The packaged demo needs no checkout: install <code>ChatLogin[demo]</code> and run <code>chatlogin serve</code>. It uses an explicitly labelled public synthetic identity; see <a href="../demo/">Demo</a>.</p>
+<p>The following separate source example demonstrates host-supplied credentials; it is not required by <code>serve</code>.</p>
 <p>From the source distribution or repository root. The demo has no default password and uses synthetic accounts rather than production data:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">".[web,demo]"</span>
 <a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nb">read</span><span class="w"> </span>-s<span class="w"> </span>CHATLOGIN_DEMO_PASSWORD

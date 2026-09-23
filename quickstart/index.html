@@ -8,13 +8,13 @@
       
       
       
-        <link rel="canonical" href="https://arch.gh.wzhecnu.cn/ChatLogin/cli-tree/">
+        <link rel="canonical" href="https://arch.gh.wzhecnu.cn/ChatLogin/quickstart/">
       
       
-        <link rel="prev" href="../integration/">
+        <link rel="prev" href="../demo/">
       
       
-        <link rel="next" href="../capability-map/">
+        <link rel="next" href="../integration/">
       
       
       <link rel="icon" href="../assets/images/favicon.png">
@@ -22,7 +22,7 @@
     
     
       
-        <title>CLI 树 - ChatLogin 文档</title>
+        <title>快速接入 - ChatLogin 文档</title>
       
     
     
@@ -64,7 +64,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#cli" class="md-skip">
+        <a href="#_1" class="md-skip">
           跳转至
         </a>
       
@@ -98,7 +98,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              CLI 树
+              快速接入
             
           </span>
         </div>
@@ -125,7 +125,7 @@
           </li>
         
           <li class="md-select__item">
-            <a href="../en/cli-tree/" hreflang="en" class="md-select__link">
+            <a href="../en/quickstart/" hreflang="en" class="md-select__link">
               English
             </a>
           </li>
@@ -250,9 +250,11 @@
   
   
   
+    
   
-    <li class="md-tabs__item">
-      <a href="../quickstart/" class="md-tabs__link">
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
         
   
   
@@ -288,13 +290,11 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="./" class="md-tabs__link">
+      <li class="md-tabs__item">
+        <a href="../cli-tree/" class="md-tabs__link">
           
   
   
@@ -399,10 +399,32 @@
       
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../quickstart/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    快速接入
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -413,6 +435,71 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1" class="md-nav__link">
+    <span class="md-ellipsis">
+      1. 安装并保存完整应用
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. 显式设置密码并启动
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. 保留后端，独立选择前端
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-headless" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Headless 请求顺序
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      下一步
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -443,31 +530,28 @@
       
   
   
-    
   
   
-  
     
     
     
     
-      
-        
-        
       
       
         
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
         
           
-          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
             
   
   
@@ -480,7 +564,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             命令与接口
@@ -491,32 +575,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    CLI 树
-    
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../cli-tree/" class="md-nav__link">
         
   
   
@@ -527,62 +589,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="目录">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      目录
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
-    <span class="md-ellipsis">
-      顶层命令
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
-    <span class="md-ellipsis">
-      路径检查
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
-    <span class="md-ellipsis">
-      产品演示
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
-    <span class="md-ellipsis">
-      验证命令
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -668,9 +674,36 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#_1" class="md-nav__link">
+  <a href="#1" class="md-nav__link">
     <span class="md-ellipsis">
-      顶层命令
+      1. 安装并保存完整应用
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2" class="md-nav__link">
+    <span class="md-ellipsis">
+      2. 显式设置密码并启动
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3" class="md-nav__link">
+    <span class="md-ellipsis">
+      3. 保留后端，独立选择前端
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-headless" class="md-nav__link">
+    <span class="md-ellipsis">
+      4. Headless 请求顺序
     </span>
   </a>
   
@@ -679,25 +712,7 @@
         <li class="md-nav__item">
   <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
-      路径检查
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
-    <span class="md-ellipsis">
-      产品演示
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
-    <span class="md-ellipsis">
-      验证命令
+      下一步
     </span>
   </a>
   
@@ -719,7 +734,7 @@
 
 
   
-    <a href="https://github.com/ChatArch/ChatLogin/edit/main/docs/cli-tree.md" title="编辑此页" class="md-content__button md-icon" rel="edit">
+    <a href="https://github.com/ChatArch/ChatLogin/edit/main/docs/quickstart.md" title="编辑此页" class="md-content__button md-icon" rel="edit">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
@@ -727,44 +742,111 @@
   
 
 
-<h1 id="cli">CLI 树<a class="headerlink" href="#cli" title="Permanent link">&para;</a></h1>
-<p>可复用认证与网页能力由 <a href="../interface-tree/">Python 接口</a> 提供。命令行还可运行隔离产品演示；它不是生产登录微服务。</p>
-<h2 id="_1">顶层命令<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>chatlogin
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>├── --help                                      # 查看帮助
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>├── --version                                   # 查询安装版本
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>├── --tree                                      # 真实命令树，含参数
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>├── --tree-brief                                # 简明命令树
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>├── paths &lt;INSTANCE&gt; [--home HOME] [--json]      # 只读解析实例运行路径
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>└── serve [--host HOST] [--port PORT] [--origin ORIGIN]
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>                                                    # 运行隔离合成演示
+<h1 id="_1">快速接入自己的项目<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
+<div class="grid cards">
+<ul>
+<li><strong>新建 FastAPI 网站</strong>：复制下方完整应用，先完成一次真实登录。</li>
+<li><strong>已有账户数据库</strong>：保留账户与密码材料，换用 <a href="../integration/#backends">同步或异步回调</a>。</li>
+<li><strong>已有前端</strong>：保留页面，只挂载 <code>ui=None</code> 的 JSON 接口，按 <a href="../integration/#browser-contract">浏览器契约</a> 传递会话与 CSRF。</li>
+<li><strong>先选视觉风格</strong>：运行 <a href="../demo/">演示站</a> 的模板游乐场，再复制 <code>LoginUI(...)</code> 配置。</li>
+</ul>
+</div>
+<h2 id="1">1. 安装并保存完整应用<a class="headerlink" href="#1" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">"ChatLogin[web]"</span><span class="w"> </span>uvicorn
 </code></pre></div>
-<h2 id="_2">路径检查<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>chatlogin<span class="w"> </span>paths<span class="w"> </span>my-site<span class="w"> </span>--json
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>chatlogin<span class="w"> </span>paths<span class="w"> </span>my-site<span class="w"> </span>--home<span class="w"> </span><span class="s2">"</span><span class="nv">$HOME</span><span class="s2">/.chatarch"</span><span class="w"> </span>--json
+<p>把下面代码保存为 <code>app.py</code>。账号名为 <code>operator</code>，密码必须由你显式设置；示例不会读取演示站账号，也没有默认生产密码。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="sd">"""Minimal host app; provide an explicit password through the environment."""</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">urllib.parse</span><span class="w"> </span><span class="kn">import</span> <span class="n">urlsplit</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="kn">from</span><span class="w"> </span><span class="nn">fastapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">Depends</span><span class="p">,</span> <span class="n">FastAPI</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="kn">import</span><span class="w"> </span><span class="nn">uvicorn</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="kn">from</span><span class="w"> </span><span class="nn">chatlogin</span><span class="w"> </span><span class="kn">import</span> <span class="n">MemorySessionStore</span><span class="p">,</span> <span class="n">PasswordBackend</span><span class="p">,</span> <span class="n">Principal</span><span class="p">,</span> <span class="n">SessionManager</span><span class="p">,</span> <span class="n">hash_password</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="kn">from</span><span class="w"> </span><span class="nn">chatlogin.fastapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">CookieSettings</span><span class="p">,</span> <span class="n">FastAPIAuth</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="kn">from</span><span class="w"> </span><span class="nn">chatlogin.ui</span><span class="w"> </span><span class="kn">import</span> <span class="n">LoginUI</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="n">origin</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"MY_SITE_ORIGIN"</span><span class="p">,</span> <span class="s2">"http://127.0.0.1:8000"</span><span class="p">)</span>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="n">password</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"MY_SITE_LOGIN_PASSWORD"</span><span class="p">]</span>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a><span class="n">backend</span> <span class="o">=</span> <span class="n">PasswordBackend</span><span class="p">({</span>
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>    <span class="s2">"operator"</span><span class="p">:</span> <span class="p">(</span><span class="n">Principal</span><span class="p">(</span><span class="s2">"operator"</span><span class="p">,</span> <span class="s2">"Operator"</span><span class="p">),</span> <span class="n">hash_password</span><span class="p">(</span><span class="n">password</span><span class="p">)),</span>
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a><span class="p">})</span>
+<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a><span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">()</span>
+<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="n">auth</span> <span class="o">=</span> <span class="n">FastAPIAuth</span><span class="p">(</span>
+<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a>    <span class="n">backend</span><span class="p">,</span>
+<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a>    <span class="n">SessionManager</span><span class="p">(</span><span class="n">MemorySessionStore</span><span class="p">(</span><span class="n">max_sessions</span><span class="o">=</span><span class="mi">256</span><span class="p">),</span> <span class="n">instance</span><span class="o">=</span><span class="s2">"my-site"</span><span class="p">,</span> <span class="n">ttl</span><span class="o">=</span><span class="mi">3600</span><span class="p">),</span>
+<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>    <span class="n">origin</span><span class="o">=</span><span class="n">origin</span><span class="p">,</span>
+<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a>    <span class="n">ui</span><span class="o">=</span><span class="n">LoginUI</span><span class="p">(),</span>
+<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a>    <span class="n">cookie</span><span class="o">=</span><span class="n">CookieSettings</span><span class="p">(</span><span class="n">secure</span><span class="o">=</span><span class="n">urlsplit</span><span class="p">(</span><span class="n">origin</span><span class="p">)</span><span class="o">.</span><span class="n">scheme</span> <span class="o">==</span> <span class="s2">"https"</span><span class="p">),</span>
+<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a><span class="p">)</span>
+<a id="__codelineno-1-24" name="__codelineno-1-24" href="#__codelineno-1-24"></a><span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span><span class="n">auth</span><span class="o">.</span><span class="n">router</span><span class="p">)</span>
+<a id="__codelineno-1-25" name="__codelineno-1-25" href="#__codelineno-1-25"></a>
+<a id="__codelineno-1-26" name="__codelineno-1-26" href="#__codelineno-1-26"></a><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/"</span><span class="p">)</span>
+<a id="__codelineno-1-27" name="__codelineno-1-27" href="#__codelineno-1-27"></a><span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">():</span>
+<a id="__codelineno-1-28" name="__codelineno-1-28" href="#__codelineno-1-28"></a>    <span class="k">return</span> <span class="p">{</span><span class="s2">"login"</span><span class="p">:</span> <span class="s2">"/auth/?next=/private"</span><span class="p">}</span>
+<a id="__codelineno-1-29" name="__codelineno-1-29" href="#__codelineno-1-29"></a>
+<a id="__codelineno-1-30" name="__codelineno-1-30" href="#__codelineno-1-30"></a><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/private"</span><span class="p">)</span>
+<a id="__codelineno-1-31" name="__codelineno-1-31" href="#__codelineno-1-31"></a><span class="k">def</span><span class="w"> </span><span class="nf">private</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">Depends</span><span class="p">(</span><span class="n">auth</span><span class="o">.</span><span class="n">current_user</span><span class="p">)):</span>
+<a id="__codelineno-1-32" name="__codelineno-1-32" href="#__codelineno-1-32"></a>    <span class="k">return</span> <span class="n">user</span><span class="o">.</span><span class="n">as_dict</span><span class="p">()</span>
+<a id="__codelineno-1-33" name="__codelineno-1-33" href="#__codelineno-1-33"></a>
+<a id="__codelineno-1-34" name="__codelineno-1-34" href="#__codelineno-1-34"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
+<a id="__codelineno-1-35" name="__codelineno-1-35" href="#__codelineno-1-35"></a>    <span class="n">uvicorn</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="s2">"127.0.0.1"</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">8000</span><span class="p">,</span> <span class="n">proxy_headers</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </code></pre></div>
-<p>返回 <code>directory</code> 与 <code>database</code> 字段。显式 <code>--home</code> 优先于 ChatEnv 的默认 home；路径支持用户目录和已定义环境变量，拒绝未知变量与不安全实例名。此命令不创建目录、数据库或账户。</p>
-<h2 id="_3">产品演示<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">"ChatLogin[demo]"</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>chatlogin<span class="w"> </span>serve
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>chatlogin<span class="w"> </span>serve<span class="w"> </span>--host<span class="w"> </span><span class="m">127</span>.0.0.1<span class="w"> </span>--port<span class="w"> </span><span class="m">8765</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span>--origin<span class="w"> </span>https://login.example.com
+<h2 id="2">2. 显式设置密码并启动<a class="headerlink" href="#2" title="Permanent link">&para;</a></h2>
+<p>在 Bash/Zsh 终端输入下面命令，再输入不少于 12 个字符的测试密码。输入不回显，密码不会进入命令行参数。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="nb">read</span><span class="w"> </span>-rs<span class="w"> </span>MY_SITE_LOGIN_PASSWORD
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nb">export</span><span class="w"> </span>MY_SITE_LOGIN_PASSWORD
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>python<span class="w"> </span>app.py
 </code></pre></div>
-<p>默认绑定 <code>127.0.0.1:8765</code>。非 loopback bind 若未提供 <code>--origin</code> 会失败；反向代理场景的 <code>--origin</code> 必须是浏览器访问的固定可信源，命令不会从 forwarded headers 推断它。演示只使用公开合成身份、短期有界 session 与一次性内存 fixture，详见<a href="../demo/">演示指南</a>。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>Usage: chatlogin serve [OPTIONS]
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>Options:
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>  --host TEXT           Bind address; loopback by default.  [default: 127.0.0.1]
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>  --port INTEGER RANGE  TCP port.  [default: 8765; 1&lt;=x&lt;=65535]
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>  --origin TEXT         Fixed trusted public origin for browser Host/Origin checks.
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>  --help                Show this message and exit.
-</code></pre></div>
-<h2 id="_4">验证命令<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>chatlogin<span class="w"> </span>--version
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>chatlogin<span class="w"> </span>--tree
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>chatlogin<span class="w"> </span>--tree-brief
-</code></pre></div>
-<p>命令树直接来自 ChatStyle 和 Click 已注册元数据；新增命令时同步更新测试和本页。网页接入见 <a href="../integration/">接入与安全</a>。</p>
+<p>打开 <a href="http://127.0.0.1:8000/auth/?next=/private">http://127.0.0.1:8000/auth/?next=/private</a>，使用 <code>operator</code> 与刚设置的密码登录。成功后 <code>/private</code> 返回服务端可信用户信息；未登录直接访问该路径返回 401。</p>
+<p>这个示例使用单进程内存会话，重启即清空。生产部署应选择持久化 store、固定 HTTPS origin 和符合业务的数据权限；不能把公开演示身份搬进真实网站。</p>
+<h2 id="3">3. 保留后端，独立选择前端<a class="headerlink" href="#3" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>你希望保留什么</th>
+<th>修改方式</th>
+<th>宿主负责什么</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>直接使用默认 UI</td>
+<td><code>ui=LoginUI(palette="forest", layout="split")</code></td>
+<td>账户来源、业务路由</td>
+</tr>
+<tr>
+<td>自有模板与品牌</td>
+<td><code>LoginUI(template_dirs=("templates",), template_name="host/login.html")</code></td>
+<td>模板安全、静态资源</td>
+</tr>
+<tr>
+<td>原有 HTML/JS</td>
+<td><code>ui=None</code></td>
+<td>表单、错误反馈、登录后的跳转</td>
+</tr>
+<tr>
+<td>标准库 HTTP 宿主</td>
+<td><code>LoginUI.render(context)</code></td>
+<td>Cookie、Origin、CSRF 与 HTTP 路由</td>
+</tr>
+</tbody>
+</table>
+<p><code>template_dirs</code> 是宿主可信模板目录，必须存在；不要修改 site-packages。模板覆盖和回调账户库互相独立。<code>script_url</code> 可指定同源本地脚本，默认不加载宿主脚本。</p>
+<h2 id="4-headless">4. Headless 请求顺序<a class="headerlink" href="#4-headless" title="Permanent link">&para;</a></h2>
+<ol>
+<li><code>GET /auth/session</code>，匿名时也返回 200 与 <code>authenticated=false</code>。</li>
+<li><code>POST /auth/login</code>，JSON 包含 <code>username</code>、<code>password</code>、<code>next</code>。浏览器自动发送同源 Origin；如果已有有效会话，先读取当前 CSRF，并加入 <code>X-CSRF-Token</code>。</li>
+<li>使用 <code>credentials: 'same-origin'</code> 调用业务接口；Cookie 自动携带，不要手工读取 token。</li>
+<li>写操作使用当前 CSRF；退出前重新读取 session，再 <code>POST /auth/logout</code>。</li>
+<li>退出后清理私有界面；受保护接口恢复 401。</li>
+</ol>
+<p>完整可运行的前端实现可以查看包内 <code>chatlogin.demo_site/assets/demo.js</code> 的 Headless 演示。公开 Demo 的业务数据是合成数据，不代表你的后端已经接入。</p>
+<h2 id="_2">下一步<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../integration/">接入与安全</a>：四类后端、精确 ChatVoice schema、HTTP/角色/owner 边界。</li>
+<li><a href="../interface-tree/">Python 接口树</a>：可导入的类与实际方法。</li>
+<li><a href="../demo/">演示站</a>：启动独立演示和查看配置效果。</li>
+</ul>
 
 
 

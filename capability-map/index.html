@@ -233,6 +233,44 @@
   
   
     <li class="md-tabs__item">
+      <a href="../demo/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  演示站与快速开始
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../quickstart/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  快速接入
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
       <a href="../integration/" class="md-tabs__link">
         
   
@@ -342,6 +380,50 @@
   
   
     <li class="md-nav__item">
+      <a href="../demo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    演示站与快速开始
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    快速接入
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../integration/" class="md-nav__link">
         
   
@@ -382,10 +464,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
         
           
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
             
   
   
@@ -398,8 +480,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_3">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             命令与接口
           </label>
@@ -639,6 +721,11 @@
 </thead>
 <tbody>
 <tr>
+<td>包内演示站</td>
+<td>已实现（<code>demo</code> extra）</td>
+<td><code>chatlogin serve</code>、四类真实后端体验、模板游乐场与可复制接入示例；不连接生产数据</td>
+</tr>
+<tr>
 <td>身份与授权</td>
 <td>已实现</td>
 <td><code>Principal</code>、<code>Role</code>、401/403、<code>require_role</code>、<code>require_owner</code>；admin 不自动绕过 owner</td>
@@ -704,11 +791,11 @@
 <p>后端选择：固定/多账号 <code>PasswordBackend</code>；同步宿主库 <code>CallbackBackend</code>；异步宿主库 <code>AsyncCallbackBackend</code>；ChatVoice schema 用现成 <code>ChatVoiceAuth</code>。详见 <a href="../integration/">选择矩阵</a>。</p>
 <h2 id="_4">不在当前范围<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <ul>
-<li>不提供独立常驻登录服务、SSO、OAuth/邮箱登录、MFA 或账户管理后台。</li>
+<li>不提供独立生产登录微服务、SSO、OAuth/邮箱登录、MFA 或账户管理后台。</li>
 <li>不接管会议、文件、卡片等业务数据；每个宿主继续定义资源 owner 和 policy。</li>
 <li>不把 guest 当成数据库账户；访客体验由宿主显式声明。</li>
 <li>不提供万能 ORM 或后端注册中心；ChatVoice 兼容后端来自自有桥接实现，并以旧 schema 合成测试验证。</li>
-<li>不输出 secret、cookie、CSRF token、Authorization header 或生产凭据。</li>
+<li>不把 secret、cookie、CSRF token、Authorization header 或生产凭据写入日志或页面。CSRF 仅通过同源 session/login JSON 交给浏览器，用于受保护写操作。</li>
 </ul>
 
 
