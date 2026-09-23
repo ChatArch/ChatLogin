@@ -80,8 +80,15 @@ def _resource(kind: str, name: str) -> str:
     return (resources.files("chatlogin.demo_site") / kind / name).read_text(encoding="utf-8")
 
 
+def _versioned_assets(markup: str) -> str:
+    for name in _ASSETS:
+        for quote in ('"', "'"):
+            markup = markup.replace(f"{quote}/assets/{name}{quote}", f"{quote}/assets/{name}?v={__version__}{quote}")
+    return markup.replace("{{VERSION}}", escape(__version__))
+
+
 def _page(html: str, *, frame: bool = False) -> HTMLResponse:
-    response = HTMLResponse(html)
+    response = HTMLResponse(_versioned_assets(html))
     response.headers["Cache-Control"] = "no-store"
     response.headers["Pragma"] = "no-cache"
     response.headers["Content-Security-Policy"] = _CSP if frame else _CSP.replace("frame-ancestors 'self'", "frame-ancestors 'none'")
@@ -106,7 +113,7 @@ def _replace(template: str, **values: object) -> str:
 
 def _host_override(context: dict) -> str:
     """Trusted local renderer used to demonstrate a genuine host-owned page."""
-    return f"""<!doctype html>
+    return _versioned_assets(f"""<!doctype html>
 <html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{escape(str(context['title']))}</title>
 <link rel="stylesheet" href="{escape(str(context['assets_path']))}/login.css">
@@ -118,12 +125,12 @@ def _host_override(context: dict) -> str:
  data-appearance="light" data-login-url="{escape(str(context['login_url']))}"
  data-session-url="{escape(str(context['session_url']))}" data-next="{escape(str(context['next']))}">
 <a class="back-link" href="/">← ChatLogin</a><section class="host-login__card">
-<p class="demo-kicker">HOST TEMPLATE OVERRIDE · 本地合成回调</p><h1>{escape(str(context['title']))}</h1>
+<p class="demo-kicker">宿主自定义界面 · 同步回调</p><h1>{escape(str(context['title']))}</h1>
 <p>{escape(str(context['subtitle']))}</p><form class="chatlogin__form">
 <label><span>账号</span><input name="username" autocomplete="username" required></label>
 <label><span>密码</span><input name="password" type="password" autocomplete="current-password" required></label>
-<button type="submit">登录并进入 /workspace/callback</button><p class="chatlogin__status" role="status"></p>
-</form></section></main></body></html>"""
+<button type="submit">登录</button><p class="chatlogin__status" role="status"></p>
+</form></section></main></body></html>""")
 
 
 def _memory_auth(backend, *, origin: str, mode: str, ui: LoginUI | None) -> FastAPIAuth:
@@ -193,14 +200,14 @@ def create_demo_app(*, origin: str) -> FastAPI:
         valid = demo_match(username, password)
         return Principal("demo-async", "异步回调 Demo") if valid else None
 
-    demo_script = "/assets/demo-login.js"
+    demo_script = f"/assets/demo-login.js?v={__version__}"
     modes: dict[str, _Mode] = {}
     password_auth = _memory_auth(
         password_backend, origin=origin, mode="password",
         ui=LoginUI(
-            title="PasswordBackend",
-            subtitle="显式固定账号 · 登录后进入 /workspace/password",
-            script_url=demo_script, stylesheet_url="/assets/demo-login.css",
+            title="固定账号登录",
+            subtitle="使用演示账号体验默认登录界面。",
+            script_url=demo_script, stylesheet_url=f"/assets/demo-login.css?v={__version__}",
             guest_url="/guest?mode=password",
         ),
     )
@@ -208,8 +215,8 @@ def create_demo_app(*, origin: str) -> FastAPI:
     callback_auth = _memory_auth(
         CallbackBackend(callback), origin=origin, mode="callback",
         ui=LoginUI(
-            title="CallbackBackend",
-            subtitle="宿主覆盖 UI · 登录后进入 /workspace/callback",
+            title="自定义页面登录",
+            subtitle="保留你的页面，复用登录与会话能力。",
             renderer=_host_override,
         ),
     )
@@ -229,9 +236,9 @@ def create_demo_app(*, origin: str) -> FastAPI:
         origin=origin,
         prefix="/demo/chatvoice",
         ui=LoginUI(
-            title="ChatVoiceAuth",
-            subtitle="一次性内存 schema fixture · 登录后进入 /workspace/chatvoice",
-            palette="amber", layout="split", appearance="dark", script_url=demo_script, stylesheet_url="/assets/demo-login.css",
+            title="账户库兼容登录",
+            subtitle="演示已有账户库接入，不连接真实数据。",
+            palette="amber", layout="split", appearance="dark", script_url=demo_script, stylesheet_url=f"/assets/demo-login.css?v={__version__}",
         ),
         cookie=CookieSettings(
             name="chatlogin_demo_chatvoice", path="/", max_age=DEMO_TTL_SECONDS,
@@ -301,10 +308,10 @@ def create_demo_app(*, origin: str) -> FastAPI:
         if palette not in PALETTES or layout not in LAYOUTS or appearance not in APPEARANCES or guest not in {0, 1}:
             raise HTTPException(400, "Unsupported preview choice")
         ui = LoginUI(
-            title="模板实时预览", subtitle="由实际 LoginUI.render() 生成",
+            title="示例应用登录", subtitle="登录后继续演示体验。",
             palette=palette, layout=layout, appearance=appearance,
             guest_url="/guest?mode=password" if guest else None,
-            script_url=demo_script, stylesheet_url="/assets/demo-login.css",
+            script_url=demo_script, stylesheet_url=f"/assets/demo-login.css?v={__version__}",
         )
         html = ui.render({
             "login_url": "/demo/password/login", "session_url": "/demo/password/session",

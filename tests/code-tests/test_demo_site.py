@@ -49,7 +49,7 @@ def test_demo_resources_are_packaged_and_public_pages_are_real(demo_client):
 )
 def test_every_backend_and_frontend_mode_has_a_real_page(demo_client, mode, page, marker):
     client, _, _, _ = demo_client
-    response = client.get(page)
+    response = client.get(page, params={"next": f"/workspace/{mode}"})
     assert response.status_code == 200
     assert marker in response.text
     assert "Fill Demo" in response.text or "demo-login.js" in response.text

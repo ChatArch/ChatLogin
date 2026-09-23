@@ -5,6 +5,10 @@
     const open = nav.toggleAttribute("data-open");
     navButton.setAttribute("aria-expanded", String(open));
   });
+  nav?.querySelectorAll("a").forEach((link) => link.addEventListener("click", () => {
+    nav.removeAttribute("data-open");
+    navButton?.setAttribute("aria-expanded", "false");
+  }));
   const headless = document.querySelector("#headless-login");
   if (headless) {
     const form = headless.querySelector("form");
@@ -50,10 +54,31 @@
   if (playground) {
     const frame = playground.querySelector("iframe");
     const config = playground.querySelector("[data-config]");
-    const values = () => ({palette:playground.elements?.palette?.value || playground.querySelector('[name="palette"]').value,layout:playground.querySelector('[name="layout"]').value,appearance:playground.querySelector('[name="appearance"]').value,guest:playground.querySelector('[name="guest"]').checked});
+    const openPreview = playground.querySelector("[data-open-preview]");
+    const values = () => ({palette:playground.querySelector('[name="palette"]').value, layout:playground.querySelector('[name="layout"]').value, appearance:playground.querySelector('[name="appearance"]').value, guest:playground.querySelector('[name="guest"]').checked});
     const snippet = (v) => `LoginUI(\n    palette="${v.palette}",\n    layout="${v.layout}",\n    appearance="${v.appearance}",${v.guest?'\n    guest_url="/guest",':''}\n)`;
-    const update = () => { const v=values(); config.textContent=snippet(v); frame.src=`/playground/preview?palette=${v.palette}&layout=${v.layout}&appearance=${v.appearance}&guest=${v.guest?1:0}`; };
-    playground.querySelectorAll("select,input").forEach((control)=>control.addEventListener("change",update)); update();
-    playground.querySelector("[data-copy]").addEventListener("click", async () => { try { await navigator.clipboard.writeText(config.textContent); playground.querySelector(".copy-status").textContent="已复制"; } catch { playground.querySelector(".copy-status").textContent="请手动复制代码"; } });
+    const previewURL = (v) => `/playground/preview?palette=${v.palette}&layout=${v.layout}&appearance=${v.appearance}&guest=${v.guest?1:0}`;
+    const paint = (v) => {
+      const root = frame.contentDocument?.querySelector(".chatlogin");
+      if (!root) return false;
+      root.dataset.palette=v.palette; root.dataset.layout=v.layout; root.dataset.appearance=v.appearance;
+      let guest = root.querySelector(".chatlogin__guest");
+      if (v.guest && !guest) {
+        guest=frame.contentDocument.createElement("a"); guest.className="chatlogin__guest"; guest.href="/guest?mode=password"; guest.textContent="以访客身份继续";
+        root.querySelector(".chatlogin__form-panel").append(guest);
+      } else if (!v.guest && guest) { guest.remove(); }
+      return true;
+    };
+    const update = () => {
+      const v=values(); config.textContent=snippet(v); openPreview.href=previewURL(v);
+      if (!paint(v)) frame.src=previewURL(v);
+    };
+    frame.addEventListener("load",()=>paint(values()));
+    playground.querySelectorAll("select,input").forEach(control=>control.addEventListener("change",update));
+    config.textContent=snippet(values()); openPreview.href=previewURL(values());
+    playground.querySelector("[data-copy]").addEventListener("click",async()=>{
+      try { await navigator.clipboard.writeText(config.textContent); playground.querySelector(".copy-status").textContent="已复制"; }
+      catch { playground.querySelector(".copy-status").textContent="请展开代码手动复制"; }
+    });
   }
 })();
