@@ -1,0 +1,994 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://arch.gh.wzhecnu.cn/ChatLogin/dev/en/integration/">
+      
+      
+        <link rel="prev" href="../">
+      
+      
+        <link rel="next" href="../cli-tree/">
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.6.23">
+    
+    
+      
+        <title>Integration and Security - ChatLogin Documentation</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.84d31ad4.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+    
+  </head>
+  
+  
+    <body dir="ltr">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#integration-and-security-boundaries" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../" title="ChatLogin Documentation" class="md-header__button md-logo" aria-label="ChatLogin Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            ChatLogin Documentation
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Integration and Security
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+      <div class="md-header__option">
+  <div class="md-select">
+    
+    <button class="md-header__button md-icon" aria-label="Select language">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m12.87 15.07-2.54-2.51.03-.03A17.5 17.5 0 0 0 14.07 6H17V4h-7V2H8v2H1v2h11.17C11.5 7.92 10.44 9.75 9 11.35 8.07 10.32 7.3 9.19 6.69 8h-2c.73 1.63 1.73 3.17 2.98 4.56l-5.09 5.02L4 19l5-5 3.11 3.11zM18.5 10h-2L12 22h2l1.12-3h4.75L21 22h2zm-2.62 7 1.62-4.33L19.12 17z"/></svg>
+    </button>
+    <div class="md-select__inner">
+      <ul class="md-select__list">
+        
+          <li class="md-select__item">
+            <a href="../../integration/" hreflang="zh" class="md-select__link">
+              中文
+            </a>
+          </li>
+        
+          <li class="md-select__item">
+            <a href="./" hreflang="en" class="md-select__link">
+              English
+            </a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+          <a href="javascript:void(0)" class="md-search__icon md-icon" title="Share" aria-label="Share" data-clipboard data-clipboard-text="" data-md-component="search-share" tabindex="-1">
+            
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9a3 3 0 0 0-3 3 3 3 0 0 0 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.15c-.05.21-.08.43-.08.66 0 1.61 1.31 2.91 2.92 2.91s2.92-1.3 2.92-2.91A2.92 2.92 0 0 0 18 16.08"/></svg>
+          </a>
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/ChatArch/ChatLogin" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    ChatArch/ChatLogin
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Integration and Security
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../cli-tree/" class="md-tabs__link">
+          
+  
+  
+  Commands and APIs
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../" title="ChatLogin Documentation" class="md-nav__button md-logo" aria-label="ChatLogin Documentation" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    ChatLogin Documentation
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/ChatArch/ChatLogin" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    ChatArch/ChatLogin
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Home
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    Integration and Security
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    Integration and Security
+    
+  </span>
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#choose-an-integration-level" class="md-nav__link">
+    <span class="md-ellipsis">
+      Choose an Integration Level
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#choose-an-authentication-backend" class="md-nav__link">
+    <span class="md-ellipsis">
+      Choose an Authentication Backend
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Choose an Authentication Backend">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#chatvoice-schema-compatibility-backend" class="md-nav__link">
+    <span class="md-ellipsis">
+      ChatVoice Schema Compatibility Backend
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compose-with-all-three-ui-modes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Compose with All Three UI Modes
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#browser-http-contract" class="md-nav__link">
+    <span class="md-ellipsis">
+      Browser HTTP Contract
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#identity-authorization-and-storage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Identity, Authorization and Storage
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dependency-compatibility-gate" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dependency Compatibility Gate
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#runnable-demo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Runnable Demo
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#customization-responsibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      Customization Responsibility
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Commands and APIs
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            Commands and APIs
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cli-tree/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    CLI Tree
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../capability-map/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Capability Map
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../interface-tree/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Python Interface Tree
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#choose-an-integration-level" class="md-nav__link">
+    <span class="md-ellipsis">
+      Choose an Integration Level
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#choose-an-authentication-backend" class="md-nav__link">
+    <span class="md-ellipsis">
+      Choose an Authentication Backend
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Choose an Authentication Backend">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#chatvoice-schema-compatibility-backend" class="md-nav__link">
+    <span class="md-ellipsis">
+      ChatVoice Schema Compatibility Backend
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#compose-with-all-three-ui-modes" class="md-nav__link">
+    <span class="md-ellipsis">
+      Compose with All Three UI Modes
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#browser-http-contract" class="md-nav__link">
+    <span class="md-ellipsis">
+      Browser HTTP Contract
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#identity-authorization-and-storage" class="md-nav__link">
+    <span class="md-ellipsis">
+      Identity, Authorization and Storage
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#dependency-compatibility-gate" class="md-nav__link">
+    <span class="md-ellipsis">
+      Dependency Compatibility Gate
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#runnable-demo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Runnable Demo
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#customization-responsibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      Customization Responsibility
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+    <a href="https://github.com/ChatArch/ChatLogin/edit/main/docs/integration.en.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
+    </a>
+  
+  
+
+
+<h1 id="integration-and-security-boundaries">Integration and Security Boundaries<a class="headerlink" href="#integration-and-security-boundaries" title="Permanent link">&para;</a></h1>
+<h2 id="choose-an-integration-level">Choose an Integration Level<a class="headerlink" href="#choose-an-integration-level" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Requirement</th>
+<th>Entry point</th>
+<th>Host responsibilities</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Ready-to-use login page</td>
+<td><code>FastAPIAuth(..., ui=LoginUI(...))</code></td>
+<td>User source, business routes, deployment and TLS</td>
+</tr>
+<tr>
+<td>Custom brand or layout</td>
+<td><code>LoginUI(template_dirs=..., template_name=...)</code> or <code>renderer</code></td>
+<td>Custom HTML/CSS and renderer safety</td>
+</tr>
+<tr>
+<td>Existing HTML/JS frontend</td>
+<td><code>FastAPIAuth(..., ui=None)</code></td>
+<td>Existing page, frontend state, all business data</td>
+</tr>
+<tr>
+<td>Existing HTTP/database contract</td>
+<td><code>CallbackBackend</code>, <code>SessionManager</code>, host <code>SessionStore</code></td>
+<td>Stable account IDs, password data, session mapping and response compatibility</td>
+</tr>
+<tr>
+<td>Standard-library HTTP page</td>
+<td><code>LoginUI(...).render(context)</code> + <code>ChatLogin[ui]</code></td>
+<td>HTTP handler, cookies, Origin/CSRF and response fields</td>
+</tr>
+</tbody>
+</table>
+<p>Headless does not require another auth microservice. Mount JSON routes in the existing FastAPI process, or call the core Python API while keeping existing HTTP handlers and response fields. Python packages can carry HTML/CSS/JS; host templates take priority over package templates, without editing site-packages.</p>
+<h2 id="choose-an-authentication-backend">Choose an Authentication Backend<a class="headerlink" href="#choose-an-authentication-backend" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Account source</th>
+<th>Entry point</th>
+<th>Responsibility</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Fixed account / multiple accounts</td>
+<td><code>PasswordBackend(accounts)</code></td>
+<td>One / multiple explicit <code>Principal</code> and <code>PasswordHash</code> entries, with a chosen <code>SessionStore</code></td>
+</tr>
+<tr>
+<td>Other host user database</td>
+<td><code>CallbackBackend(authenticate)</code> + host <code>SessionStore</code></td>
+<td>Host verification and mapping; do not assume the ChatVoice schema</td>
+</tr>
+<tr>
+<td>Async upstream service</td>
+<td><code>AsyncCallbackBackend(authenticate)</code> + <code>SessionManager</code></td>
+<td>Await host verification; invalid input is not sent upstream and invalid results fail closed</td>
+</tr>
+<tr>
+<td>Existing ChatVoice accounts and sessions</td>
+<td><code>ChatVoiceAuth</code></td>
+<td>Ready-made, opt-in compatibility backend; no ChatVoice or <code>web</code> dependency</td>
+</tr>
+</tbody>
+</table>
+<p><code>CallbackBackend</code> and <code>AsyncCallbackBackend</code> share the same input bounds: usernames are 1..256 UTF-8 bytes and passwords are 1..1024 UTF-8 bytes. Results must be an authenticated <code>Principal</code> or <code>None</code>; do not place private upstream Authorization, model keys, Dufs/Overleaf credentials or relay context into <code>Principal</code> metadata, session JSON or UI payloads.</p>
+<h3 id="chatvoice-schema-compatibility-backend">ChatVoice Schema Compatibility Backend<a class="headerlink" href="#chatvoice-schema-compatibility-backend" title="Permanent link">&para;</a></h3>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">chatlogin.backends</span><span class="w"> </span><span class="kn">import</span> <span class="n">ChatVoiceAuth</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="c1"># host is the application object. Resolve its current connection, lock and clock</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="c1"># on each call instead of capturing a database path.</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">auth</span> <span class="o">=</span> <span class="n">ChatVoiceAuth</span><span class="p">(</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    <span class="k">lambda</span><span class="p">:</span> <span class="n">host</span><span class="o">.</span><span class="n">open_auth_connection</span><span class="p">(),</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>    <span class="k">lambda</span><span class="p">:</span> <span class="n">host</span><span class="o">.</span><span class="n">auth_lock</span><span class="p">,</span>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    <span class="k">lambda</span><span class="p">:</span> <span class="n">host</span><span class="o">.</span><span class="n">utc_now</span><span class="p">()</span><span class="o">.</span><span class="n">timestamp</span><span class="p">(),</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    <span class="n">ttl</span><span class="o">=</span><span class="mi">86400</span><span class="p">,</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="p">)</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="c1"># Existing HTTP handlers can call:</span>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="c1"># auth.login(account, password) -&gt; IssuedSession | None</span>
+<a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="c1"># auth.resolve_row(token) -&gt; dict | None</span>
+<a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="c1"># auth.check_csrf(auth_row, submitted) -&gt; None; raises AccessDenied on failure</span>
+<a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="c1"># auth.logout(token) -&gt; None</span>
+</code></pre></div>
+<p>The factory must return a fresh <code>sqlite3.Connection</code> with <code>row_factory=sqlite3.Row</code>, <code>PRAGMA foreign_keys=ON</code> and no pending transaction; each operation closes it. The host owns initialization of the existing schema, file permissions and account creation:</p>
+<ul>
+<li><code>accounts(id TEXT PRIMARY KEY, account TEXT NOT NULL UNIQUE, display_name TEXT NOT NULL, password_salt BLOB NOT NULL, password_hash BLOB NOT NULL, created_at TEXT NOT NULL)</code>.</li>
+<li><code>auth_sessions(token_hash TEXT PRIMARY KEY, user_id TEXT NOT NULL, csrf_token TEXT NOT NULL, created_at TEXT NOT NULL, expires_at TEXT NOT NULL)</code>, with a foreign key from <code>user_id</code> to <code>accounts(id) ON DELETE CASCADE</code>.</li>
+</ul>
+<p>This is <strong>ChatVoice schema compatibility</strong>, not a generic ORM for arbitrary SQLite account systems. Account matching is exact; retain host case/whitespace normalization before calling. Passwords keep PBKDF2-HMAC-SHA256 at 310000 iterations and existing salt/digest material. Account IDs, ISO expiry (including offsets), legacy 32-character CSRF and SHA-256 token digests are preserved. Anonymous, expired and invalid requests create no identity. Resolution rejoins the account instead of caching a user snapshot.</p>
+<p><code>ChatVoiceSessionStore(connect, lock, clock, *, max_sessions=10000)</code> accepts only the <code>chatvoice</code> namespace and <code>Role.USER</code> sessions, never guest/admin. Capacity is database-wide and SQLite transactions serialize it across store instances. Live sessions are not evicted; a full store raises <code>StoreFull</code>. <code>SessionManager.issue(..., previous_token=...)</code> replaces atomically, rolling back to the old session on insert failure. <code>ChatVoiceAuth</code> retains the original constructor and a default capacity of 10000; compose the store and manager separately for a custom capacity.</p>
+<h3 id="compose-with-all-three-ui-modes">Compose with All Three UI Modes<a class="headerlink" href="#compose-with-all-three-ui-modes" title="Permanent link">&para;</a></h3>
+<p>With <code>ChatLogin[web]</code>, pass a sync or async backend and its manager to the generic adapter:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">chatlogin.fastapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">FastAPIAuth</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">chatlogin.ui</span><span class="w"> </span><span class="kn">import</span> <span class="n">LoginUI</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="n">web</span> <span class="o">=</span> <span class="n">FastAPIAuth</span><span class="p">(</span><span class="n">auth</span><span class="o">.</span><span class="n">backend</span><span class="p">,</span> <span class="n">auth</span><span class="o">.</span><span class="n">manager</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="s2">"https://example.test"</span><span class="p">,</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>                 <span class="n">ui</span><span class="o">=</span><span class="n">LoginUI</span><span class="p">())</span>  <span class="c1"># default UI</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="c1"># ui=LoginUI(template_dirs=("templates",), template_name="host/login.html")  # host override</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="c1"># ui=None  # headless JSON; or use the Python methods above with existing HTTP handlers</span>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span><span class="n">web</span><span class="o">.</span><span class="n">router</span><span class="p">)</span>
+</code></pre></div>
+<p>The generic HTTP adapter keeps its existing JSON fields, Origin/Host, cookie, CSRF and rate-limit behavior; it does not automatically become the ChatVoice HTTP API. When retaining existing HTTP, the host still owns cookie/response mapping, Origin/CSRF checks, account creation and every business owner/policy decision. The <code>_chatlogin_session</code> entry in <code>resolve_row</code> is for server-side CSRF checks, not whole-row JSON serialization or sensitive-field logging.</p>
+<p>Without FastAPI, install <code>ChatLogin[ui]</code> and call <code>LoginUI.render()</code>. That mode only renders templates; secure HTTP behavior remains the host's responsibility.</p>
+<h2 id="browser-http-contract">Browser HTTP Contract<a class="headerlink" href="#browser-http-contract" title="Permanent link">&para;</a></h2>
+<p>The default prefix is <code>/auth</code>; it can be explicitly configured as <code>/api/auth</code> or another fixed local prefix.</p>
+<table>
+<thead>
+<tr>
+<th>Request</th>
+<th>Purpose</th>
+<th>Requirements</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET {prefix}/session</code></td>
+<td>Identity and CSRF; guests have <code>authenticated=false</code></td>
+<td>Trusted Host, no cache</td>
+</tr>
+<tr>
+<td><code>POST {prefix}/login</code></td>
+<td>Verify credentials, set cookie</td>
+<td>JSON, exact Origin, size/rate bounds; a valid existing cookie also requires CSRF</td>
+</tr>
+<tr>
+<td><code>POST {prefix}/logout</code></td>
+<td>Revoke current session and delete cookie</td>
+<td>Exact Origin and CSRF</td>
+</tr>
+<tr>
+<td><code>current_user</code></td>
+<td>Protected reads</td>
+<td>401 without a valid session</td>
+</tr>
+<tr>
+<td><code>csrf_user</code></td>
+<td>Cookie-authenticated writes</td>
+<td>Identity, exact Origin and CSRF</td>
+</tr>
+<tr>
+<td><code>roles(...)</code></td>
+<td>Explicit role requirement</td>
+<td>401 if unauthenticated, 403 if role is insufficient</td>
+</tr>
+</tbody>
+</table>
+<p>Use browser fetch with <code>credentials: 'same-origin'</code>. Read CSRF from session JSON and send it as <code>X-CSRF-Token</code> for writes. Never store passwords, session cookies or CSRF in localStorage/sessionStorage or logs. Browsers generate Origin for same-origin POST requests; scripts do not need to forge that header.</p>
+<p><code>allow_native=True</code> explicitly permits a programmatic initial-login exception: a request without Origin or browser fetch-site semantics can send <code>X-ChatLogin-Client: native</code>. This header is not a credential; cookie writes still require canonical Origin and CSRF. The exception is disabled by default and does not enable cross-site CORS.</p>
+<h2 id="identity-authorization-and-storage">Identity, Authorization and Storage<a class="headerlink" href="#identity-authorization-and-storage" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Guest is unauthenticated state, not automatic account/session creation or migration of guest history.</li>
+<li>User/admin roles come only from a trusted backend. Use multiple explicit <code>PasswordBackend</code> entries or connect an existing database with <code>CallbackBackend</code>.</li>
+<li><code>require_owner</code> applies equally to admins. Any admin access to other users' data must be a separate host policy.</li>
+<li>Random session tokens are delivered only through HttpOnly cookies; <code>SessionStore</code> receives digests. CSRF is a separate sensitive value, intentionally returned to same-origin clients but never logged.</li>
+<li>Expiry cleanup is triggered through <code>SessionManager.purge_expired()</code>. The manager calls the store with its own validated instance and clock. Hosts that maintain private context indexes should clean them at this boundary instead of duplicating TTL math or touching store internals.</li>
+<li>Bounded memory storage is for single-process tests/demos. SQLite is durable local storage; multi-host deployments need a shared <code>SessionStore</code>. Login limiting is a process-local backstop, not distributed abuse prevention.</li>
+<li><code>SQLiteSessionStore</code> delegates to the public <code>PrivateSQLite</code> primitive. On POSIX, every real directory component is traversed no-follow: ancestors must be owned by root (including its user-namespace mapping) or the service UID and must not be writable by untrusted group/other users, except where sticky semantics demonstrably protect the trusted owner's entry. The final data directory must be service-UID-owned and exactly <code>0700</code>.</li>
+<li>The main database is opened at its real path with <code>mode=rw</code> after one exclusive secure initialization. Existing main databases and <code>-journal</code>/<code>-wal</code>/<code>-shm</code> files must be service-UID-owned, single-link, regular files with exact mode <code>0600</code>; existing paths are never chmodded. Safe sidecars SQLite creates inside the trusted parent are validated after connection/transaction activity and normalized to <code>0600</code> only when newly created. This does not rely on an fd alias and does not exclude a malicious same-UID process: same-UID processes and root are inside the local-filesystem trust boundary.</li>
+<li>POSIX platforms lacking the required dir-fd/no-follow primitives fail closed. Non-POSIX uses the isolated legacy compatibility path without POSIX no-follow/mode guarantees, so deployments must protect it with platform ACLs. The primitive is for trusted local filesystems, not network/shared filesystems.</li>
+<li>Configure a fixed trusted <code>origin</code>. Never infer it from arbitrary Host or forwarded headers. Proxy trust, TLS and process lifecycle belong to the host.</li>
+</ul>
+<h2 id="dependency-compatibility-gate">Dependency Compatibility Gate<a class="headerlink" href="#dependency-compatibility-gate" title="Permanent link">&para;</a></h2>
+<p><code>ChatLogin[web]</code> now declares <code>starlette&gt;=0.40,&lt;2.0</code>. Compatibility tests cover:</p>
+<ul>
+<li>Current 0.x line: 338 passed / 6 browser-opt-in skipped.</li>
+<li>ChatShare target line: installed wheel with <code>FastAPI==0.133.1</code> + <code>Starlette==1.3.1</code>, 338 passed / 6 skipped.</li>
+<li>New 1.x probe: installed wheel with <code>FastAPI==0.141.1</code> + <code>Starlette==1.6.0</code>, 338 passed / 6 skipped.</li>
+<li>Clean <code>ChatLogin[ui]</code> wheel install without FastAPI/Starlette rendered <code>LoginUI</code> successfully.</li>
+</ul>
+<p>The repository's <code>Web Compatibility</code> workflow still installs explicit 0.x and 1.3.x lines through the normal resolver for the <code>web</code> extra. The 1.x functional probes demonstrate runtime compatibility; run standard dependency resolution and the minimum-Python wheel gate before release.</p>
+<h2 id="runnable-demo">Runnable Demo<a class="headerlink" href="#runnable-demo" title="Permanent link">&para;</a></h2>
+<p>From the source distribution or repository root. The demo has no default password and uses synthetic accounts rather than production data:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">".[web,demo]"</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nb">read</span><span class="w"> </span>-s<span class="w"> </span>CHATLOGIN_DEMO_PASSWORD
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="nb">export</span><span class="w"> </span>CHATLOGIN_DEMO_PASSWORD
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>python<span class="w"> </span>-m<span class="w"> </span>uvicorn<span class="w"> </span>examples.demo_fastapi:create_app<span class="w"> </span>--factory<span class="w"> </span>--host<span class="w"> </span><span class="m">127</span>.0.0.1<span class="w"> </span>--port<span class="w"> </span><span class="m">10081</span>
+</code></pre></div>
+<p>Use a temporary password of at least 12 characters. The demo username is <code>demo</code>. Open <code>http://127.0.0.1:10081/api/auth/</code>, sign in, return to the host homepage, and sign out. <code>/private</code> is a protected read endpoint. This is a local test address, not a deployed public website.</p>
+<h2 id="customization-responsibility">Customization Responsibility<a class="headerlink" href="#customization-responsibility" title="Permanent link">&para;</a></h2>
+<p>Default templates autoescape text and serve packaged static assets. Custom renderers are trusted host code and must handle their own HTML safety. Styling must not weaken cookies, CSRF or resource ownership checks.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      <script id="__config" type="application/json">{"base": "../..", "features": ["navigation.tabs", "navigation.sections", "navigation.expand", "navigation.top", "search.highlight", "search.share", "content.code.copy", "content.action.edit"], "search": "../../assets/javascripts/workers/search.973d3a69.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.f55a23d4.min.js"></script>
+      
+    
+  </body>
+</html>
