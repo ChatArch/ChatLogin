@@ -233,6 +233,44 @@
   
   
     <li class="md-tabs__item">
+      <a href="../demo/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Demo and Quick Start
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../quickstart/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Quick Integration
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
       <a href="../integration/" class="md-tabs__link">
         
   
@@ -342,6 +380,50 @@
   
   
     <li class="md-nav__item">
+      <a href="../demo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Demo and Quick Start
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Quick Integration
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../integration/" class="md-nav__link">
         
   
@@ -382,10 +464,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
         
           
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
             
   
   
@@ -398,8 +480,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_3">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             Commands and APIs
           </label>
@@ -474,6 +556,15 @@
   <a href="#path-inspection" class="md-nav__link">
     <span class="md-ellipsis">
       Path Inspection
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#product-demo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Product Demo
     </span>
   </a>
   
@@ -595,6 +686,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#product-demo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Product Demo
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#verification" class="md-nav__link">
     <span class="md-ellipsis">
       Verification
@@ -628,24 +728,41 @@
 
 
 <h1 id="cli-tree">CLI Tree<a class="headerlink" href="#cli-tree" title="Permanent link">&para;</a></h1>
-<p>Authentication and web behavior are <a href="../interface-tree/">Python APIs</a>. The CLI provides version information and side-effect-free runtime-path inspection, not another login service.</p>
+<p>Reusable authentication and web behavior are <a href="../interface-tree/">Python APIs</a>. The CLI can also run the isolated product demo; it is not a production login service.</p>
 <h2 id="top-level-commands">Top-Level Commands<a class="headerlink" href="#top-level-commands" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>chatlogin
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>├── --help                                      # Show help
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>├── --version                                   # Query installed version
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>├── --tree                                      # Actual tree with arguments
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>├── --tree-brief                                # Compact tree
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>└── paths &lt;INSTANCE&gt; [--home HOME] [--json]      # Inspect instance runtime paths
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>├── paths &lt;INSTANCE&gt; [--home HOME] [--json]      # Inspect instance runtime paths
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>└── serve [--host HOST] [--port PORT] [--origin ORIGIN]
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>                                                    # Run the isolated synthetic demo
 </code></pre></div>
 <h2 id="path-inspection">Path Inspection<a class="headerlink" href="#path-inspection" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>chatlogin<span class="w"> </span>paths<span class="w"> </span>my-site<span class="w"> </span>--json
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>chatlogin<span class="w"> </span>paths<span class="w"> </span>my-site<span class="w"> </span>--home<span class="w"> </span><span class="s2">"</span><span class="nv">$HOME</span><span class="s2">/.chatarch"</span><span class="w"> </span>--json
 </code></pre></div>
 <p>Returns <code>directory</code> and <code>database</code>. Explicit <code>--home</code> takes precedence over ChatEnv's default home. User directories and defined environment variables expand; unknown variables and unsafe instance names are rejected. This command creates no directories, databases or accounts.</p>
+<h2 id="product-demo">Product Demo<a class="headerlink" href="#product-demo" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">"ChatLogin[demo]"</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>chatlogin<span class="w"> </span>serve
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>chatlogin<span class="w"> </span>serve<span class="w"> </span>--host<span class="w"> </span><span class="m">127</span>.0.0.1<span class="w"> </span>--port<span class="w"> </span><span class="m">8765</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span>--origin<span class="w"> </span>https://login.example.com
+</code></pre></div>
+<p>The default bind is <code>127.0.0.1:8765</code>. A non-loopback bind fails unless <code>--origin</code> is explicit. Behind a proxy, set it to the fixed browser-visible origin; the command never infers it from forwarded headers. The site uses only a public synthetic identity, short bounded sessions, and a disposable in-memory fixture. See the <a href="../demo/">Demo Guide</a>.</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>Usage: chatlogin serve [OPTIONS]
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>Options:
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>  --host TEXT           Bind address; loopback by default.  [default: 127.0.0.1]
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>  --port INTEGER RANGE  TCP port.  [default: 8765; 1&lt;=x&lt;=65535]
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>  --origin TEXT         Fixed trusted public origin for browser Host/Origin checks.
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>  --help                Show this message and exit.
+</code></pre></div>
 <h2 id="verification">Verification<a class="headerlink" href="#verification" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>chatlogin<span class="w"> </span>--version
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>chatlogin<span class="w"> </span>--tree
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>chatlogin<span class="w"> </span>--tree-brief
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>chatlogin<span class="w"> </span>--version
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>chatlogin<span class="w"> </span>--tree
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>chatlogin<span class="w"> </span>--tree-brief
 </code></pre></div>
 <p>The tree comes directly from registered ChatStyle/Click metadata. Update tests and this page when adding commands. See <a href="../integration/">Integration and Security</a> for website integration.</p>
 

@@ -233,6 +233,44 @@
   
   
     <li class="md-tabs__item">
+      <a href="../demo/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  演示站与快速开始
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../quickstart/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  快速接入
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
       <a href="../integration/" class="md-tabs__link">
         
   
@@ -342,6 +380,50 @@
   
   
     <li class="md-nav__item">
+      <a href="../demo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    演示站与快速开始
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    快速接入
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../integration/" class="md-nav__link">
         
   
@@ -382,10 +464,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
         
           
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
             
   
   
@@ -398,8 +480,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_3">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             命令与接口
           </label>
@@ -481,6 +563,15 @@
       
         <li class="md-nav__item">
   <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      产品演示
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       验证命令
     </span>
@@ -597,6 +688,15 @@
         <li class="md-nav__item">
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
+      产品演示
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
       验证命令
     </span>
   </a>
@@ -628,24 +728,41 @@
 
 
 <h1 id="cli">CLI 树<a class="headerlink" href="#cli" title="Permanent link">&para;</a></h1>
-<p>认证与网页功能由 <a href="../interface-tree/">Python 接口</a> 提供。命令行提供版本查询和无副作用的路径回读，不另起登录服务。</p>
+<p>可复用认证与网页能力由 <a href="../interface-tree/">Python 接口</a> 提供。命令行还可运行隔离产品演示；它不是生产登录微服务。</p>
 <h2 id="_1">顶层命令<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>chatlogin
 <a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>├── --help                                      # 查看帮助
 <a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>├── --version                                   # 查询安装版本
 <a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>├── --tree                                      # 真实命令树，含参数
 <a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>├── --tree-brief                                # 简明命令树
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>└── paths &lt;INSTANCE&gt; [--home HOME] [--json]      # 只读解析实例运行路径
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>├── paths &lt;INSTANCE&gt; [--home HOME] [--json]      # 只读解析实例运行路径
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>└── serve [--host HOST] [--port PORT] [--origin ORIGIN]
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>                                                    # 运行隔离合成演示
 </code></pre></div>
 <h2 id="_2">路径检查<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>chatlogin<span class="w"> </span>paths<span class="w"> </span>my-site<span class="w"> </span>--json
 <a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>chatlogin<span class="w"> </span>paths<span class="w"> </span>my-site<span class="w"> </span>--home<span class="w"> </span><span class="s2">"</span><span class="nv">$HOME</span><span class="s2">/.chatarch"</span><span class="w"> </span>--json
 </code></pre></div>
 <p>返回 <code>directory</code> 与 <code>database</code> 字段。显式 <code>--home</code> 优先于 ChatEnv 的默认 home；路径支持用户目录和已定义环境变量，拒绝未知变量与不安全实例名。此命令不创建目录、数据库或账户。</p>
-<h2 id="_3">验证命令<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>chatlogin<span class="w"> </span>--version
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>chatlogin<span class="w"> </span>--tree
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>chatlogin<span class="w"> </span>--tree-brief
+<h2 id="_3">产品演示<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">"ChatLogin[demo]"</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>chatlogin<span class="w"> </span>serve
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>chatlogin<span class="w"> </span>serve<span class="w"> </span>--host<span class="w"> </span><span class="m">127</span>.0.0.1<span class="w"> </span>--port<span class="w"> </span><span class="m">8765</span><span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span>--origin<span class="w"> </span>https://login.example.com
+</code></pre></div>
+<p>默认绑定 <code>127.0.0.1:8765</code>。非 loopback bind 若未提供 <code>--origin</code> 会失败；反向代理场景的 <code>--origin</code> 必须是浏览器访问的固定可信源，命令不会从 forwarded headers 推断它。演示只使用公开合成身份、短期有界 session 与一次性内存 fixture，详见<a href="../demo/">演示指南</a>。</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>Usage: chatlogin serve [OPTIONS]
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>Options:
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>  --host TEXT           Bind address; loopback by default.  [default: 127.0.0.1]
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>  --port INTEGER RANGE  TCP port.  [default: 8765; 1&lt;=x&lt;=65535]
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>  --origin TEXT         Fixed trusted public origin for browser Host/Origin checks.
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>  --help                Show this message and exit.
+</code></pre></div>
+<h2 id="_4">验证命令<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>chatlogin<span class="w"> </span>--version
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>chatlogin<span class="w"> </span>--tree
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>chatlogin<span class="w"> </span>--tree-brief
 </code></pre></div>
 <p>命令树直接来自 ChatStyle 和 Click 已注册元数据；新增命令时同步更新测试和本页。网页接入见 <a href="../integration/">接入与安全</a>。</p>
 

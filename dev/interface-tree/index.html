@@ -231,6 +231,44 @@
   
   
     <li class="md-tabs__item">
+      <a href="../demo/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  演示站与快速开始
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../quickstart/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  快速接入
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
       <a href="../integration/" class="md-tabs__link">
         
   
@@ -340,6 +378,50 @@
   
   
     <li class="md-nav__item">
+      <a href="../demo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    演示站与快速开始
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    快速接入
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../integration/" class="md-nav__link">
         
   
@@ -380,10 +462,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
         
           
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="">
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
             
   
   
@@ -396,8 +478,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_3">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             命令与接口
           </label>
@@ -559,6 +641,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      包内演示应用
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -655,6 +746,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      包内演示应用
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -722,7 +822,7 @@
 </code></pre></div>
 <h2 id="chatvoice">内建可选 ChatVoice 后端<a class="headerlink" href="#chatvoice" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>chatlogin.backends.chatvoice
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>├── ChatVoiceAuth(connect, lock, clock, *, ttl)
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>├── ChatVoiceAuth(connect, lock, clock, *, ttl, max_sessions=10000)
 <a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>│   ├── login(account, password) -&gt; IssuedSession | None
 <a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>│   ├── resolve_row(token) -&gt; dict | None
 <a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>│   ├── check_csrf(auth, submitted)
@@ -771,7 +871,8 @@
 <a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>      template_name="chatlogin/login.html",
 <a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>      stylesheet_url=None,
 <a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>      renderer=None,
-<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>    )
+<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>      script_url=None,
+<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a>    )
 </code></pre></div>
 <p>宿主模板放在 <code>template_dirs</code> 中并优先于包内模板。可以 <code>{% extends "chatlogin/login.html" %}</code> 覆盖单个 block，也可以提供整页模板，或传入直接返回 HTML 的 renderer。</p>
 <h2 id="_2">最小后端接入<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
@@ -807,6 +908,8 @@
 <p>POSIX 实现逐级 no-follow 校验祖先 owner 与写权限，要求最终数据目录由服务 UID 拥有且恰为 <code>0700</code>。主库以真实 file URI 的 <code>mode=rw</code> 打开；已有主库和 sidecar 必须是服务 UID 拥有、单链接、恰为 <code>0600</code> 的普通文件，绝不 chmod 历史对象。SQLite 在可信父目录中新建的安全 sidecar 才可按需规范为 <code>0600</code>。这套边界不依赖 fd alias，也不排除同 UID 进程；同 UID 与 root 在信任边界内。</p>
 <p>缺少所需 dir-fd/no-follow 原语的 POSIX 平台失败关闭。非 POSIX 保留隔离的旧路径行为，不把 mode bits 当作 Windows ACL 保证；宿主仍需用平台 ACL 保护目录。此 API 面向可信本地文件系统，不支持网络/共享文件系统。</p>
 <p>宿主需要清理私有上下文索引时，调用 <code>SessionManager.purge_expired()</code>，由 manager 使用已验证 instance 与 clock 委托给 store；不要复制 TTL 计算或访问 store 私有成员。</p>
+<h2 id="_4">包内演示应用<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<p>安装 <code>ChatLogin[demo]</code> 后，<code>chatlogin.demo.create_demo_app(origin=...)</code> 返回完整的隔离演示应用；<code>chatlogin serve</code> 是对应的薄 CLI。它展示真实后端和 UI，但不充当生产身份中心。见 <a href="../quickstart/">快速接入</a> 与 <a href="../demo/">演示站</a>。</p>
 
 
 

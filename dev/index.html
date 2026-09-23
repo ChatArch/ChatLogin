@@ -12,7 +12,7 @@
       
       
       
-        <link rel="next" href="integration/">
+        <link rel="next" href="demo/">
       
       
       <link rel="icon" href="assets/images/favicon.png">
@@ -233,6 +233,44 @@
   
   
     <li class="md-tabs__item">
+      <a href="demo/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  演示站与快速开始
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="quickstart/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  快速接入
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
       <a href="integration/" class="md-tabs__link">
         
   
@@ -418,6 +456,50 @@
   
   
     <li class="md-nav__item">
+      <a href="demo/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    演示站与快速开始
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="quickstart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    快速接入
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="integration/" class="md-nav__link">
         
   
@@ -455,10 +537,10 @@
         
           
         
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_3" >
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
         
           
-          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
             
   
   
@@ -471,8 +553,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_3">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
             <span class="md-nav__icon md-icon"></span>
             命令与接口
           </label>
@@ -649,7 +731,12 @@
 <li>
 <p><strong>快速接入 FastAPI</strong></p>
 <p>安装 <code>web</code> extra，挂载可配置前缀的认证路由、依赖和默认页面。</p>
-<p><a href="interface-tree/">查看接口树</a></p>
+<p><a href="integration/">查看接入与安全</a></p>
+</li>
+<li>
+<p><strong>运行包内产品演示</strong></p>
+<p>从已安装 wheel 启动四类真实后端、三类前端和模板游乐场。</p>
+<p><a href="demo/">打开演示指南</a></p>
 </li>
 <li>
 <p><strong>保留现有网站样式</strong></p>
@@ -658,7 +745,7 @@
 </li>
 <li>
 <p><strong>校对 CLI 与包边界</strong></p>
-<p>CLI 只负责版本和标准命令树；认证能力首先是可 import 的 Python API。</p>
+<p>CLI 提供版本、命令树、只读路径解析和隔离的 <code>serve</code> 产品演示；可复用认证能力仍是 Python API。</p>
 <p><a href="cli-tree/">查看 CLI 树</a></p>
 </li>
 </ul>
@@ -666,30 +753,35 @@
 <h2 id="_2">安装<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">"ChatLogin[web]"</span>
 </code></pre></div>
+<p>只体验安装包自带网站：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">"ChatLogin[demo]"</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>chatlogin<span class="w"> </span>serve
+</code></pre></div>
+<p>默认只监听 <code>127.0.0.1:8765</code>。公开合成身份、短期有界 session 和一次性 schema fixture 只服务于演示；它不是生产登录微服务。见<a href="demo/">演示站与快速开始</a>。</p>
 <p>最小 FastAPI 集成使用合成账号或宿主提供的回调，不内置默认生产密码：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">fastapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">Depends</span><span class="p">,</span> <span class="n">FastAPI</span>
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">chatlogin</span><span class="w"> </span><span class="kn">import</span> <span class="n">PasswordBackend</span><span class="p">,</span> <span class="n">MemorySessionStore</span><span class="p">,</span> <span class="n">Principal</span><span class="p">,</span> <span class="n">SessionManager</span><span class="p">,</span> <span class="n">hash_password</span>
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">chatlogin.fastapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">CookieSettings</span><span class="p">,</span> <span class="n">FastAPIAuth</span>
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="kn">from</span><span class="w"> </span><span class="nn">chatlogin.ui</span><span class="w"> </span><span class="kn">import</span> <span class="n">LoginUI</span>
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="n">backend</span> <span class="o">=</span> <span class="n">PasswordBackend</span><span class="p">({</span>
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>    <span class="s2">"demo"</span><span class="p">:</span> <span class="p">(</span><span class="n">Principal</span><span class="p">(</span><span class="s2">"usr_1"</span><span class="p">,</span> <span class="s2">"Demo user"</span><span class="p">),</span> <span class="n">hash_password</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"EXAMPLE_LOGIN_PASSWORD"</span><span class="p">]))</span>
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="p">})</span>
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="n">auth</span> <span class="o">=</span> <span class="n">FastAPIAuth</span><span class="p">(</span>
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>    <span class="n">backend</span><span class="p">,</span>
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>    <span class="n">SessionManager</span><span class="p">(</span><span class="n">MemorySessionStore</span><span class="p">(),</span> <span class="n">instance</span><span class="o">=</span><span class="s2">"my-site"</span><span class="p">),</span>
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>    <span class="n">origin</span><span class="o">=</span><span class="s2">"https://www.example.com"</span><span class="p">,</span>
-<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>    <span class="n">prefix</span><span class="o">=</span><span class="s2">"/api/auth"</span><span class="p">,</span>
-<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>    <span class="n">ui</span><span class="o">=</span><span class="n">LoginUI</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"My site"</span><span class="p">),</span>
-<a id="__codelineno-1-16" name="__codelineno-1-16" href="#__codelineno-1-16"></a>    <span class="n">cookie</span><span class="o">=</span><span class="n">CookieSettings</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"my_site_session"</span><span class="p">),</span>
-<a id="__codelineno-1-17" name="__codelineno-1-17" href="#__codelineno-1-17"></a><span class="p">)</span>
-<a id="__codelineno-1-18" name="__codelineno-1-18" href="#__codelineno-1-18"></a><span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">()</span>
-<a id="__codelineno-1-19" name="__codelineno-1-19" href="#__codelineno-1-19"></a><span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span><span class="n">auth</span><span class="o">.</span><span class="n">router</span><span class="p">)</span>
-<a id="__codelineno-1-20" name="__codelineno-1-20" href="#__codelineno-1-20"></a>
-<a id="__codelineno-1-21" name="__codelineno-1-21" href="#__codelineno-1-21"></a><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/private"</span><span class="p">)</span>
-<a id="__codelineno-1-22" name="__codelineno-1-22" href="#__codelineno-1-22"></a><span class="k">def</span><span class="w"> </span><span class="nf">private</span><span class="p">(</span><span class="n">principal</span><span class="o">=</span><span class="n">Depends</span><span class="p">(</span><span class="n">auth</span><span class="o">.</span><span class="n">current_user</span><span class="p">)):</span>
-<a id="__codelineno-1-23" name="__codelineno-1-23" href="#__codelineno-1-23"></a>    <span class="k">return</span> <span class="n">principal</span><span class="o">.</span><span class="n">as_dict</span><span class="p">()</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">fastapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">Depends</span><span class="p">,</span> <span class="n">FastAPI</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">chatlogin</span><span class="w"> </span><span class="kn">import</span> <span class="n">PasswordBackend</span><span class="p">,</span> <span class="n">MemorySessionStore</span><span class="p">,</span> <span class="n">Principal</span><span class="p">,</span> <span class="n">SessionManager</span><span class="p">,</span> <span class="n">hash_password</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">chatlogin.fastapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">CookieSettings</span><span class="p">,</span> <span class="n">FastAPIAuth</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="kn">from</span><span class="w"> </span><span class="nn">chatlogin.ui</span><span class="w"> </span><span class="kn">import</span> <span class="n">LoginUI</span>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="n">backend</span> <span class="o">=</span> <span class="n">PasswordBackend</span><span class="p">({</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>    <span class="s2">"demo"</span><span class="p">:</span> <span class="p">(</span><span class="n">Principal</span><span class="p">(</span><span class="s2">"usr_1"</span><span class="p">,</span> <span class="s2">"Demo user"</span><span class="p">),</span> <span class="n">hash_password</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"EXAMPLE_LOGIN_PASSWORD"</span><span class="p">]))</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="p">})</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="n">auth</span> <span class="o">=</span> <span class="n">FastAPIAuth</span><span class="p">(</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>    <span class="n">backend</span><span class="p">,</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>    <span class="n">SessionManager</span><span class="p">(</span><span class="n">MemorySessionStore</span><span class="p">(),</span> <span class="n">instance</span><span class="o">=</span><span class="s2">"my-site"</span><span class="p">),</span>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>    <span class="n">origin</span><span class="o">=</span><span class="s2">"https://www.example.com"</span><span class="p">,</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a>    <span class="n">prefix</span><span class="o">=</span><span class="s2">"/api/auth"</span><span class="p">,</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>    <span class="n">ui</span><span class="o">=</span><span class="n">LoginUI</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"My site"</span><span class="p">),</span>
+<a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a>    <span class="n">cookie</span><span class="o">=</span><span class="n">CookieSettings</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"my_site_session"</span><span class="p">),</span>
+<a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="p">)</span>
+<a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">()</span>
+<a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a><span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span><span class="n">auth</span><span class="o">.</span><span class="n">router</span><span class="p">)</span>
+<a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a>
+<a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/private"</span><span class="p">)</span>
+<a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a><span class="k">def</span><span class="w"> </span><span class="nf">private</span><span class="p">(</span><span class="n">principal</span><span class="o">=</span><span class="n">Depends</span><span class="p">(</span><span class="n">auth</span><span class="o">.</span><span class="n">current_user</span><span class="p">)):</span>
+<a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a>    <span class="k">return</span> <span class="n">principal</span><span class="o">.</span><span class="n">as_dict</span><span class="p">()</span>
 </code></pre></div>
 <p>完整可运行示例见仓库 <code>examples/demo_fastapi.py</code>，仅使用临时合成账号。</p>
 <h2 id="_3">前端三种接入<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
