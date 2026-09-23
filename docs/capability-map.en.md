@@ -9,7 +9,7 @@
 | ChatVoice compatibility backend | Implemented (core, opt-in import) | `ChatVoiceAuth` / `ChatVoiceSessionStore`; existing ChatVoice schema, fixed namespace and USER only; no schema migration or ChatVoice/web dependency |
 | Legacy password verification | Implemented | `verify_pbkdf2` verifies existing PBKDF2-HMAC-SHA256 salt/digest material without forced password migration |
 | Sessions | Implemented | Opaque token, SHA-256-only storage, TTL, rotation, revocation, separate CSRF secret, and public `purge_expired()`; memory storage is demo/test-only |
-| SQLite storage | Implemented | Namespaced by instance, `0600` database, private newly created directories, no chmod on shared parents |
+| SQLite storage | Implemented | Public `PrivateSQLite` plus an instance-namespaced session store; POSIX uses a trusted `0700` directory and real-path `mode=rw`, rejects unsafe existing databases/sidecars, and does not present fd aliases as sidecar protection |
 | FastAPI adapter | Implemented (`web` extra) | Configurable prefix, cookie, Origin/Host, body bound, rate limiting, JSON/headless routes, and dependencies |
 | Default login UI | Implemented (`ui` or `web` extra) | `ui` installs only Jinja2; `web` also installs FastAPI/Starlette; wheel-packaged templates/CSS/JS |
 | Web dependency compatibility gate | Implemented | `web`/`dev` declare `starlette>=0.40,<2.0`; compatibility tests cover Starlette 0.x, 1.3.1 and 1.6.0, and CI pins 0.x plus 1.3.x gates |

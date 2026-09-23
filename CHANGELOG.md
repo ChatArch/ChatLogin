@@ -1,5 +1,12 @@
 # 更新日志
 
+## 0.1.4 — 2026-09-23
+
+- 新增稳定导出的 `PrivateSQLite` 复用原语，`SQLiteSessionStore` 改为委托它管理私有目录、真实路径 `mode=rw` 连接和事务；保留既有 store API、schema 与会话行为，供依赖 ChatLogin 的叶子包复用。
+- POSIX 下逐级 no-follow 校验祖先：可改名后代的目录必须由 root（含用户命名空间映射）或服务 UID 拥有，且不得由不受信任的 group/other 写入；仅在 sticky 语义能保护可信 owner 条目时接受例外，最终数据目录必须由服务 UID 拥有且恰为 `0700`。
+- 已有数据库与 `-journal`/`-wal`/`-shm` 必须是服务 UID 拥有、单链接、恰为 `0600` 的普通文件，绝不通过 chmod “修复”历史路径；只为新建私有目录/主库显式设 mode，并仅在可信 `0700` 目录内规范化本次连接新建且类型、owner、链接数安全的 sidecar。
+- SQLite 以真实数据库路径打开，不再使用或宣称 `/proc/self/fd` / `/dev/fd` alias 能保护 sidecar。安全边界不排除同 UID 进程；非 POSIX 保留隔离的旧兼容路径，且不声称 POSIX no-follow/mode 等价于平台 ACL。
+
 ## 0.1.3 — 2026-09-11
 
 - 新增 `AsyncCredentialBackend` 协议与 `AsyncCallbackBackend`，复用同步 `CallbackBackend` 的用户名/密码字节上限和受信任 `Principal` 校验；非法输入不会调用宿主回调，非法返回值失败关闭。

@@ -25,6 +25,8 @@ chatlogin
 chatlogin
 ├── SessionStore                      # Protocol
 ├── MemorySessionStore(max_sessions)  # demo/test only
+├── PrivateSQLite(database, timeout=5)
+│   └── connect(immediate=False)
 ├── SQLiteSessionStore(database)
 ├── SQLiteSessionStore.for_instance(instance, home=None)
 ├── Session / IssuedSession
@@ -145,12 +147,17 @@ The host continues to own its account table, password material, resource owners,
 ## Runtime Paths
 
 ```python
-from chatlogin import SQLiteSessionStore, state_paths
+from chatlogin import PrivateSQLite, SQLiteSessionStore, state_paths
 
 paths = state_paths("my-site")
 store = SQLiteSessionStore.for_instance("my-site")
+private = PrivateSQLite(paths.directory / "leaf-package.sqlite3")
 ```
 
-The default path is `<ChatArch home>/chatlogin/instances/<instance>/sessions.sqlite3`. Importing the package or calculating paths creates nothing. Store initialization creates only its own private directory and a `0600` database; shared parent modes are unchanged.
+The default session path is `<ChatArch home>/chatlogin/instances/<instance>/sessions.sqlite3`. Importing the package or calculating paths creates nothing; initializing `PrivateSQLite` or the store securely creates missing private directories and the main database. Leaf packages can reuse the boundary with `with private.connect() as connection:`. A normal context exit commits, an exception rolls back, and `immediate=True` runs `BEGIN IMMEDIATE` before yielding the connection.
+
+The POSIX implementation traverses every ancestor no-follow and validates ownership/write access; the final data directory must be service-UID-owned and exactly `0700`. It opens the main database at its real file URI with `mode=rw`. Existing main databases and sidecars must be service-UID-owned, single-link, regular files with exact mode `0600` and are never chmodded; only safe sidecars newly created by SQLite inside the trusted parent may be normalized to `0600`. The boundary does not rely on an fd alias and does not exclude same-UID processes; same-UID processes and root are trusted here.
+
+POSIX systems without the required dir-fd/no-follow primitives fail closed. Non-POSIX systems retain the isolated legacy path without POSIX mode guarantees, so the host must protect the directory with platform ACLs. This API is for a trusted local filesystem, not a network/shared filesystem.
 
 When a host needs to clean a private context index, call `SessionManager.purge_expired()`. The manager delegates to the store with its validated instance and clock; do not duplicate TTL calculations or access store internals.

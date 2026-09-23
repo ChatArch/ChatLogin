@@ -41,7 +41,7 @@ pip install "ChatLogin[ui]"
 
 核心包不要求网站采用包内页面。已有静态 HTML/原生 JS 的网站可以只挂载 JSON 路由，继续保留原登录入口和用户数据库；标准库 HTTP 宿主也可以只使用 `LoginUI` 渲染登录页。
 
-## 选择认证后端（0.1.3）
+## 选择认证后端（0.1.4）
 
 | 账户来源 | 可选后端 | 会话与宿主边界 |
 | --- | --- | --- |
@@ -57,6 +57,7 @@ pip install "ChatLogin[ui]"
 - `guest` / `user` / `admin` 是服务端可信身份，角色不能由请求体指定。
 - 固定账号、多账号和宿主回调均可；已有 PBKDF2 密码材料可验证，不强制迁移。
 - 会话 token 只以 SHA-256 摘要持久化，支持 TTL、轮换、撤销、CSRF、实例隔离和公开 `SessionManager.purge_expired()` 清理。
+- 公开 `PrivateSQLite` 供依赖包复用；POSIX 上以可信 `0700` 数据目录和真实路径 `mode=rw` 连接保护主库及 SQLite sidecar，拒绝不安全的已有路径且不 chmod 历史文件。同 UID 进程属于本地文件系统信任边界；非 POSIX 不把 mode bits 误称为 ACL。
 - FastAPI adapter 默认同站 Origin/Host 校验、请求体大小限制、限流和安全 `next`。
 - `ChatLogin[web]` 声明 `starlette>=0.40,<2.0`；兼容性测试覆盖 Starlette 0.x、1.3.1 和 1.6.0，CI 门禁继续固定 0.x 与 1.3.x 线路。
 - 默认模板提供色系、布局与浅色/深色/跟随系统选项；宿主可覆盖局部或整页，也可保留原 HTML/JS 走 headless。
