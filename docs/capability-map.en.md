@@ -4,6 +4,7 @@
 
 | Capability | Status | Boundary |
 | --- | --- | --- |
+| Packaged demo | Implemented (`demo` extra) | `chatlogin serve`, four backend experiences, a template playground, and copyable integration examples; no production data |
 | Identity and authorization | Implemented | `Principal`, `Role`, 401/403, `require_role`, and `require_owner`; admin does not bypass ownership |
 | Credential backends | Implemented | `PasswordBackend` supports one or more explicit accounts; `CallbackBackend` integrates host user stores; `AsyncCallbackBackend` awaits async upstream verification |
 | ChatVoice compatibility backend | Implemented (core, opt-in import) | `ChatVoiceAuth` / `ChatVoiceSessionStore`; existing ChatVoice schema, fixed namespace and USER only; no schema migration or ChatVoice/web dependency |
@@ -26,7 +27,7 @@ Backend selection: fixed/multiple accounts use `PasswordBackend`; sync host data
 
 ## Out of Scope
 
-- No standalone login microservice, SSO, OAuth/email login, MFA, or admin console.
+- No standalone production login microservice, SSO, OAuth/email login, MFA, or admin console.
 - ChatLogin does not own meetings, files, cards, or other business data; hosts retain owner and policy decisions.
 - Guest is not a database account; guest experiences must be explicitly declared by the host.
 - No universal ORM or backend registry; the ChatVoice backend promotes our existing bridge with synthetic legacy-schema regression coverage.

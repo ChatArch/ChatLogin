@@ -1,5 +1,14 @@
 # 更新日志
 
+## 0.1.5 — 2026-09-24
+
+- 新增已安装 wheel 可直接运行的 `chatlogin serve` 隔离产品演示；默认仅绑定 `127.0.0.1:8765`，反向代理使用显式固定 `--origin`，不信任 forwarded headers。
+- 演示站包含中文优先响应式首页、真实的 `PasswordBackend` / `CallbackBackend` / `AsyncCallbackBackend` / `ChatVoiceAuth` 合成登录流程、独立短期有界会话、安全 principal 工作区与实际 `LoginUI` 模板游乐场。
+- `ChatLogin[demo]` 现在自包含 FastAPI、Starlette、Jinja2 与 Uvicorn；站点 HTML/CSS/JS 使用 `importlib.resources` 从包内读取，并通过 package-data 同时进入 wheel 与 sdist。
+- `LoginUI` 新增可选、仅同源本地路径的 `script_url`，与既有 `stylesheet_url` 一样供可信宿主扩展；默认行为不变。
+- 有界 session store 满载时 FastAPI adapter 返回可重试、无敏感细节的 HTTP 503；`ChatVoiceAuth` 新增可选 `max_sessions` 构造参数并保留 10000 默认值。
+- 同步更新中英文 README、MkDocs 首页、演示指南、CLI 树、能力地图、Python 接口树与接入/安全文档。演示站不是共享生产登录微服务，也不新增 OAuth、SSO、MFA、邮件、短信或扫码后端。
+
 ## 0.1.4 — 2026-09-23
 
 - 新增稳定导出的 `PrivateSQLite` 复用原语，`SQLiteSessionStore` 改为委托它管理私有目录、真实路径 `mode=rw` 连接和事务；保留既有 store API、schema 与会话行为，供依赖 ChatLogin 的叶子包复用。

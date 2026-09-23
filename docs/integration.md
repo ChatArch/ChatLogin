@@ -1,5 +1,7 @@
 # 接入与安全边界
 
+先按 [完整快速接入](quickstart.md) 跑通一个应用；只想体验组件时安装 `ChatLogin[demo]` 并运行 `chatlogin serve`，参见 [演示站](demo.md)。
+
 ## 选择接入层级
 
 | 需求 | 入口 | 网站保留的责任 |
@@ -12,7 +14,7 @@
 
 Headless 不等于另起认证微服务。可以在同一个 FastAPI 进程挂载 JSON 路由，也可以只调用核心 Python API，保留既有 HTTP handler 与 JSON 字段。普通 Python 包即可携带 HTML/CSS/JS；安装位置不是定制入口，宿主模板目录优先于包内模板。
 
-## 选择认证后端
+## 选择认证后端 {#backends}
 
 | 账户来源 | 入口 | 责任 |
 | --- | --- | --- |
@@ -49,7 +51,7 @@ auth = ChatVoiceAuth(
 
 这是 **ChatVoice schema 专用兼容**，不是任意 SQLite 账户系统的通用 ORM。账户名精确匹配，宿主若已有大小写/空白规范化须在调用前保留。密码保持 PBKDF2-HMAC-SHA256、310000 次与原有 salt/digest；保留原账号 ID、ISO expiry（含时区偏移）、32 字符旧 CSRF 与 SHA-256 token 摘要。匿名、失效或错误凭据不会创建身份。每次解析重新 join 账号，不缓存用户快照。
 
-`ChatVoiceSessionStore(connect, lock, clock, *, max_sessions=10000)` 只接受 `chatvoice` 命名空间与 `Role.USER` 会话，拒绝 guest/admin。容量按整个数据库计算，跨 store 实例由 SQLite 事务串行化；不驱逐有效会话，满时抛 `StoreFull`。`SessionManager.issue(..., previous_token=...)` 原子替换，插入失败会回滚并保留旧会话。`ChatVoiceAuth` 保留原构造签名，store 默认上限为 10000；需要自定义上限时可单独组合该 store 与 manager。
+`ChatVoiceSessionStore(connect, lock, clock, *, max_sessions=10000)` 只接受 `chatvoice` 命名空间与 `Role.USER` 会话，拒绝 guest/admin。容量按整个数据库计算，跨 store 实例由 SQLite 事务串行化；不驱逐有效会话，满时抛 `StoreFull`。`SessionManager.issue(..., previous_token=...)` 原子替换，插入失败会回滚并保留旧会话。`ChatVoiceAuth` 兼容原构造调用，并新增可选关键字参数 `max_sessions=10000`；也可单独组合 store 与 manager。
 
 ### 与三种 UI 模式组合
 
@@ -70,7 +72,7 @@ app.include_router(web.router)
 
 如果不使用 FastAPI，只安装 `ChatLogin[ui]` 并调用 `LoginUI.render()`；此模式只负责模板渲染，安全 HTTP 行为仍由宿主实现。
 
-## 浏览器 HTTP 契约
+## 浏览器 HTTP 契约 {#browser-contract}
 
 默认前缀是 `/auth`，可显式改为 `/api/auth` 等固定本地前缀。
 
@@ -112,6 +114,10 @@ app.include_router(web.router)
 仓库的 `Web Compatibility` workflow 继续显式安装 0.x 与 1.3.x 线路，用正常 resolver 验证 `web` extra。1.x 功能探针已证明代码行为兼容；发布前仍需运行标准依赖解析与最低 Python wheel gate。
 
 ## 可运行演示
+
+包内演示不需要源码：`python -m pip install "ChatLogin[demo]"` 后执行 `chatlogin serve`。它使用明确标记的公开合成身份，详见 [演示站](demo.md)。
+
+下面是另一个需要源码的宿主示例，用于演示自行指定口令的接入方式，不是 `serve` 的启动条件。
 
 从源码分发或仓库根目录执行。演示不含默认口令，使用临时合成账号，不连接生产数据：
 

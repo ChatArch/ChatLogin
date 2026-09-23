@@ -1,0 +1,9 @@
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Headless · AsyncCallbackBackend</title><link rel="stylesheet" href="/assets/demo.css"><script defer src="/assets/demo.js"></script></head>
+<body class="lab-page"><header class="lab-header"><a class="brand" href="/"><span>CL</span> ChatLogin</a><p>HEADLESS / ASYNC CALLBACK</p></header>
+<main class="headless-shell"><section><p class="eyebrow">HOST-OWNED HTML + JSON API</p><h1>界面完全属于宿主，安全契约仍由 ChatLogin 执行。</h1><p>这是本地合成的 <code>AsyncCallbackBackend</code>；没有远程服务或客户数据库。</p>
+<div class="sequence"><span>01 bootstrap</span><span>02 session</span><span>03 login</span><span>04 CSRF action</span><span>05 logout</span></div></section>
+<section class="headless-login" id="headless-login" data-mode="async" data-return="/workspace/async"><p class="chip">PUBLIC DEMO · 无业务权限</p><h2>Headless 登录</h2>
+<form><label>账号<input name="username" autocomplete="username" required></label><label>密码<input name="password" type="password" autocomplete="current-password" required></label>
+<div class="form-actions"><button class="button" type="button" data-fill-demo data-username="{{USERNAME}}" data-password="{{PASSWORD}}" title="Fill Demo">填入 Demo</button><button class="button primary" type="submit">登录</button></div><p class="form-status" role="status"></p></form>
+<p class="safe-note">公开凭据 <code>{{USERNAME}}</code> / <code>{{PASSWORD}}</code>；5 分钟、最多 16 个内存会话。</p><a href="/guest?mode=async">以访客身份查看工作区</a></section></main></body></html>

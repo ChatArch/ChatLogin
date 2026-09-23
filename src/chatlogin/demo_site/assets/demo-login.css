@@ -1,0 +1,4 @@
+.chatlogin .demo-fill { display: grid; gap: .6rem; margin-top: 1rem; padding: 1rem; border: 1px solid currentColor; border-radius: 1rem; font-size: .875rem; line-height: 1.5; text-align: left; opacity: .9; }
+.chatlogin .demo-fill strong, .chatlogin .demo-fill span { display: block; overflow-wrap: anywhere; }
+.chatlogin .demo-fill button { display: block; width: 100%; min-height: 2.75rem; margin: 0; padding: .55rem .8rem; border: 1px solid currentColor; border-radius: .65rem; background: transparent; color: inherit; box-shadow: none; font: inherit; cursor: pointer; }
+.chatlogin .demo-fill button:hover { background: color-mix(in srgb, currentColor 8%, transparent); }

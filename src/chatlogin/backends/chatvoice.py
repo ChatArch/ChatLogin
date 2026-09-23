@@ -111,8 +111,8 @@ class ChatVoiceAuth:
     ``backend`` and ``manager`` can also be passed directly to FastAPIAuth.
     """
 
-    def __init__(self, connect, lock, clock, *, ttl):
-        self.store = ChatVoiceSessionStore(connect, lock, clock)
+    def __init__(self, connect, lock, clock, *, ttl, max_sessions=10_000):
+        self.store = ChatVoiceSessionStore(connect, lock, clock, max_sessions=max_sessions)
         self.backend = CallbackBackend(self._authenticate)
         self.manager = SessionManager(self.store, instance=INSTANCE, ttl=ttl, clock=clock)
 

@@ -12,7 +12,13 @@ Site entry: <https://arch.gh.wzhecnu.cn/ChatLogin/en/>
 
     Install the `web` extra and mount configurable auth routes, dependencies, and an optional page.
 
-    [Open Interface Tree](interface-tree.md)
+    [Open Integration and Security](integration.md)
+
+- **Run the packaged product demo**
+
+    Start four real backend families, three frontend modes, and the template playground from the installed wheel.
+
+    [Open Demo Guide](demo.md)
 
 - **Keep an existing visual style**
 
@@ -22,7 +28,7 @@ Site entry: <https://arch.gh.wzhecnu.cn/ChatLogin/en/>
 
 - **Review CLI and package boundaries**
 
-    The CLI exposes version and standard command trees; authentication is first an importable Python API.
+    The CLI exposes version, command trees, read-only paths, and the isolated `serve` product demo; reusable auth remains a Python API.
 
     [Open CLI Tree](cli-tree.md)
 
@@ -33,6 +39,15 @@ Site entry: <https://arch.gh.wzhecnu.cn/ChatLogin/en/>
 ```bash
 python -m pip install "ChatLogin[web]"
 ```
+
+To run only the packaged interactive site:
+
+```bash
+python -m pip install "ChatLogin[demo]"
+chatlogin serve
+```
+
+It binds only `127.0.0.1:8765` by default. Its public synthetic identity, short bounded sessions, and disposable schema fixture are demonstration-only; this is not a production login microservice. See [Demo and Quick Start](demo.md).
 
 The smallest FastAPI integration uses either synthetic accounts or a host-provided callback. There is no built-in production password.
 

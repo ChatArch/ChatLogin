@@ -308,9 +308,11 @@ def test_callbacks_follow_path_lock_and_clock_changes(host, auth, tmp_path):
 
 
 def test_import_requires_neither_chatvoice_nor_web_extra():
+    import chatlogin
+    package_root = Path(chatlogin.__file__).resolve().parent.parent
     code = f"""
 import sys
-sys.path.insert(0, {str(ROOT / 'src')!r})
+sys.path.insert(0, {str(package_root)!r})
 class RejectOptional:
     def find_spec(self, fullname, path=None, target=None):
         if fullname.split('.')[0] in {{'chatvoice', 'fastapi', 'starlette', 'jinja2'}}:

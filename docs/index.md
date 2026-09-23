@@ -12,7 +12,13 @@ ChatLogin 把网站登录中的**后端安全契约**做成可复用 Python 能�
 
     安装 `web` extra，挂载可配置前缀的认证路由、依赖和默认页面。
 
-    [查看接口树](interface-tree.md)
+    [查看接入与安全](integration.md)
+
+- **运行包内产品演示**
+
+    从已安装 wheel 启动四类真实后端、三类前端和模板游乐场。
+
+    [打开演示指南](demo.md)
 
 - **保留现有网站样式**
 
@@ -22,7 +28,7 @@ ChatLogin 把网站登录中的**后端安全契约**做成可复用 Python 能�
 
 - **校对 CLI 与包边界**
 
-    CLI 只负责版本和标准命令树；认证能力首先是可 import 的 Python API。
+    CLI 提供版本、命令树、只读路径解析和隔离的 `serve` 产品演示；可复用认证能力仍是 Python API。
 
     [查看 CLI 树](cli-tree.md)
 
@@ -33,6 +39,15 @@ ChatLogin 把网站登录中的**后端安全契约**做成可复用 Python 能�
 ```bash
 python -m pip install "ChatLogin[web]"
 ```
+
+只体验安装包自带网站：
+
+```bash
+python -m pip install "ChatLogin[demo]"
+chatlogin serve
+```
+
+默认只监听 `127.0.0.1:8765`。公开合成身份、短期有界 session 和一次性 schema fixture 只服务于演示；它不是生产登录微服务。见[演示站与快速开始](demo.md)。
 
 最小 FastAPI 集成使用合成账号或宿主提供的回调，不内置默认生产密码：
 

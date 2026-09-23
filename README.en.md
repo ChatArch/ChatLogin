@@ -39,9 +39,25 @@ For packaged template rendering without FastAPI, install only:
 pip install "ChatLogin[ui]"
 ```
 
+To run the packaged product demo (`demo` includes the web stack and Uvicorn):
+
+```bash
+pip install "ChatLogin[demo]"
+chatlogin serve
+# Open http://127.0.0.1:8765/
+```
+
+Behind a reverse proxy, keep the bind on loopback and explicitly set the trusted browser origin:
+
+```bash
+chatlogin serve --host 127.0.0.1 --port 8765 --origin https://login.example.com
+```
+
+`serve` is an isolated product demonstration with a public synthetic identity, bounded five-minute in-memory sessions, and a disposable ChatVoice schema fixture. It reads no ChatEnv account or production database, provides no default production credential, and is not a shared login microservice. See [Demo and Quick Start](docs/demo.en.md).
+
 The core package does not require adopting the packaged page. An existing static HTML/vanilla-JS site can mount only JSON routes and retain its current entry page and user database; a standard-library HTTP host can use `LoginUI` for rendering without installing FastAPI.
 
-## Choose an Authentication Backend (0.1.4)
+## Choose an Authentication Backend (0.1.5)
 
 | Account source | Optional backend | Session and host boundary |
 | --- | --- | --- |
@@ -77,4 +93,4 @@ python -m twine check dist/*
 mkdocs build --strict
 ```
 
-A runnable FastAPI demo with a synthetic account is available in `examples/demo_fastapi.py`.
+A runnable FastAPI synthetic-account example is available in `examples/demo_fastapi.py`; use `chatlogin serve` for the packaged interactive demo.

@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="ChatLogin 可复用认证、会话与登录 UI 的隔离产品演示">
+  <title>ChatLogin · 把登录边界装进 Python 包</title>
+  <link rel="stylesheet" href="/assets/demo.css">
+  <script defer src="/assets/demo.js"></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="ChatLogin 首页"><span>CL</span> ChatLogin <small>v{{VERSION}}</small></a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav">导航</button>
+    <nav id="site-nav" aria-label="主要导航">
+      <a href="#overview">概览</a><a href="#live">登录体验</a><a href="/templates">模板</a>
+      <a href="#integrate">快速接入</a><a href="https://arch.gh.wzhecnu.cn/ChatLogin/">文档</a>
+      <a href="https://github.com/ChatArch/ChatLogin">源码</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero" id="overview">
+      <div class="hero__copy">
+        <p class="eyebrow">REUSABLE AUTH BOUNDARY · PYTHON</p>
+        <h1>为 Python 网站接入登录。</h1>
+        <p class="lede">ChatLogin 组合可信身份、凭据校验、短期会话、CSRF 与可替换 UI。它是宿主应用里的库，不是一套共享身份中心。</p>
+        <div class="hero__actions"><a class="button primary" href="#live">进入真实登录体验</a><a class="button" href="#integrate">复制最小接入</a></div>
+        <p class="safe-note">公开演示身份：<code>demo</code> / <code>chatlogin-demo</code> · 无业务权限 · 5 分钟内存会话 · 不连接真实账号或数据库</p>
+      </div>
+      <aside class="boundary-card" aria-label="产品边界">
+        <p class="eyebrow">WHAT IT IS</p><h2>认证、会话与界面，自由组合</h2>
+        <dl><div><dt>已实现</dt><dd>4 类后端 · 3 类前端 · 2 种通用存储</dd></div><div><dt>安全边界</dt><dd>Origin / Host · CSRF · TTL · owner</dd></div><div><dt>明确不提供</dt><dd>OAuth / SSO / MFA / 短信 / 邮件 / QR</dd></div></dl>
+      </aside>
+    </section>
+
+    <section class="section" aria-labelledby="capability-title">
+      <div class="section-heading"><p class="eyebrow">CAPABILITY MAP</p><h2 id="capability-title">先选后端，再独立选择前端</h2><p>色板和布局是视觉配置，不是新的认证方式。</p></div>
+      <div class="capability-grid">
+        <article><span>01</span><h3>账户 / 凭据后端</h3><p><code>PasswordBackend</code><br><code>CallbackBackend</code><br><code>AsyncCallbackBackend</code><br><code>ChatVoiceAuth</code></p><small>已实现：显式账号、宿主回调与精确旧 schema。</small></article>
+        <article><span>02</span><h3>前端接入</h3><p><code>LoginUI</code><br>宿主 template / renderer<br><code>ui=None</code> headless</p><small>三种模式都调用同一真实 HTTP 安全契约。</small></article>
+        <article><span>03</span><h3>会话存储</h3><p><code>MemorySessionStore</code><br><code>SQLiteSessionStore</code><br>宿主 <code>SessionStore</code></p><small>这是存储维度，不是认证协议。</small></article>
+        <article><span>04</span><h3>授权边界</h3><p><code>current_user</code><br><code>csrf_user</code><br><code>roles</code> / <code>require_owner</code></p><small>业务资源策略继续由宿主明确负责。</small></article>
+      </div>
+    </section>
+
+    <section class="section live" id="live" aria-labelledby="live-title">
+      <div class="section-heading"><p class="eyebrow">LIVE LOGIN LAB</p><h2 id="live-title">四种真实后端，一份公开合成身份</h2><p>每张卡进入独立 cookie 与 session namespace；回调和 ChatVoice schema 都只存在于本进程。</p></div>
+      <div class="demo-grid">
+        <article class="demo-card"><p class="chip">DEFAULT UI</p><h3>PasswordBackend</h3><p>一个显式哈希账号 + 默认 <code>LoginUI</code>。</p><a class="button primary" href="/demo/password/?next=/workspace/password">体验固定账号 →</a></article>
+        <article class="demo-card"><p class="chip">HOST OVERRIDE</p><h3>CallbackBackend</h3><p>本地同步回调 + 完整宿主 renderer。</p><a class="button primary" href="/demo/callback/?next=/workspace/callback">体验宿主覆盖 →</a></article>
+        <article class="demo-card"><p class="chip">HEADLESS</p><h3>AsyncCallbackBackend</h3><p>本地异步回调 + 自有 HTML / JS。</p><a class="button primary" href="/experience/async">体验 Headless →</a></article>
+        <article class="demo-card"><p class="chip">LEGACY SCHEMA</p><h3>ChatVoiceAuth</h3><p>一次性内存 schema fixture + split UI。</p><a class="button primary" href="/demo/chatvoice/?next=/workspace/chatvoice">体验 ChatVoice →</a></article>
+      </div>
+    </section>
+
+    <section class="section" id="integrate" aria-labelledby="integrate-title">
+      <div class="section-heading"><p class="eyebrow">QUICK INTEGRATION</p><h2 id="integrate-title">FastAPI 默认 UI：完整最小应用</h2><p>安装 <code>ChatLogin[web]</code> 和宿主 ASGI server；下面的程序只从环境变量读取宿主显式设置的密码，没有默认生产凭据。</p></div>
+      <div class="code-layout"><pre><code>"""Minimal host app; provide an explicit password through the environment."""
+import os
+from urllib.parse import urlsplit
+
+from fastapi import Depends, FastAPI
+import uvicorn
+from chatlogin import MemorySessionStore, PasswordBackend, Principal, SessionManager, hash_password
+from chatlogin.fastapi import CookieSettings, FastAPIAuth
+from chatlogin.ui import LoginUI
+
+origin = os.environ.get("MY_SITE_ORIGIN", "http://127.0.0.1:8000")
+password = os.environ["MY_SITE_LOGIN_PASSWORD"]
+backend = PasswordBackend({
+    "operator": (Principal("operator", "Operator"), hash_password(password)),
+})
+app = FastAPI()
+auth = FastAPIAuth(
+    backend,
+    SessionManager(MemorySessionStore(max_sessions=256), instance="my-site", ttl=3600),
+    origin=origin,
+    ui=LoginUI(),
+    cookie=CookieSettings(secure=urlsplit(origin).scheme == "https"),
+)
+app.include_router(auth.router)
+
+@app.get("/")
+def home():
+    return {"login": "/auth/?next=/private"}
+
+@app.get("/private")
+def private(user=Depends(auth.current_user)):
+    return user.as_dict()
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="127.0.0.1", port=8000, proxy_headers=False)
+</code></pre>
+      <div class="integration-links"><p>保存为 app.py，显式设置 MY_SITE_LOGIN_PASSWORD 后运行。账号为 operator；打开 /auth/?next=/private 完成登录。完整启动命令和生产边界见快速接入文档。</p><a href="/templates"><strong>模板游乐场</strong><span>3 色板 × 2 布局 × 3 外观，复制精确配置。</span></a><a href="https://arch.gh.wzhecnu.cn/ChatLogin/quickstart/"><strong>完整接入与安全</strong><span>Headless sequence、同步/异步回调、stores、ChatVoice schema。</span></a></div></div>
+    </section>
+
+    <section class="section exclusion"><p class="eyebrow">HONEST BOUNDARIES</p><h2>演示站不是生产登录微服务</h2><p>它没有默认生产凭据，不读取 ChatEnv profile，不信任 forwarded headers，也不提供 OAuth、SSO、MFA、邮件、短信或扫码登录。生产宿主必须选择自己的后端、持久 store、固定 origin、TLS 与业务授权。</p></section>
+  </main>
+  <footer><span>ChatLogin v{{VERSION}}</span><span>Isolated product demo · synthetic data only</span></footer>
+</body></html>

@@ -44,6 +44,7 @@ class LoginUI:
     appearance: str = "system"
     guest_url: str | None = None
     guest_label: str = "以访客身份继续"
+    script_url: str | None = None
 
     def __post_init__(self) -> None:
         if self.palette not in PALETTES:
@@ -65,7 +66,7 @@ class LoginUI:
         object.__setattr__(self, "template_dirs", tuple(self.template_dirs))
         if self.renderer is not None and not callable(self.renderer):
             raise TypeError("renderer must be callable")
-        for name in ("stylesheet_url", "guest_url"):
+        for name in ("stylesheet_url", "script_url", "guest_url"):
             value = getattr(self, name)
             if value is not None:
                 _local_url(value, name)
@@ -82,6 +83,7 @@ class LoginUI:
             "layout": self.layout,
             "appearance": self.appearance,
             "stylesheet_url": self.stylesheet_url,
+            "script_url": self.script_url,
             "guest_url": self.guest_url,
             "guest_label": self.guest_label,
         })

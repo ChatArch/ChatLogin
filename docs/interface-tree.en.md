@@ -47,7 +47,7 @@ chatlogin
 
 ```text
 chatlogin.backends.chatvoice
-├── ChatVoiceAuth(connect, lock, clock, *, ttl)
+├── ChatVoiceAuth(connect, lock, clock, *, ttl, max_sessions=10000)
 │   ├── login(account, password) -> IssuedSession | None
 │   ├── resolve_row(token) -> dict | None
 │   ├── check_csrf(auth, submitted)
@@ -104,11 +104,12 @@ chatlogin.ui
       layout="card" | "split",
       appearance="system" | "light" | "dark",
       guest_url=None,
-      guest_label="以访客身份继续",
+      guest_label="Continue as guest",  # explicit localization override
       template_dirs=(),
       template_name="chatlogin/login.html",
       stylesheet_url=None,
       renderer=None,
+      script_url=None,
     )
 ```
 
@@ -161,3 +162,6 @@ The POSIX implementation traverses every ancestor no-follow and validates owners
 POSIX systems without the required dir-fd/no-follow primitives fail closed. Non-POSIX systems retain the isolated legacy path without POSIX mode guarantees, so the host must protect the directory with platform ACLs. This API is for a trusted local filesystem, not a network/shared filesystem.
 
 When a host needs to clean a private context index, call `SessionManager.purge_expired()`. The manager delegates to the store with its validated instance and clock; do not duplicate TTL calculations or access store internals.
+## Packaged Demo Application
+
+With `ChatLogin[demo]`, `chatlogin.demo.create_demo_app(origin=...)` returns the isolated demo application; `chatlogin serve` is its thin CLI. It exercises real backends/UI without becoming a production identity center. See [Quick Integration](quickstart.md) and [Demo](demo.md).

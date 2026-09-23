@@ -47,7 +47,7 @@ chatlogin
 
 ```text
 chatlogin.backends.chatvoice
-├── ChatVoiceAuth(connect, lock, clock, *, ttl)
+├── ChatVoiceAuth(connect, lock, clock, *, ttl, max_sessions=10000)
 │   ├── login(account, password) -> IssuedSession | None
 │   ├── resolve_row(token) -> dict | None
 │   ├── check_csrf(auth, submitted)
@@ -109,6 +109,7 @@ chatlogin.ui
       template_name="chatlogin/login.html",
       stylesheet_url=None,
       renderer=None,
+      script_url=None,
     )
 ```
 
@@ -161,3 +162,6 @@ POSIX 实现逐级 no-follow 校验祖先 owner 与写权限，要求最终数�
 缺少所需 dir-fd/no-follow 原语的 POSIX 平台失败关闭。非 POSIX 保留隔离的旧路径行为，不把 mode bits 当作 Windows ACL 保证；宿主仍需用平台 ACL 保护目录。此 API 面向可信本地文件系统，不支持网络/共享文件系统。
 
 宿主需要清理私有上下文索引时，调用 `SessionManager.purge_expired()`，由 manager 使用已验证 instance 与 clock 委托给 store；不要复制 TTL 计算或访问 store 私有成员。
+## 包内演示应用
+
+安装 `ChatLogin[demo]` 后，`chatlogin.demo.create_demo_app(origin=...)` 返回完整的隔离演示应用；`chatlogin serve` 是对应的薄 CLI。它展示真实后端和 UI，但不充当生产身份中心。见 [快速接入](quickstart.md) 与 [演示站](demo.md)。

@@ -4,6 +4,7 @@
 
 | 能力 | 状态 | 边界 |
 | --- | --- | --- |
+| 包内演示站 | 已实现（`demo` extra） | `chatlogin serve`、四类真实后端体验、模板游乐场与可复制接入示例；不连接生产数据 |
 | 身份与授权 | 已实现 | `Principal`、`Role`、401/403、`require_role`、`require_owner`；admin 不自动绕过 owner |
 | 认证后端 | 已实现 | `PasswordBackend` 支持一个或多个显式账号；`CallbackBackend` 接入宿主用户库；`AsyncCallbackBackend` await 异步上游校验 |
 | ChatVoice 兼容后端 | 已实现（核心包，按需导入） | `ChatVoiceAuth` / `ChatVoiceSessionStore`；仅现有 ChatVoice schema、固定命名空间与 USER，不建表/迁移，无 ChatVoice/web 依赖 |
@@ -26,8 +27,8 @@
 
 ## 不在当前范围
 
-- 不提供独立常驻登录服务、SSO、OAuth/邮箱登录、MFA 或账户管理后台。
+- 不提供独立生产登录微服务、SSO、OAuth/邮箱登录、MFA 或账户管理后台。
 - 不接管会议、文件、卡片等业务数据；每个宿主继续定义资源 owner 和 policy。
 - 不把 guest 当成数据库账户；访客体验由宿主显式声明。
 - 不提供万能 ORM 或后端注册中心；ChatVoice 兼容后端来自自有桥接实现，并以旧 schema 合成测试验证。
-- 不输出 secret、cookie、CSRF token、Authorization header 或生产凭据。
+- 不把 secret、cookie、CSRF token、Authorization header 或生产凭据写入日志或页面。CSRF 仅通过同源 session/login JSON 交给浏览器，用于受保护写操作。
