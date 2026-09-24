@@ -32,3 +32,7 @@ Backend selection: fixed/multiple accounts use `PasswordBackend`; sync host data
 - Guest is not a database account; guest experiences must be explicitly declared by the host.
 - No universal ORM or backend registry; the ChatVoice backend promotes our existing bridge with synthetic legacy-schema regression coverage.
 - Secrets, cookies, CSRF tokens, Authorization headers, and production credentials are never logged.
+
+## Multi-User Boundary
+
+Account mappings, callbacks, and the ChatVoice-compatible backend support multiple identities. `require_owner` is a host-invoked ownership check, not automatic database row-level security. Different users require distinct stable user IDs. See the [A/B lab and responsibility split](demo.en.md#user-isolation).

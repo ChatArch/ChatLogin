@@ -12,6 +12,7 @@ from html import escape
 from importlib import resources
 import hashlib
 import hmac
+import secrets
 import sqlite3
 import threading
 import time
@@ -22,6 +23,7 @@ from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import HTMLResponse, JSONResponse, Response
 
 from . import (
+    AccessDenied,
     AsyncCallbackBackend,
     CallbackBackend,
     MemorySessionStore,
@@ -30,6 +32,7 @@ from . import (
     SessionManager,
     __version__,
     hash_password,
+    require_owner,
 )
 from .backends import ChatVoiceAuth
 from .fastapi import CookieSettings, FastAPIAuth
@@ -39,6 +42,34 @@ DEMO_USERNAME = "demo"
 DEMO_PASSWORD = "chatlogin-demo"
 DEMO_TTL_SECONDS = 300
 DEMO_MAX_SESSIONS = 16
+
+
+@dataclass(frozen=True)
+class _DemoAccount:
+    key: str
+    username: str
+    password: str
+    label: str
+
+
+# Explicit public fixtures for serve only; never read a production account source.
+_DEMO_ACCOUNTS = (
+    _DemoAccount("a", DEMO_USERNAME, DEMO_PASSWORD, "演示用户 A"),
+    _DemoAccount("b", "demo-b", "chatlogin-demo-b", "演示用户 B"),
+)
+
+
+def _demo_principal(mode: str, account: _DemoAccount) -> Principal:
+    suffix = "" if account.key == "a" else "-b"
+    return Principal(f"demo-{mode}{suffix}", account.label)
+
+
+def _demo_record_id(mode: str, account: _DemoAccount) -> str:
+    return f"{mode}-{account.key}"
+
+
+def _data_error(status: int, detail: str) -> HTTPException:
+    return HTTPException(status, detail, headers={"Cache-Control": "no-store", "Pragma": "no-cache"})
 
 _ASSETS = {
     "demo.css": "text/css; charset=utf-8",
@@ -169,12 +200,14 @@ def _chatvoice_fixture():
             FOREIGN KEY(user_id) REFERENCES accounts(id) ON DELETE CASCADE
         );
     """)
-    salt = b"ChatLoginDemoSalt"
-    digest = hashlib.pbkdf2_hmac("sha256", DEMO_PASSWORD.encode(), salt, 310_000)
-    keeper.execute(
-        "INSERT INTO accounts VALUES (?, ?, ?, ?, ?, ?)",
-        ("demo-chatvoice", DEMO_USERNAME, "ChatVoice 合成用户", salt, digest, datetime.now(timezone.utc).isoformat()),
-    )
+    for account in _DEMO_ACCOUNTS:
+        salt = secrets.token_bytes(16)
+        digest = hashlib.pbkdf2_hmac("sha256", account.password.encode(), salt, 310_000)
+        principal = _demo_principal("chatvoice", account)
+        keeper.execute(
+            "INSERT INTO accounts VALUES (?, ?, ?, ?, ?, ?)",
+            (principal.user_id, account.username, principal.display_name, salt, digest, datetime.now(timezone.utc).isoformat()),
+        )
     keeper.commit()
     return keeper, connect
 
@@ -182,23 +215,27 @@ def _chatvoice_fixture():
 def create_demo_app(*, origin: str) -> FastAPI:
     """Build the isolated demo app for one explicit, trusted browser origin."""
     password_backend = PasswordBackend({
-        DEMO_USERNAME: (Principal("demo-password", "固定账号 Demo"), hash_password(DEMO_PASSWORD)),
+        account.username: (_demo_principal("password", account), hash_password(account.password))
+        for account in _DEMO_ACCOUNTS
     })
 
-    def demo_match(username: str, password: str) -> bool:
-        # CallbackBackend has already validated UTF-8 shape.  Byte comparison
-        # stays controlled for all Unicode accepted by that public contract.
-        return hmac.compare_digest(username.encode("utf-8"), DEMO_USERNAME.encode("utf-8")) & hmac.compare_digest(
-            password.encode("utf-8"), DEMO_PASSWORD.encode("utf-8")
-        )
+    def demo_match(username: str, password: str) -> _DemoAccount | None:
+        matched = None
+        for account in _DEMO_ACCOUNTS:
+            valid = hmac.compare_digest(username.encode("utf-8"), account.username.encode("utf-8")) & hmac.compare_digest(
+                password.encode("utf-8"), account.password.encode("utf-8")
+            )
+            if valid:
+                matched = account
+        return matched
 
     def callback(username: str, password: str):
-        valid = demo_match(username, password)
-        return Principal("demo-callback", "同步回调 Demo") if valid else None
+        account = demo_match(username, password)
+        return _demo_principal("callback", account) if account else None
 
     async def async_callback(username: str, password: str):
-        valid = demo_match(username, password)
-        return Principal("demo-async", "异步回调 Demo") if valid else None
+        account = demo_match(username, password)
+        return _demo_principal("async", account) if account else None
 
     demo_script = f"/assets/demo-login.js?v={__version__}"
     modes: dict[str, _Mode] = {}
@@ -247,6 +284,32 @@ def create_demo_app(*, origin: str) -> FastAPI:
     )
     modes["chatvoice"] = _Mode("chatvoice", "ChatVoiceAuth", "LoginUI split", chatvoice_auth)
 
+    # Business resources belong to this demo host, not to the authentication core.
+    # Fixed, bounded, in-memory fixtures: no user-created objects or disk access.
+    record_lock = threading.RLock()
+    records = {}
+    for mode_key in modes:
+        for account in _DEMO_ACCOUNTS:
+            principal = _demo_principal(mode_key, account)
+            record_id = _demo_record_id(mode_key, account)
+            records[(mode_key, record_id)] = {
+                "id": record_id, "owner_id": principal.user_id,
+                "title": f"{account.label}的样例",
+                "note": f"仅属于{account.label}的合成数据",
+                "revision": 0,
+            }
+
+    def owned_record(mode: str, record_id: str, principal: Principal) -> dict:
+        # Call under record_lock; callers never supply the authoritative owner.
+        record = records.get((mode, record_id))
+        if record is None:
+            raise _data_error(404, "Demo record not found")
+        try:
+            require_owner(principal, record["owner_id"])
+        except AccessDenied as exc:
+            raise _data_error(exc.status_code, exc.detail) from None
+        return record
+
     # FastAPIAuth performs the strict syntax/canonical-origin validation.
     normalized_origin = password_auth.origin
     authority = urlsplit(normalized_origin).netloc.lower()
@@ -267,6 +330,14 @@ def create_demo_app(*, origin: str) -> FastAPI:
     app.state.demo_chatvoice_keeper = keeper
     for mode in modes.values():
         app.include_router(mode.auth.router)
+
+    @app.get("/api/demo/accounts")
+    async def demo_accounts():
+        # Only these deliberately public constants, never the backend/host database.
+        return _json({"synthetic": True, "accounts": [
+            {"key": account.key, "label": account.label, "username": account.username, "password": account.password}
+            for account in _DEMO_ACCOUNTS
+        ]})
 
     @app.get("/", response_class=HTMLResponse)
     async def home():
@@ -338,22 +409,52 @@ def create_demo_app(*, origin: str) -> FastAPI:
         user_id = principal.user_id if principal else "—"
         display_name = principal.display_name if principal else "访客 / Guest"
         role = principal.role.value if principal else "guest"
+        account = next((candidate for candidate in _DEMO_ACCOUNTS
+                        if principal and _demo_principal(mode, candidate).user_id == principal.user_id), None)
+        my_record = _demo_record_id(mode, account) if account else ""
+        other = next((candidate for candidate in _DEMO_ACCOUNTS if candidate != account), None) if account else None
+        other_record = _demo_record_id(mode, other) if other else ""
         html = _replace(
             _resource("templates", "workspace.html"),
             MODE=mode, STATE=state, USER_ID=user_id, DISPLAY_NAME=display_name, ROLE=role,
             BACKEND=current.backend_label, UI=current.ui_label, LOGIN_ROUTE=login_route(mode),
+            MY_RECORD=my_record, OTHER_RECORD=other_record, ACCOUNT=account.username if account else "—",
+            LOGIN_LABEL="切换账号" if principal else "返回登录页",
         )
         return _page(html, frame=True)
 
     @app.get("/guest", response_class=HTMLResponse)
-    async def guest(mode: str = "password"):
-        current = selected(mode)
-        html = _replace(
-            _resource("templates", "workspace.html"),
-            MODE=mode, STATE="guest", USER_ID="—", DISPLAY_NAME="访客 / Guest", ROLE="guest",
-            BACKEND=current.backend_label, UI=current.ui_label, LOGIN_ROUTE=login_route(mode),
-        )
-        return _page(html, frame=True)
+    async def guest(request: Request, mode: str = "password"):
+        # A public-navigation link does not revoke a valid session or fake a guest.
+        return await workspace(mode, request)
+
+    @app.get("/api/demo/{mode}/records")
+    async def my_records(mode: str, request: Request):
+        principal = await selected(mode).auth.current_user(request)
+        with record_lock:
+            owned = [dict(record) for (record_mode, _), record in records.items()
+                     if record_mode == mode and record["owner_id"] == principal.user_id]
+        return _json({"user_id": principal.user_id, "records": owned})
+
+    @app.get("/api/demo/{mode}/records/{record_id}")
+    async def read_record(mode: str, record_id: str, request: Request):
+        principal = await selected(mode).auth.current_user(request)
+        with record_lock:
+            record = dict(owned_record(mode, record_id, principal))
+        return _json({"user_id": principal.user_id, "record": record})
+
+    @app.post("/api/demo/{mode}/records/{record_id}/touch")
+    async def touch_record(mode: str, record_id: str, request: Request):
+        principal = await selected(mode).auth.csrf_user(request)
+        # No writable owner/revision fields. Reject without buffering an input body.
+        async for chunk in request.stream():
+            if chunk:
+                raise _data_error(400, "This action accepts no request body")
+        with record_lock:
+            record = owned_record(mode, record_id, principal)
+            record["revision"] = min(record["revision"] + 1, 1_000_000)
+            payload = dict(record)
+        return _json({"user_id": principal.user_id, "record": payload})
 
     @app.get("/api/demo/{mode}/protected")
     async def protected(mode: str, request: Request):

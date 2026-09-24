@@ -91,7 +91,7 @@ def test_web_compatibility_install_command_quotes_each_requirement():
 
 
 def test_distribution_exports_new_public_apis():
-    script = ("import chatlogin as cl; assert cl.__version__ == '0.1.6.dev1'; "
+    script = ("import chatlogin as cl; assert cl.__version__ == '0.1.6.dev2'; "
               "assert cl.AsyncCallbackBackend; assert cl.AsyncCredentialBackend; "
               "assert cl.PrivateSQLite")
     subprocess.run([sys.executable, "-c", script], cwd="/tmp", check=True)
@@ -103,6 +103,6 @@ def test_core_import_does_not_load_optional_web_modules():
         "assert 'fastapi' not in sys.modules; "
         "assert 'starlette' not in sys.modules; "
         "assert 'jinja2' not in sys.modules; "
-        "assert chatlogin.__version__ == '0.1.6.dev1'"
+        "assert chatlogin.__version__ == '0.1.6.dev2'"
     )
     subprocess.run([sys.executable, "-c", script], cwd="/tmp", check=True)

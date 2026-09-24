@@ -36,25 +36,43 @@ chatlogin serve \
 
 ## 可以实际体验什么
 
-公开演示身份是 `demo` / `chatlogin-demo`。它没有业务权限，不对应任何真实账户或客户数据；页面上的 **Fill Demo** 只填充这组公开合成值。
+开发预览提供公开合成A/B账号，登录页可选择并填入。它们不对应真实账户或客户数据，详见[多账号与数据隔离](#user-isolation)。
 
 | 后端 | 前端 | 入口 | 数据来源 |
 | --- | --- | --- | --- |
-| `PasswordBackend` | 默认 `LoginUI` | `/demo/password/` | 进程启动时显式构造的单个合成 hash |
+| `PasswordBackend` | 默认 `LoginUI` | `/demo/password/` | 显式构造的两个独立账号与密码hash |
 | `CallbackBackend` | 宿主 `renderer` 覆盖 | `/demo/callback/` | 本地同步合成回调 |
 | `AsyncCallbackBackend` | `ui=None` + 自有 HTML/JS | `/experience/async` | 本地异步合成回调 |
 | `ChatVoiceAuth` | `LoginUI` split/dark | `/demo/chatvoice/` | 一次性共享内存 SQLite 旧 schema fixture |
 
-四种模式各自使用 cookie 名与 session namespace。登录成功后的工作区只显示安全的 `Principal` 和后端/UI 标签，并提供真实的受保护读取、CSRF 成功/失败检查和退出操作。页面与日志不展示 session token、cookie、密码 hash 或 CSRF 值。CSRF 只在同源 session/login JSON 中返回给浏览器以执行安全写操作；会话 token 只通过 HttpOnly Cookie 交付。
+四种模式各自使用 cookie 名与 session namespace。登录成功后的工作区显示安全身份、宿主拥有的合成记录、真实数据归属校验，以及受保护读取、CSRF检查与退出操作。页面与日志不展示 session token、cookie、密码 hash 或 CSRF 值。CSRF 只在同源 session/login JSON 中返回给浏览器以执行安全写操作；会话 token 只通过 HttpOnly Cookie 交付。
 
 模板游乐场在 `/templates`，预览由实际 `LoginUI.render()` 生成。它只接受三个色板、两个布局、`light`/`dark`/`system` 与 guest 开关，并生成可复制的精确 Python 配置；不接受任意 HTML 或文件路径。
 
 健康与版本读回：
 
 ```text
-GET /health   -> {"status":"ok","version":"0.1.5"}
-GET /version  -> {"version":"0.1.5"}
+GET /health   -> {"status":"ok","version":"0.1.6.dev2"}
+GET /version  -> {"version":"0.1.6.dev2"}
 ```
+
+## 多账号与数据隔离 {#user-isolation}
+
+A/B隔离实验在 `0.1.6.dev2` 开发预览可用；`0.1.5` 的认证核心已经支持多账号，但它的演示只公示一个账号。以站点页眉或 `chatlogin --version` 为准，开发预览不等于新的PyPI正式版本。
+
+| 层次 | 负责方 | 验证方式 |
+| --- | --- | --- |
+| 多账号认证 | `PasswordBackend` 映射、同步/异步回调、`ChatVoiceAuth` 账户库 | A/B返回不同且稳定的 `user_id` |
+| 用户会话 | ChatLogin会话存储与HttpOnly Cookie | 两个独立浏览器会话互不串号；退出A不影响B |
+| 业务数据 | 宿主按可信身份过滤、调用 `require_owner` | 本人列表/详情/写入成功；持A会话读写B样例返回403，反向相同 |
+
+每个后端演示都有两组**公开合成凭据**：A为 `demo` / `chatlogin-demo`，B为 `demo-b` / `chatlogin-demo-b`。登录页选择账号并填入，再点击登录。不要用两个普通标签假装独立用户：它们共享Cookie；并行验证使用普通与无痕窗口，或两个浏览器。
+
+登录后的“用户数据隔离”提供本人读取、本人修改、读取对方、修改对方四个真实API操作。修订号由服务端修改；数据未预先全部下发再由前端隐藏。归属来自服务端 `Principal.user_id`，不接受客户端指定 `owner_id`。公开的对方资源ID仅用于合成越权测试，不应成为真实产品的目录枚举接口。
+
+这是应用层逻辑隔离，不是每人独立数据库。ChatVoice宿主也可按 `(owner_id, record_id)` 查询并对不存在于当前用户空间的详情返回404。登录库不自动隔离会议、文件、下载、后台任务或其他业务表：宿主必须在每个入口执行自己的授权规则。每个真实用户必须拥有稳定且不同的 `user_id`，不能让多个账号都返回同一Principal。
+
+样例业务记录仅驻留当前演示进程，重启清空；它们没有任何真实业务权限。演示账号公开，所以任何访问者都可主动登录A或B；隔离结论是**持A会话不能越权访问B资源**，不是对知道B凭据的访问者保密。
 
 ## 演示安全边界
 

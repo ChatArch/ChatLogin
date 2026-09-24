@@ -94,3 +94,7 @@ mkdocs build --strict
 ```
 
 A runnable FastAPI synthetic-account example is available in `examples/demo_fastapi.py`; use `chatlogin serve` for the packaged interactive demo.
+
+### Multiple Users and Data Isolation
+
+Authentication backends support multiple accounts with distinct stable `user_id` values. ChatLogin owns sessions; the host owns authorization for business resources. Installing login does not automatically isolate every business table. The development preview provides a real A/B read/write isolation lab; see the [demo guide](docs/demo.en.md#user-isolation).

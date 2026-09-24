@@ -26,7 +26,7 @@
         <h1>登录体验与接入示例</h1>
         <p class="lede">复用认证、会话与登录界面。先体验登录效果，再选择模板、复制接入代码。</p>
         <div class="hero__actions"><a class="button primary" href="#live">进入真实登录体验</a><a class="button" href="/templates">选择登录页模板</a></div>
-        <p class="safe-note">公开演示身份：<code>demo</code> / <code>chatlogin-demo</code> · 无业务权限 · 5 分钟内存会话 · 不连接真实账号或数据库</p>
+        <p class="safe-note">每种方式都可选择演示用户 A / B；登录后实测本人数据与跨用户拒绝。仅合成数据，不连接真实业务库。</p>
       </div>
       <aside class="boundary-card" aria-label="产品边界">
         <p class="eyebrow">WHAT IT IS</p><h2>认证、会话与界面，自由组合</h2>
@@ -35,12 +35,12 @@
     </section>
 
     <section class="section live" id="live" aria-labelledby="live-title">
-      <div class="section-heading"><p class="eyebrow">LIVE LOGIN LAB</p><h2 id="live-title">四种后端的登录体验</h2><p>四种真实后端，分别演示默认、自定义和 Headless 界面。账户与会话相互隔离。</p></div>
+      <div class="section-heading"><p class="eyebrow">LIVE LOGIN LAB</p><h2 id="live-title">四种后端的登录体验</h2><p>四种真实后端，每例都有 A/B 用户。身份与会话由 ChatLogin 管理；业务数据由宿主按 user_id / owner_id 校验。</p></div>
       <div class="demo-grid">
-        <article class="demo-card"><p class="chip">默认界面</p><h3>固定账号登录</h3><code class="backend-name">PasswordBackend</code><p>一个显式哈希账号 + 默认 <code>LoginUI</code>。</p><a class="button primary" href="/demo/password/?next=/workspace/password">体验固定账号 →</a></article>
+        <article class="demo-card"><p class="chip">默认界面</p><h3>固定账号登录</h3><code class="backend-name">PasswordBackend</code><p>两个独立账号与密码哈希，使用默认 <code>LoginUI</code>。</p><a class="button primary" href="/demo/password/?next=/workspace/password">体验固定账号 →</a></article>
         <article class="demo-card"><p class="chip">自定义界面</p><h3>同步回调接入</h3><code class="backend-name">CallbackBackend</code><p>本地同步回调 + 完整宿主 renderer。</p><a class="button primary" href="/demo/callback/?next=/workspace/callback">体验宿主覆盖 →</a></article>
         <article class="demo-card"><p class="chip">HEADLESS</p><h3>异步回调接入</h3><code class="backend-name">AsyncCallbackBackend</code><p>本地异步回调 + 自有 HTML / JS。</p><a class="button primary" href="/experience/async">体验 Headless →</a></article>
-        <article class="demo-card"><p class="chip">账户库兼容</p><h3>ChatVoice 接入</h3><code class="backend-name">ChatVoiceAuth</code><p>一次性内存 schema fixture + split UI。</p><a class="button primary" href="/demo/chatvoice/?next=/workspace/chatvoice">体验 ChatVoice →</a></article>
+        <article class="demo-card"><p class="chip">账户库兼容</p><h3>ChatVoice 接入</h3><code class="backend-name">ChatVoiceAuth</code><p>在内存账户库里演示 A/B 登录，保留既有 ChatVoice schema。</p><a class="button primary" href="/demo/chatvoice/?next=/workspace/chatvoice">体验 ChatVoice →</a></article>
       </div>
     </section>
 
