@@ -448,6 +448,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#user-isolation" class="md-nav__link">
+    <span class="md-ellipsis">
+      多账号与数据隔离
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       演示安全边界
@@ -683,6 +692,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#user-isolation" class="md-nav__link">
+    <span class="md-ellipsis">
+      多账号与数据隔离
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       演示安全边界
@@ -748,7 +766,7 @@
 </code></pre></div>
 <p><code>--origin</code> 是固定安全配置，不从 <code>Host</code>、<code>X-Forwarded-Host</code> 或 <code>X-Forwarded-Proto</code> 自动推导。代理、TLS、进程监督和公网限流仍由部署方负责。</p>
 <h2 id="_3">可以实际体验什么<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
-<p>公开演示身份是 <code>demo</code> / <code>chatlogin-demo</code>。它没有业务权限，不对应任何真实账户或客户数据；页面上的 <strong>Fill Demo</strong> 只填充这组公开合成值。</p>
+<p>开发预览提供公开合成A/B账号，登录页可选择并填入。它们不对应真实账户或客户数据，详见<a href="#user-isolation">多账号与数据隔离</a>。</p>
 <table>
 <thead>
 <tr>
@@ -763,7 +781,7 @@
 <td><code>PasswordBackend</code></td>
 <td>默认 <code>LoginUI</code></td>
 <td><code>/demo/password/</code></td>
-<td>进程启动时显式构造的单个合成 hash</td>
+<td>显式构造的两个独立账号与密码hash</td>
 </tr>
 <tr>
 <td><code>CallbackBackend</code></td>
@@ -785,12 +803,44 @@
 </tr>
 </tbody>
 </table>
-<p>四种模式各自使用 cookie 名与 session namespace。登录成功后的工作区只显示安全的 <code>Principal</code> 和后端/UI 标签，并提供真实的受保护读取、CSRF 成功/失败检查和退出操作。页面与日志不展示 session token、cookie、密码 hash 或 CSRF 值。CSRF 只在同源 session/login JSON 中返回给浏览器以执行安全写操作；会话 token 只通过 HttpOnly Cookie 交付。</p>
+<p>四种模式各自使用 cookie 名与 session namespace。登录成功后的工作区显示安全身份、宿主拥有的合成记录、真实数据归属校验，以及受保护读取、CSRF检查与退出操作。页面与日志不展示 session token、cookie、密码 hash 或 CSRF 值。CSRF 只在同源 session/login JSON 中返回给浏览器以执行安全写操作；会话 token 只通过 HttpOnly Cookie 交付。</p>
 <p>模板游乐场在 <code>/templates</code>，预览由实际 <code>LoginUI.render()</code> 生成。它只接受三个色板、两个布局、<code>light</code>/<code>dark</code>/<code>system</code> 与 guest 开关，并生成可复制的精确 Python 配置；不接受任意 HTML 或文件路径。</p>
 <p>健康与版本读回：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>GET /health   -&gt; {"status":"ok","version":"0.1.5"}
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>GET /version  -&gt; {"version":"0.1.5"}
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>GET /health   -&gt; {"status":"ok","version":"0.1.6.dev2"}
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>GET /version  -&gt; {"version":"0.1.6.dev2"}
 </code></pre></div>
+<h2 id="user-isolation">多账号与数据隔离<a class="headerlink" href="#user-isolation" title="Permanent link">&para;</a></h2>
+<p>A/B隔离实验在 <code>0.1.6.dev2</code> 开发预览可用；<code>0.1.5</code> 的认证核心已经支持多账号，但它的演示只公示一个账号。以站点页眉或 <code>chatlogin --version</code> 为准，开发预览不等于新的PyPI正式版本。</p>
+<table>
+<thead>
+<tr>
+<th>层次</th>
+<th>负责方</th>
+<th>验证方式</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>多账号认证</td>
+<td><code>PasswordBackend</code> 映射、同步/异步回调、<code>ChatVoiceAuth</code> 账户库</td>
+<td>A/B返回不同且稳定的 <code>user_id</code></td>
+</tr>
+<tr>
+<td>用户会话</td>
+<td>ChatLogin会话存储与HttpOnly Cookie</td>
+<td>两个独立浏览器会话互不串号；退出A不影响B</td>
+</tr>
+<tr>
+<td>业务数据</td>
+<td>宿主按可信身份过滤、调用 <code>require_owner</code></td>
+<td>本人列表/详情/写入成功；持A会话读写B样例返回403，反向相同</td>
+</tr>
+</tbody>
+</table>
+<p>每个后端演示都有两组<strong>公开合成凭据</strong>：A为 <code>demo</code> / <code>chatlogin-demo</code>，B为 <code>demo-b</code> / <code>chatlogin-demo-b</code>。登录页选择账号并填入，再点击登录。不要用两个普通标签假装独立用户：它们共享Cookie；并行验证使用普通与无痕窗口，或两个浏览器。</p>
+<p>登录后的“用户数据隔离”提供本人读取、本人修改、读取对方、修改对方四个真实API操作。修订号由服务端修改；数据未预先全部下发再由前端隐藏。归属来自服务端 <code>Principal.user_id</code>，不接受客户端指定 <code>owner_id</code>。公开的对方资源ID仅用于合成越权测试，不应成为真实产品的目录枚举接口。</p>
+<p>这是应用层逻辑隔离，不是每人独立数据库。ChatVoice宿主也可按 <code>(owner_id, record_id)</code> 查询并对不存在于当前用户空间的详情返回404。登录库不自动隔离会议、文件、下载、后台任务或其他业务表：宿主必须在每个入口执行自己的授权规则。每个真实用户必须拥有稳定且不同的 <code>user_id</code>，不能让多个账号都返回同一Principal。</p>
+<p>样例业务记录仅驻留当前演示进程，重启清空；它们没有任何真实业务权限。演示账号公开，所以任何访问者都可主动登录A或B；隔离结论是<strong>持A会话不能越权访问B资源</strong>，不是对知道B凭据的访问者保密。</p>
 <h2 id="_4">演示安全边界<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <ul>
 <li>每个后端最多 16 个有效 session，TTL 为 5 分钟；满载时返回可重试的 HTTP 503，不驱逐其他有效 session。</li>

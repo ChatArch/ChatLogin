@@ -593,6 +593,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#multi-user-boundary" class="md-nav__link">
+    <span class="md-ellipsis">
+      Multi-User Boundary
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -680,6 +689,15 @@
   <a href="#out-of-scope" class="md-nav__link">
     <span class="md-ellipsis">
       Out of Scope
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#multi-user-boundary" class="md-nav__link">
+    <span class="md-ellipsis">
+      Multi-User Boundary
     </span>
   </a>
   
@@ -797,6 +815,8 @@
 <li>No universal ORM or backend registry; the ChatVoice backend promotes our existing bridge with synthetic legacy-schema regression coverage.</li>
 <li>Secrets, cookies, CSRF tokens, Authorization headers, and production credentials are never logged.</li>
 </ul>
+<h2 id="multi-user-boundary">Multi-User Boundary<a class="headerlink" href="#multi-user-boundary" title="Permanent link">&para;</a></h2>
+<p>Account mappings, callbacks, and the ChatVoice-compatible backend support multiple identities. <code>require_owner</code> is a host-invoked ownership check, not automatic database row-level security. Different users require distinct stable user IDs. See the <a href="../demo/#user-isolation">A/B lab and responsibility split</a>.</p>
 
 
 
