@@ -94,3 +94,7 @@ mkdocs build --strict
 ```
 
 可运行的 FastAPI 合成账号示例：`examples/demo_fastapi.py`；包内交互演示：`chatlogin serve`。
+
+### 多用户与数据隔离
+
+认证后端支持多个账号，每个用户需要不同且稳定的 `user_id`。会话归ChatLogin，业务资源授权归宿主；接入登录组件并不自动隔离所有业务数据。开发预览提供A/B账号的真实读写隔离实验，参见[演示说明](docs/demo.md#user-isolation)。

@@ -1,7 +1,9 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>LoginUI 模板游乐场</title><link rel="stylesheet" href="/assets/demo.css"><script defer src="/assets/demo.js"></script></head>
-<body class="templates-page"><header class="lab-header"><a class="brand" href="/"><span>CL</span> ChatLogin</a><p>ACTUAL LOGINUI PLAYGROUND</p></header>
-<main class="playground" data-playground><section class="playground__controls"><p class="eyebrow">3 × 2 × 3</p><h1>选择适合你网站的登录页。</h1><p>预览由实际 <code>LoginUI.render()</code> 生成；控件只修改有限的公开选项。</p>
-<label>色系<select name="palette"><option>indigo</option><option>forest</option><option>amber</option></select></label><label>布局<select name="layout"><option>card</option><option>split</option></select></label><label>外观<select name="appearance"><option>system</option><option>light</option><option>dark</option></select></label><label class="check"><input name="guest" type="checkbox"> 显示访客入口</label>
-<pre><code data-config>LoginUI()</code></pre><button class="button" type="button" data-copy>复制配置</button><p class="copy-status" role="status"></p></section>
-<section class="playground__preview"><iframe title="LoginUI 实时预览" src="/playground/preview"></iframe></section></main></body></html>
+<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ChatLogin · 登录页模板</title><link rel="stylesheet" href="/assets/demo.css"><script defer src="/assets/demo.js"></script></head>
+<body class="templates-page"><header class="lab-header"><a class="brand" href="/"><span>CL</span> ChatLogin <small>模板</small></a><a class="back-link" href="/#live">返回体验</a></header>
+<main class="playground" data-playground><section class="playground__controls"><h1>选择登录页样式</h1><p class="playground__intro">3 × 2 基础组合。切换即预览，代码按需展开。</p>
+<div class="playground__inputs"><label>色系<select name="palette"><option value="indigo">靛蓝</option><option value="forest">森林</option><option value="amber">琥珀</option></select></label><label>布局<select name="layout"><option value="card">卡片</option><option value="split">分栏</option></select></label><label>外观<select name="appearance"><option value="system">系统</option><option value="light">浅色</option><option value="dark">深色</option></select></label></div>
+<div class="playground__toolbar"><label class="check"><input name="guest" type="checkbox">访客入口</label><button class="button" type="button" data-copy>复制配置</button><p class="copy-status" role="status"></p></div>
+</section>
+<section class="playground__preview"><div class="preview-toolbar"><span>真实 LoginUI 预览</span><a data-open-preview href="/playground/preview" target="_blank" rel="noopener">独立打开 ↗</a></div><iframe title="LoginUI 实时预览" src="/playground/preview"></iframe></section>
+<details class="config-details"><summary>查看接入代码</summary><pre><code data-config>LoginUI()</code></pre></details>
+</main></body></html>

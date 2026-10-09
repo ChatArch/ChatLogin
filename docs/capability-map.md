@@ -32,3 +32,7 @@
 - 不把 guest 当成数据库账户；访客体验由宿主显式声明。
 - 不提供万能 ORM 或后端注册中心；ChatVoice 兼容后端来自自有桥接实现，并以旧 schema 合成测试验证。
 - 不把 secret、cookie、CSRF token、Authorization header 或生产凭据写入日志或页面。CSRF 仅通过同源 session/login JSON 交给浏览器，用于受保护写操作。
+
+## 多用户边界
+
+多账号认证已由账号映射、回调及ChatVoice兼容后端提供。`require_owner`只是宿主可复用的归属校验，不是自动数据库行级权限。不同账号必须返回不同的稳定user_id。[A/B实验及责任划分](demo.md#user-isolation)。

@@ -1,4 +1,22 @@
-.chatlogin .demo-fill { display: grid; gap: .6rem; margin-top: 1rem; padding: 1rem; border: 1px solid currentColor; border-radius: 1rem; font-size: .875rem; line-height: 1.5; text-align: left; opacity: .9; }
-.chatlogin .demo-fill strong, .chatlogin .demo-fill span { display: block; overflow-wrap: anywhere; }
-.chatlogin .demo-fill button { display: block; width: 100%; min-height: 2.75rem; margin: 0; padding: .55rem .8rem; border: 1px solid currentColor; border-radius: .65rem; background: transparent; color: inherit; box-shadow: none; font: inherit; cursor: pointer; }
-.chatlogin .demo-fill button:hover { background: color-mix(in srgb, currentColor 8%, transparent); }
+.chatlogin { --cl-font:Inter,"PingFang SC","Noto Sans CJK SC","Microsoft YaHei",system-ui,sans-serif; padding:1rem; }
+.chatlogin h1 { font-size:clamp(1.5rem,2.4vw,2rem); line-height:1.25; letter-spacing:normal; }
+.chatlogin__panel { padding:1.5rem; }
+.chatlogin__eyebrow { font-size:.75rem; margin-bottom:.35rem; }
+.chatlogin__subtitle { font-size:.875rem; line-height:1.45; margin:.45rem 0 .8rem; }
+.chatlogin__form { gap:.65rem; margin-top:.8rem; }
+.chatlogin label { gap:.3rem; font-size:.875rem; }
+.chatlogin input { padding:.6rem .8rem; font-size:1rem; }
+.chatlogin button { padding:.65rem .8rem; font-size:.875rem; }
+.chatlogin__status:empty { display:none; }
+.chatlogin__guest { margin-top:.7rem; font-size:.85rem; }
+:is(.chatlogin,.headless-login) .demo-fill { display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:center; gap:.15rem .6rem; margin-top:.3rem; padding:.65rem; border:1px solid var(--cl-border,var(--_cl-border,#cbd5e1)); border-radius:.6rem; text-align:left; }
+:is(.chatlogin,.headless-login) .demo-fill strong { font-size:.75rem; line-height:1.3; }
+:is(.chatlogin,.headless-login) .demo-fill span { grid-column:1; min-width:0; overflow-wrap:anywhere; font-size:.7rem; line-height:1.4; opacity:.8; }
+:is(.chatlogin,.headless-login) .demo-fill button { grid-column:2; grid-row:1 / span 2; display:block; min-height:40px; margin:0; padding:.4rem .6rem; border:1px solid currentColor; border-radius:.4rem; background:transparent; color:inherit; box-shadow:none; font-size:.75rem; cursor:pointer; }
+.demo-context { position:fixed; z-index:20; top:.75rem; left:1rem; right:1rem; display:flex; justify-content:space-between; align-items:center; gap:.7rem; padding:.6rem .8rem; border:1px solid #d8dce6; border-radius:.6rem; background:#ffffffed; color:#334155; font:500 .8rem/1.4 system-ui,sans-serif; }
+.demo-context a { color:inherit; text-decoration:none; }
+.demo-context span { font-size:.72rem; color:#64748b; }
+.demo-standalone .chatlogin { padding-top:4.5rem; padding-bottom:1.5rem; }
+@media(max-width:640px) { .chatlogin { padding:.65rem; } .chatlogin__panel { padding:1.1rem; } .chatlogin[data-layout="split"] .chatlogin__panel { gap:.7rem; } .demo-context { left:.65rem; right:.65rem; } }
+
+:is(.chatlogin,.headless-login) .demo-fill select { grid-column:1; width:100%; min-width:0; min-height:30px; padding:.25rem .35rem; border:1px solid var(--cl-border,var(--_cl-border,#94a3b8)); border-radius:.35rem; background:var(--cl-input,var(--_cl-input,#fff)); color:var(--cl-text,var(--_cl-text,#17202a)); font:inherit; font-size:.75rem; }

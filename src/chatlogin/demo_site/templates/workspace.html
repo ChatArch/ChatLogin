@@ -1,7 +1,14 @@
 <!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>安全工作区 · {{BACKEND}}</title><link rel="stylesheet" href="/assets/demo.css"><script defer src="/assets/demo.js"></script></head>
+<title>多用户隔离实验 · {{BACKEND}}</title><link rel="stylesheet" href="/assets/demo.css"><script defer src="/assets/demo.js"></script></head>
 <body class="workspace-page"><header class="lab-header"><a class="brand" target="_top" href="/"><span>CL</span> ChatLogin</a><p>{{BACKEND}} / {{UI}}</p></header>
-<main class="workspace" data-workspace data-mode="{{MODE}}" data-state="{{STATE}}"><section class="identity-card"><p class="eyebrow">SAFE PRINCIPAL</p><h1>{{DISPLAY_NAME}}</h1>
-<dl><div><dt>user_id</dt><dd>{{USER_ID}}</dd></div><div><dt>role</dt><dd>{{ROLE}}</dd></div><div><dt>backend</dt><dd>{{BACKEND}}</dd></div><div><dt>frontend</dt><dd>{{UI}}</dd></div></dl>
-<p class="safe-note">页面只显示安全 principal 与模式标签；session token、cookie、CSRF 和密码材料永不渲染或记录。</p></section>
-<section class="action-card"><p class="eyebrow">BOUNDARY CHECKS</p><h2>真实会话操作</h2><div class="action-list"><button class="button" data-protected>受保护读取</button><button class="button" data-csrf>CSRF 保护检查</button><button class="button" data-bad-csrf>故意失败的 CSRF</button><button class="button danger" data-logout>退出</button></div><pre class="action-output" aria-live="polite">等待操作…</pre><a target="_top" href="{{LOGIN_ROUTE}}">返回登录页</a></section></main></body></html>
+<main class="workspace" data-workspace data-mode="{{MODE}}" data-state="{{STATE}}" data-user-id="{{USER_ID}}" data-my-record="{{MY_RECORD}}" data-other-record="{{OTHER_RECORD}}">
+<section class="identity-card"><p class="eyebrow">当前登录身份</p><h1 data-identity-name>{{DISPLAY_NAME}}</h1><p>账号：<code data-identity-account>{{ACCOUNT}}</code></p>
+<div class="identity-actions"><a class="button" target="_top" href="{{LOGIN_ROUTE}}">{{LOGIN_LABEL}}</a><button class="button danger" data-logout>退出</button></div>
+<details data-identity-details><summary>身份详情</summary><dl><div><dt>user_id</dt><dd>{{USER_ID}}</dd></div><div><dt>role</dt><dd>{{ROLE}}</dd></div><div><dt>backend</dt><dd>{{BACKEND}}</dd></div><div><dt>frontend</dt><dd>{{UI}}</dd></div></dl></details>
+<p class="safe-note">同一浏览器标签共享Cookie。并行验证A/B，请使用普通窗口与无痕窗口，或两个浏览器。</p></section>
+<section class="resource-card"><p class="eyebrow">真正的服务端归属校验</p><h2>用户数据隔离</h2><p>当前为 <strong>{{DISPLAY_NAME}}</strong>。本人可读写；持当前会话请求另一个用户的样例，服务端应返回403。</p>
+<div class="action-list"><button class="button" data-own-records>看我的数据</button><button class="button" data-touch-own>改我的数据</button><button class="button" data-read-other>读对方数据</button><button class="button" data-touch-other>改对方数据</button></div>
+<pre class="data-output" aria-live="polite">登录后点击按钮验证。数据不会预先混在页面里再隐藏。</pre>
+<p class="resource-note">这里是有界内存样例，重启清空。业务数据属于宿主，ChatLogin提供可信身份和 <code>require_owner</code>，不会自动替应用隔离所有业务表。对方ID仅为公开合成测试目标。</p></section>
+<details class="action-card session-details" data-session-checks><summary>会话与CSRF检查</summary><div class="action-list"><button class="button" data-protected>受保护读取</button><button class="button" data-csrf>CSRF 保护检查</button><button class="button" data-bad-csrf>故意失败的 CSRF</button></div><pre class="action-output" aria-live="polite">等待操作…</pre></details>
+</main></body></html>

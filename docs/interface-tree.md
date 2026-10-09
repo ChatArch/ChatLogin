@@ -165,3 +165,16 @@ POSIX 实现逐级 no-follow 校验祖先 owner 与写权限，要求最终数�
 ## 包内演示应用
 
 安装 `ChatLogin[demo]` 后，`chatlogin.demo.create_demo_app(origin=...)` 返回完整的隔离演示应用；`chatlogin serve` 是对应的薄 CLI。它展示真实后端和 UI，但不充当生产身份中心。见 [快速接入](quickstart.md) 与 [演示站](demo.md)。
+
+## 演示宿主的隔离接口
+
+这些接口只在开发预览的演示应用中挂载，不属于生产账号管理API。
+
+| 请求 | 契约 |
+| --- | --- |
+| `GET /api/demo/accounts` | 仅返回写死的公开合成A/B凭据，不查宿主用户库 |
+| `GET /api/demo/{mode}/records` | 登录后仅列出本人样例 |
+| `GET /api/demo/{mode}/records/{id}` | 当前用户必须为owner |
+| `POST /api/demo/{mode}/records/{id}/touch` | 同源、当前会话CSRF、owner；不接受请求body |
+
+参见[多用户边界](demo.md#user-isolation)。

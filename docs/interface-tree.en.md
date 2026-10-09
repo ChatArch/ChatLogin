@@ -165,3 +165,16 @@ When a host needs to clean a private context index, call `SessionManager.purge_e
 ## Packaged Demo Application
 
 With `ChatLogin[demo]`, `chatlogin.demo.create_demo_app(origin=...)` returns the isolated demo application; `chatlogin serve` is its thin CLI. It exercises real backends/UI without becoming a production identity center. See [Quick Integration](quickstart.md) and [Demo](demo.md).
+
+## Demo-Host Isolation Endpoints
+
+These routes belong only to the development demo application, not a production account-management API.
+
+| Request | Contract |
+| --- | --- |
+| `GET /api/demo/accounts` | Returns only explicit public synthetic A/B credentials; never reads a host user database |
+| `GET /api/demo/{mode}/records` | Lists only the authenticated user's samples |
+| `GET /api/demo/{mode}/records/{id}` | Requires the current user to be the owner |
+| `POST /api/demo/{mode}/records/{id}/touch` | Same origin, current-session CSRF, owner; accepts no request body |
+
+See the [multi-user boundary](demo.en.md#user-isolation).
