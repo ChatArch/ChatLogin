@@ -806,11 +806,11 @@
 <p>四种模式各自使用 cookie 名与 session namespace。登录成功后的工作区显示安全身份、宿主拥有的合成记录、真实数据归属校验，以及受保护读取、CSRF检查与退出操作。页面与日志不展示 session token、cookie、密码 hash 或 CSRF 值。CSRF 只在同源 session/login JSON 中返回给浏览器以执行安全写操作；会话 token 只通过 HttpOnly Cookie 交付。</p>
 <p>模板游乐场在 <code>/templates</code>，预览由实际 <code>LoginUI.render()</code> 生成。它只接受三个色板、两个布局、<code>light</code>/<code>dark</code>/<code>system</code> 与 guest 开关，并生成可复制的精确 Python 配置；不接受任意 HTML 或文件路径。</p>
 <p>健康与版本读回：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>GET /health   -&gt; {"status":"ok","version":"0.1.6.dev2"}
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>GET /version  -&gt; {"version":"0.1.6.dev2"}
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>GET /health   -&gt; {"status":"ok","version":"0.1.6"}
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>GET /version  -&gt; {"version":"0.1.6"}
 </code></pre></div>
 <h2 id="user-isolation">多账号与数据隔离<a class="headerlink" href="#user-isolation" title="Permanent link">&para;</a></h2>
-<p>A/B隔离实验在 <code>0.1.6.dev2</code> 开发预览可用；<code>0.1.5</code> 的认证核心已经支持多账号，但它的演示只公示一个账号。以站点页眉或 <code>chatlogin --version</code> 为准，开发预览不等于新的PyPI正式版本。</p>
+<p>A/B隔离实验从 <code>0.1.6</code> 起提供；<code>0.1.5</code> 的认证核心已经支持多账号，但它的演示只公示一个账号。以站点页眉或 <code>chatlogin --version</code> 为准。</p>
 <table>
 <thead>
 <tr>
