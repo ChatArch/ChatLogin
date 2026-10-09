@@ -650,6 +650,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      演示宿主的隔离接口
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -750,6 +759,15 @@
   <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
       包内演示应用
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      演示宿主的隔离接口
     </span>
   </a>
   
@@ -910,6 +928,35 @@
 <p>宿主需要清理私有上下文索引时，调用 <code>SessionManager.purge_expired()</code>，由 manager 使用已验证 instance 与 clock 委托给 store；不要复制 TTL 计算或访问 store 私有成员。</p>
 <h2 id="_4">包内演示应用<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <p>安装 <code>ChatLogin[demo]</code> 后，<code>chatlogin.demo.create_demo_app(origin=...)</code> 返回完整的隔离演示应用；<code>chatlogin serve</code> 是对应的薄 CLI。它展示真实后端和 UI，但不充当生产身份中心。见 <a href="../quickstart/">快速接入</a> 与 <a href="../demo/">演示站</a>。</p>
+<h2 id="_5">演示宿主的隔离接口<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
+<p>这些接口只在开发预览的演示应用中挂载，不属于生产账号管理API。</p>
+<table>
+<thead>
+<tr>
+<th>请求</th>
+<th>契约</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET /api/demo/accounts</code></td>
+<td>仅返回写死的公开合成A/B凭据，不查宿主用户库</td>
+</tr>
+<tr>
+<td><code>GET /api/demo/{mode}/records</code></td>
+<td>登录后仅列出本人样例</td>
+</tr>
+<tr>
+<td><code>GET /api/demo/{mode}/records/{id}</code></td>
+<td>当前用户必须为owner</td>
+</tr>
+<tr>
+<td><code>POST /api/demo/{mode}/records/{id}/touch</code></td>
+<td>同源、当前会话CSRF、owner；不接受请求body</td>
+</tr>
+</tbody>
+</table>
+<p>参见<a href="../demo/#user-isolation">多用户边界</a>。</p>
 
 
 

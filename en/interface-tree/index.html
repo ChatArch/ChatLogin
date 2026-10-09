@@ -650,6 +650,15 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#demo-host-isolation-endpoints" class="md-nav__link">
+    <span class="md-ellipsis">
+      Demo-Host Isolation Endpoints
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -750,6 +759,15 @@
   <a href="#packaged-demo-application" class="md-nav__link">
     <span class="md-ellipsis">
       Packaged Demo Application
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#demo-host-isolation-endpoints" class="md-nav__link">
+    <span class="md-ellipsis">
+      Demo-Host Isolation Endpoints
     </span>
   </a>
   
@@ -910,6 +928,35 @@
 <p>When a host needs to clean a private context index, call <code>SessionManager.purge_expired()</code>. The manager delegates to the store with its validated instance and clock; do not duplicate TTL calculations or access store internals.</p>
 <h2 id="packaged-demo-application">Packaged Demo Application<a class="headerlink" href="#packaged-demo-application" title="Permanent link">&para;</a></h2>
 <p>With <code>ChatLogin[demo]</code>, <code>chatlogin.demo.create_demo_app(origin=...)</code> returns the isolated demo application; <code>chatlogin serve</code> is its thin CLI. It exercises real backends/UI without becoming a production identity center. See <a href="../quickstart/">Quick Integration</a> and <a href="../demo/">Demo</a>.</p>
+<h2 id="demo-host-isolation-endpoints">Demo-Host Isolation Endpoints<a class="headerlink" href="#demo-host-isolation-endpoints" title="Permanent link">&para;</a></h2>
+<p>These routes belong only to the development demo application, not a production account-management API.</p>
+<table>
+<thead>
+<tr>
+<th>Request</th>
+<th>Contract</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>GET /api/demo/accounts</code></td>
+<td>Returns only explicit public synthetic A/B credentials; never reads a host user database</td>
+</tr>
+<tr>
+<td><code>GET /api/demo/{mode}/records</code></td>
+<td>Lists only the authenticated user's samples</td>
+</tr>
+<tr>
+<td><code>GET /api/demo/{mode}/records/{id}</code></td>
+<td>Requires the current user to be the owner</td>
+</tr>
+<tr>
+<td><code>POST /api/demo/{mode}/records/{id}/touch</code></td>
+<td>Same origin, current-session CSRF, owner; accepts no request body</td>
+</tr>
+</tbody>
+</table>
+<p>See the <a href="../demo/#user-isolation">multi-user boundary</a>.</p>
 
 
 
