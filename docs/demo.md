@@ -52,13 +52,13 @@ chatlogin serve \
 健康与版本读回：
 
 ```text
-GET /health   -> {"status":"ok","version":"0.1.6.dev2"}
-GET /version  -> {"version":"0.1.6.dev2"}
+GET /health   -> {"status":"ok","version":"0.1.6"}
+GET /version  -> {"version":"0.1.6"}
 ```
 
 ## 多账号与数据隔离 {#user-isolation}
 
-A/B隔离实验在 `0.1.6.dev2` 开发预览可用；`0.1.5` 的认证核心已经支持多账号，但它的演示只公示一个账号。以站点页眉或 `chatlogin --version` 为准，开发预览不等于新的PyPI正式版本。
+A/B隔离实验从 `0.1.6` 起提供；`0.1.5` 的认证核心已经支持多账号，但它的演示只公示一个账号。以站点页眉或 `chatlogin --version` 为准。
 
 | 层次 | 负责方 | 验证方式 |
 | --- | --- | --- |
