@@ -39,3 +39,5 @@
   .chatlogin-users__identity nav { justify-content: start; }
   .chatlogin-users__record-controls, .chatlogin-users__form { grid-template-columns: minmax(0, 1fr); }
 }
+
+.chatlogin-users fieldset[data-cl-credential-form] { display: contents; }

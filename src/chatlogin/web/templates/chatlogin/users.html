@@ -12,6 +12,7 @@
 </head>
 <body class="chatlogin-page">
   <main class="chatlogin chatlogin-users" data-page="users" data-palette="{{ palette }}" data-layout="{{ layout }}" data-appearance="{{ appearance }}" data-login-url="{{ login_url }}" data-session-url="{{ session_url }}" data-logout-url="{{ logout_url }}" data-users-url="{{ users_url }}" data-profile-url="{{ profile_url }}" data-users-api-url="{{ users_api_url }}" data-profile-api-url="{{ profile_api_url }}" data-owner-transfer-api-url="{{ owner_transfer_api_url }}">
+    <noscript><p>凭据操作需要 JavaScript 和已验证的会话；未启用时不可提交。 / Credential actions require JavaScript and a verified session.</p></noscript>
     <section class="chatlogin__panel chatlogin-users__panel">
       <header class="chatlogin-users__header">
         <div>
@@ -44,7 +45,8 @@
       <section class="chatlogin-users__section" aria-labelledby="cl-create-user-title">
         <p class="chatlogin-users__overline">{% if language == "en" %}New account{% else %}新建账号{% endif %}</p>
         <h2 id="cl-create-user-title">{% if language == "en" %}Create a user{% else %}创建用户{% endif %}</h2>
-        <form id="cl-new-user-form" class="chatlogin-users__form" novalidate>
+        <form id="cl-new-user-form" class="chatlogin-users__form" method="post" action="{{ users_api_url }}" novalidate>
+          <fieldset disabled data-cl-credential-form>
           <label>
             <span>{% if language == "en" %}Username{% else %}用户名{% endif %}</span>
             <input id="cl-new-username" name="username" autocomplete="username" required maxlength="80">
@@ -68,6 +70,7 @@
             <button id="cl-create-user" type="submit">{% if language == "en" %}Create user{% else %}创建用户{% endif %}</button>
             <p id="cl-create-user-hint" class="chatlogin-users__hint">{% if language == "en" %}Only an owner can grant administrator access.{% else %}只有 owner 可以授予管理员权限。{% endif %}</p>
           </div>
+                  </fieldset>
         </form>
       </section>
 
@@ -75,7 +78,8 @@
         <p class="chatlogin-users__overline">{% if language == "en" %}Owner handoff{% else %}Owner 交接{% endif %}</p>
         <h2 id="cl-owner-transfer-title">{% if language == "en" %}Transfer ownership{% else %}交接最高权限{% endif %}</h2>
         <p id="cl-owner-transfer-hint" class="chatlogin-users__hint">{% if language == "en" %}Only the current owner can transfer ownership. This demotes the current owner to administrator.{% else %}仅当前 owner 可执行交接；交接后当前 owner 会降级为管理员。{% endif %}</p>
-        <form id="cl-owner-transfer-form" class="chatlogin-users__form" novalidate>
+        <form id="cl-owner-transfer-form" class="chatlogin-users__form" method="post" action="{{ owner_transfer_api_url }}" novalidate>
+          <fieldset disabled data-cl-credential-form>
           <label>
             <span>{% if language == "en" %}Target user ID{% else %}目标用户 ID{% endif %}</span>
             <input id="cl-owner-target" name="target_user_id" autocomplete="off" required>
@@ -91,6 +95,7 @@
           <div class="chatlogin-users__form-actions">
             <button id="cl-transfer-owner" type="submit" disabled>{% if language == "en" %}Transfer ownership{% else %}确认交接{% endif %}</button>
           </div>
+                  </fieldset>
         </form>
       </section>
     </section>

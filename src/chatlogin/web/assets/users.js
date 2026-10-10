@@ -4,6 +4,10 @@
   const root = document.querySelector(".chatlogin-users");
   if (!root) return;
 
+  // Fail closed before URL validation, asynchronous bootstrap, or host scripts.
+  root.addEventListener("submit", (event) => { event.preventDefault(); }, true);
+  const credentialForms = () => root.querySelectorAll("fieldset[data-cl-credential-form]");
+
   const english = document.documentElement.lang === "en";
   const words = (zh, en) => english ? en : zh;
   const byId = (id) => document.getElementById(id);
@@ -60,6 +64,7 @@
     state.csrf = null;
     state.user = null;
     clearPrivateDOM();
+    credentialForms().forEach((fieldset) => { fieldset.disabled = true; });
     setStatus(message);
   };
 
@@ -506,11 +511,14 @@
         return;
       }
       bindLogout(generation);
+      // Attach the authenticated action handlers before enabling credentials.
       if (root.dataset.page === "users") {
         bindUsers(generation);
+        credentialForms().forEach((fieldset) => { fieldset.disabled = false; });
         await loadUsers(generation);
       } else {
         bindProfile(generation);
+        credentialForms().forEach((fieldset) => { fieldset.disabled = false; });
         await loadProfile(generation);
       }
       if (current(generation)) setStatus("");
