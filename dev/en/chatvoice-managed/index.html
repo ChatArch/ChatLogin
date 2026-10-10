@@ -8,13 +8,13 @@
       
       
       
-        <link rel="canonical" href="https://arch.gh.wzhecnu.cn/ChatLogin/dev/en/cli-tree/">
+        <link rel="canonical" href="https://arch.gh.wzhecnu.cn/ChatLogin/dev/en/chatvoice-managed/">
       
       
-        <link rel="prev" href="../chatvoice-managed/">
+        <link rel="prev" href="../managed-users/">
       
       
-        <link rel="next" href="../capability-map/">
+        <link rel="next" href="../cli-tree/">
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
@@ -22,7 +22,7 @@
     
     
       
-        <title>CLI Tree - ChatLogin Documentation</title>
+        <title>ChatVoice Legacy Schema Integration - ChatLogin Documentation</title>
       
     
     
@@ -64,7 +64,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#cli-tree" class="md-skip">
+        <a href="#chatvoice-legacy-schema-integration" class="md-skip">
           Skip to content
         </a>
       
@@ -98,7 +98,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              CLI Tree
+              ChatVoice Legacy Schema Integration
             
           </span>
         </div>
@@ -119,7 +119,7 @@
       <ul class="md-select__list">
         
           <li class="md-select__item">
-            <a href="../../cli-tree/" hreflang="zh" class="md-select__link">
+            <a href="../../chatvoice-managed/" hreflang="zh" class="md-select__link">
               中文
             </a>
           </li>
@@ -307,9 +307,11 @@
   
   
   
+    
   
-    <li class="md-tabs__item">
-      <a href="../chatvoice-managed/" class="md-tabs__link">
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
         
   
   
@@ -326,13 +328,11 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="./" class="md-tabs__link">
+      <li class="md-tabs__item">
+        <a href="../cli-tree/" class="md-tabs__link">
           
   
   
@@ -503,76 +503,6 @@
       
   
   
-  
-  
-    <li class="md-nav__item">
-      <a href="../chatvoice-managed/" class="md-nav__link">
-        
-  
-  
-  <span class="md-ellipsis">
-    ChatVoice Legacy Schema Integration
-    
-  </span>
-  
-
-      </a>
-    </li>
-  
-
-    
-      
-      
-  
-  
-    
-  
-  
-  
-    
-    
-    
-    
-      
-        
-        
-      
-      
-        
-      
-    
-    
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
-      
-        
-        
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
-        
-          
-          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
-            
-  
-  
-  <span class="md-ellipsis">
-    Commands and APIs
-    
-  </span>
-  
-
-            <span class="md-nav__icon md-icon"></span>
-          </label>
-        
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_7">
-            <span class="md-nav__icon md-icon"></span>
-            Commands and APIs
-          </label>
-          <ul class="md-nav__list" data-md-scrollfix>
-            
-              
-                
-  
-  
     
   
   
@@ -590,7 +520,7 @@
   
   
   <span class="md-ellipsis">
-    CLI Tree
+    ChatVoice Legacy Schema Integration
     
   </span>
   
@@ -603,7 +533,7 @@
   
   
   <span class="md-ellipsis">
-    CLI Tree
+    ChatVoice Legacy Schema Integration
     
   </span>
   
@@ -626,45 +556,36 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#top-level-commands" class="md-nav__link">
+  <a href="#supported-schema-adoption" class="md-nav__link">
     <span class="md-ellipsis">
-      Top-Level Commands
+      Supported Schema Adoption
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#path-inspection" class="md-nav__link">
+  <a href="#data-preservation" class="md-nav__link">
     <span class="md-ellipsis">
-      Path Inspection
+      Data Preservation
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#product-demo" class="md-nav__link">
+  <a href="#owner-adoption" class="md-nav__link">
     <span class="md-ellipsis">
-      Product Demo
+      Owner Adoption
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#first-managed-user-bootstrap" class="md-nav__link">
+  <a href="#permissions-and-trust-boundary" class="md-nav__link">
     <span class="md-ellipsis">
-      First Managed-User Bootstrap
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#verification" class="md-nav__link">
-    <span class="md-ellipsis">
-      Verification
+      Permissions and Trust Boundary
     </span>
   </a>
   
@@ -674,6 +595,73 @@
   
 </nav>
       
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+          
+        
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    Commands and APIs
+    
+  </span>
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            Commands and APIs
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../cli-tree/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    CLI Tree
+    
+  </span>
+  
+
+      </a>
     </li>
   
 
@@ -759,45 +747,36 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#top-level-commands" class="md-nav__link">
+  <a href="#supported-schema-adoption" class="md-nav__link">
     <span class="md-ellipsis">
-      Top-Level Commands
+      Supported Schema Adoption
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#path-inspection" class="md-nav__link">
+  <a href="#data-preservation" class="md-nav__link">
     <span class="md-ellipsis">
-      Path Inspection
+      Data Preservation
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#product-demo" class="md-nav__link">
+  <a href="#owner-adoption" class="md-nav__link">
     <span class="md-ellipsis">
-      Product Demo
+      Owner Adoption
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#first-managed-user-bootstrap" class="md-nav__link">
+  <a href="#permissions-and-trust-boundary" class="md-nav__link">
     <span class="md-ellipsis">
-      First Managed-User Bootstrap
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#verification" class="md-nav__link">
-    <span class="md-ellipsis">
-      Verification
+      Permissions and Trust Boundary
     </span>
   </a>
   
@@ -819,7 +798,7 @@
 
 
   
-    <a href="https://github.com/ChatArch/ChatLogin/edit/main/docs/cli-tree.en.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
+    <a href="https://github.com/ChatArch/ChatLogin/edit/main/docs/chatvoice-managed.en.md" title="Edit this page" class="md-content__button md-icon" rel="edit">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
@@ -827,57 +806,108 @@
   
 
 
-<h1 id="cli-tree">CLI Tree<a class="headerlink" href="#cli-tree" title="Permanent link">&para;</a></h1>
-<p>Reusable authentication and web behavior are <a href="../interface-tree/">Python APIs</a>. The CLI can also run the isolated product demo; it is not a production login service.</p>
-<h2 id="top-level-commands">Top-Level Commands<a class="headerlink" href="#top-level-commands" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>chatlogin
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>├── --help  # Show this message and exit.
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>├── --version  # Show the version and exit.
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>├── --tree  # Print the registered CLI tree and exit.
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>├── --tree-brief  # Print the registered CLI tree without parameter signatures and exit.
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>├── paths &lt;INSTANCE&gt; [--home HOME] [--json]  # Show instance runtime paths without creating files or directories.
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>├── serve [--host HOST] [--port PORT] [--origin ORIGIN] [--managed-demo]  # Serve the isolated synthetic product demonstration.
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>└── users  # Explicit managed-user lifecycle operations.
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    └── bootstrap [--interactive] [USERNAME] [--instance INSTANCE] [--password-env PASSWORD-ENV] [--display-name DISPLAY-NAME] [--home HOME] [--json]  # Create the first owner in an explicitly empty managed-user instance.
+<h1 id="chatvoice-legacy-schema-integration">ChatVoice Legacy Schema Integration<a class="headerlink" href="#chatvoice-legacy-schema-integration" title="Permanent link">&para;</a></h1>
+<div class="admonition warning">
+<p class="admonition-title">Unreleased preview</p>
+<p>This page describes a candidate provider/consumer pair. Public ChatLogin 0.1.6 and ChatVoice 0.4.1 do not necessarily include these new APIs. Preview environments should use the reviewed matching wheel pair. Stable installation should adopt the capability after a matching release.</p>
+</div>
+<p>This integration is for hosts that already use ChatVoice/Speakr SQLite <code>accounts</code> and <code>auth_sessions</code>. It preserves original accounts, password material, session relationships, business <code>owner_id</code>, API-token ownership, meetings, conversations, and recordings while exposing the same account directory through ChatLogin managed users.</p>
+<h2 id="supported-schema-adoption">Supported Schema Adoption<a class="headerlink" href="#supported-schema-adoption" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">chatlogin.backends</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="n">ChatVoiceManagedStore</span><span class="p">,</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    <span class="n">adopt_owner</span><span class="p">,</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="n">initialize_chatvoice_managed_schema</span><span class="p">,</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="p">)</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="kn">from</span><span class="w"> </span><span class="nn">chatlogin.managed</span><span class="w"> </span><span class="kn">import</span> <span class="n">ManagedUsers</span>
+<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>
+<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="n">store</span> <span class="o">=</span> <span class="n">ChatVoiceManagedStore</span><span class="p">(</span><span class="n">connect</span><span class="p">,</span> <span class="n">lock</span><span class="p">,</span> <span class="n">clock</span><span class="p">,</span> <span class="n">max_users</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">max_sessions</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span>
+<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="n">store</span><span class="o">.</span><span class="n">initialize</span><span class="p">()</span>
+<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="n">users</span> <span class="o">=</span> <span class="n">ManagedUsers</span><span class="p">(</span><span class="n">store</span><span class="p">,</span> <span class="n">session_namespace</span><span class="o">=</span><span class="s2">"chatvoice"</span><span class="p">,</span> <span class="n">ttl</span><span class="o">=</span><span class="mi">86400</span><span class="p">,</span> <span class="n">clock</span><span class="o">=</span><span class="n">clock</span><span class="p">)</span>
+<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>
+<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="n">owner</span> <span class="o">=</span> <span class="n">adopt_owner</span><span class="p">(</span><span class="n">store</span><span class="p">,</span> <span class="s2">"admin@example.invalid"</span><span class="p">)</span>
 </code></pre></div>
-<h2 id="path-inspection">Path Inspection<a class="headerlink" href="#path-inspection" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>chatlogin<span class="w"> </span>paths<span class="w"> </span>my-site<span class="w"> </span>--json
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>chatlogin<span class="w"> </span>paths<span class="w"> </span>my-site<span class="w"> </span>--home<span class="w"> </span><span class="s2">"</span><span class="nv">$HOME</span><span class="s2">/.chatarch"</span><span class="w"> </span>--json
-</code></pre></div>
-<p>Returns <code>directory</code> and <code>database</code>. Explicit <code>--home</code> takes precedence over ChatEnv's default home. User directories and defined environment variables expand; unknown variables and unsafe instance names are rejected. This command creates no directories, databases or accounts.</p>
-<h2 id="product-demo">Product Demo<a class="headerlink" href="#product-demo" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">"ChatLogin[demo]"</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>chatlogin<span class="w"> </span>serve
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>chatlogin<span class="w"> </span>serve<span class="w"> </span>--host<span class="w"> </span><span class="m">127</span>.0.0.1<span class="w"> </span>--port<span class="w"> </span><span class="m">8765</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span>--origin<span class="w"> </span>https://login.example.com
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>chatlogin<span class="w"> </span>serve<span class="w"> </span>--managed-demo
-</code></pre></div>
-<p>The default bind is <code>127.0.0.1:8765</code>. A non-loopback bind fails unless <code>--origin</code> is explicit. Behind a proxy, set it to the fixed browser-visible origin; the command never infers it from forwarded headers. The site uses only a public synthetic identity, short bounded sessions, and a disposable in-memory fixture. See the <a href="../demo/">Demo Guide</a>.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>Usage: chatlogin serve [OPTIONS]
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>Options:
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>  --host TEXT           Bind address; loopback by default.  [default: 127.0.0.1]
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>  --port INTEGER RANGE  TCP port.  [default: 8765; 1&lt;=x&lt;=65535]
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>  --origin TEXT         Fixed trusted public origin for browser Host/Origin checks.
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>  --managed-demo        Serve the disposable managed-users demonstration.
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>  --help                Show this message and exit.
-</code></pre></div>
-<p><code>--managed-demo</code> explicitly selects the three-account in-memory demo; default <code>serve</code> continues to run the legacy four-backend demo. It requires the managed Core/Web preset and never reads a production/home user store.</p>
-<h2 id="first-managed-user-bootstrap">First Managed-User Bootstrap<a class="headerlink" href="#first-managed-user-bootstrap" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># APP_BOOTSTRAP_CREDENTIAL is a variable name in a controlled environment, not a password value on the command line.</span>
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>chatlogin<span class="w"> </span>users<span class="w"> </span>bootstrap<span class="w"> </span>operator<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span>--instance<span class="w"> </span>my-site<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span>--password-env<span class="w"> </span>APP_BOOTSTRAP_CREDENTIAL<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">  </span>--display-name<span class="w"> </span><span class="s2">"Operator"</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">  </span>--json
-</code></pre></div>
-<p>This command has one purpose: create the first owner in an explicitly empty instance. Ordinary arguments use ChatStyle <code>-i/--interactive</code> prompts or <code>-I/--no-interactive</code> fast failure; neither path accepts a raw password or automatically confirms creation. It validates path, instance, and environment-variable presence before a write where possible; repeat initialization and unsafe state fail nonzero, with no <code>--force</code> or chmod repair. Success emits only the safe user record. Use the Web/API for later account management; see <a href="../managed-users/">Managed Users</a>.</p>
-<h2 id="verification">Verification<a class="headerlink" href="#verification" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>chatlogin<span class="w"> </span>--version
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>chatlogin<span class="w"> </span>--tree
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>chatlogin<span class="w"> </span>--tree-brief
-</code></pre></div>
-<p>The full tree above is an actual <code>chatlogin --tree</code> readback and the compact tree comes from <code>chatlogin --tree-brief</code>. Update tests and this page when adding commands. See <a href="../integration/">Integration and Security</a> for website integration.</p>
+<p><code>connect</code>, <code>lock</code>, and <code>clock</code> come from the trusted same-process host and point at the same ChatVoice database and mutual-exclusion boundary. <code>initialize_chatvoice_managed_schema(connection)</code> may be called during explicit host database setup. Migration is not an import side effect and not a public HTTP bootstrap.</p>
+<h2 id="data-preservation">Data Preservation<a class="headerlink" href="#data-preservation" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Original data</th>
+<th>Handling after integration</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>accounts.id</code></td>
+<td>Remains the stable <code>user_id</code>; no rebuild or reassignment</td>
+</tr>
+<tr>
+<td><code>account</code> / <code>display_name</code></td>
+<td>Source for managed username/display name</td>
+</tr>
+<tr>
+<td><code>password_salt</code> / <code>password_hash</code></td>
+<td>Original bytes are preserved; old passwords are not rehashed</td>
+</tr>
+<tr>
+<td>Business-table <code>owner_id</code></td>
+<td>Continues to reference the original stable account id; managed <code>OWNER</code> is not a business-record bypass</td>
+</tr>
+<tr>
+<td><code>auth_sessions</code></td>
+<td>Continues to resolve through the same cookie/session relationship; role, status, or password-security changes invalidate affected old sessions</td>
+</tr>
+<tr>
+<td>API tokens</td>
+<td>Disabled or deleted accounts are denied without deleting preserved rows</td>
+</tr>
+</tbody>
+</table>
+<p>Schema initialization is explicit, idempotent, and additive. It adds management columns such as role/status/revision to legacy accounts, defaults old accounts to enabled <code>USER</code>, and installs the one-enabled-owner constraint. It does not delete old rows, copy accounts into a second user database, or rewrite business ownership.</p>
+<h2 id="owner-adoption">Owner Adoption<a class="headerlink" href="#owner-adoption" title="Permanent link">&para;</a></h2>
+<p><code>adopt_owner(store, exact_existing_account_or_id) -&gt; UserRecord</code> is only for one-time adoption of an exact existing account or id:</p>
+<ul>
+<li>It fails when an owner already exists.</li>
+<li>The target must already exist in original <code>accounts</code>.</li>
+<li>Adoption sets that account to enabled <code>OWNER</code>, increments its auth revision, and returns a credential-free <code>UserRecord</code>.</li>
+<li>Other existing accounts remain enabled <code>USER</code> unless a later owner/admin action changes them.</li>
+</ul>
+<p><code>admin@example.invalid</code> is a synthetic placeholder. Production selection is performed by trusted host Python setup, without writing real account names, user IDs, hashes, or tokens into public docs, command history, or logs.</p>
+<h2 id="permissions-and-trust-boundary">Permissions and Trust Boundary<a class="headerlink" href="#permissions-and-trust-boundary" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Boundary</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Public signup</td>
+<td>Not provided. ChatVoice native account provisioning remains invite-only/trusted tooling</td>
+</tr>
+<tr>
+<td>Host connector</td>
+<td><code>connect</code>/<code>lock</code> are trusted same-process interfaces; this does not defend against hostile in-process code</td>
+</tr>
+<tr>
+<td>Management roles</td>
+<td>owner/admin/user manage the account directory; business meetings, audio, API tokens, and model calls still need host ACLs</td>
+</tr>
+<tr>
+<td>Owner meaning</td>
+<td><code>OWNER</code> is the account-directory owner, not omniscient access to all business data</td>
+</tr>
+<tr>
+<td>Session invalidation</td>
+<td>Role, status, deletion, password change, and owner transfer invalidate affected sessions through revision checks</td>
+</tr>
+<tr>
+<td>Owner transfer</td>
+<td>Handled by the managed-users owner-only atomic transfer flow</td>
+</tr>
+</tbody>
+</table>
+<p>The host still enforces business authorization on routes, such as meeting <code>owner_id</code>, voice-job ownership, read-token scopes, and denial for disabled/deleted accounts.</p>
 
 
 

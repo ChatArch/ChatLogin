@@ -305,6 +305,25 @@
   
   
   
+  
+    <li class="md-tabs__item">
+      <a href="../chatvoice-managed/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  ChatVoice legacy schema 集成
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
     
   
   
@@ -482,6 +501,28 @@
       
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../chatvoice-managed/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ChatVoice legacy schema 集成
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
     
   
   
@@ -503,10 +544,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
         
           
-          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
             
   
   
@@ -519,8 +560,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_6">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_7">
             <span class="md-nav__icon md-icon"></span>
             命令与接口
           </label>
@@ -665,6 +706,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#chatvoice-facade" class="md-nav__link">
+    <span class="md-ellipsis">
+      ChatVoice 托管 facade（未发布预览）
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#fastapi" class="md-nav__link">
     <span class="md-ellipsis">
       FastAPI 适配层
@@ -791,6 +841,15 @@
   <a href="#chatvoice" class="md-nav__link">
     <span class="md-ellipsis">
       内建可选 ChatVoice 后端
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#chatvoice-facade" class="md-nav__link">
+    <span class="md-ellipsis">
+      ChatVoice 托管 facade（未发布预览）
     </span>
   </a>
   
@@ -951,73 +1010,81 @@
 <a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>    └── purge_expired(instance, now)
 </code></pre></div>
 <p>核心包即可导入，两类也从 <code>chatlogin.backends</code> 导出。固定 ChatVoice schema / <code>chatvoice</code> 命名空间，只产生 USER 身份；不建表、不迁移、不负责账号创建、HTTP 或 owner 权限。接入与三种 UI 模式见 <a href="../integration/">接入文档</a>。</p>
+<h2 id="chatvoice-facade">ChatVoice 托管 facade（未发布预览）<a class="headerlink" href="#chatvoice-facade" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>chatlogin.backends
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>├── ChatVoiceManagedStore(connect, lock, clock, *, max_users=10000, max_sessions=10000)
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>│   └── initialize()
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>├── initialize_chatvoice_managed_schema(connection) -&gt; None
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>└── adopt_owner(store, exact_existing_account_or_id) -&gt; UserRecord
+</code></pre></div>
+<p>该 facade 面向受信任同进程 ChatVoice 宿主，复用原 <code>accounts</code> 与 <code>auth_sessions</code>。schema 初始化是显式、幂等、additive 的；owner 采用只接受精确既有账号或 ID，已有 owner 时失败。完整边界见 <a href="../chatvoice-managed/">ChatVoice legacy schema 集成</a>。</p>
 <h2 id="fastapi">FastAPI 适配层<a class="headerlink" href="#fastapi" title="Permanent link">&para;</a></h2>
 <p>安装 <code>ChatLogin[web]</code> 后可用。<code>FastAPIAuth</code> 可接收同步 <code>CredentialBackend</code> 或异步 <code>AsyncCredentialBackend</code>；同步调用会在线程池执行，异步调用会被 await。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>chatlogin.fastapi
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>├── FastAPIAuth
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>│   ├── router
-<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>│   ├── current_user(request) -&gt; Principal
-<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>│   ├── csrf_user(request) -&gt; Principal
-<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>│   ├── roles(*roles) -&gt; FastAPI dependency
-<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>│   └── cookie / sessions / ui
-<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>├── CookieSettings(name, path, max_age, secure, same_site, http_only)
-<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>├── GET  {prefix}/session
-<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>├── POST {prefix}/login
-<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>└── POST {prefix}/logout
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>chatlogin.fastapi
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>├── FastAPIAuth
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>│   ├── router
+<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>│   ├── current_user(request) -&gt; Principal
+<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>│   ├── csrf_user(request) -&gt; Principal
+<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>│   ├── roles(*roles) -&gt; FastAPI dependency
+<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>│   └── cookie / sessions / ui
+<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>├── CookieSettings(name, path, max_age, secure, same_site, http_only)
+<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>├── GET  {prefix}/session
+<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>├── POST {prefix}/login
+<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>└── POST {prefix}/logout
 </code></pre></div>
 <p>传入 <code>LoginUI</code> 时额外注册：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>GET {prefix}/                  # 默认或宿主覆盖的登录页
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>GET {prefix}/assets/login.css
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>GET {prefix}/assets/login.js
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>GET {prefix}/                  # 默认或宿主覆盖的登录页
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>GET {prefix}/assets/login.css
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>GET {prefix}/assets/login.js
 </code></pre></div>
 <p>不传 <code>LoginUI</code> 时没有页面和静态资源，适合宿主保留原前端的 headless 接入。</p>
 <h2 id="ui">UI 层<a class="headerlink" href="#ui" title="Permanent link">&para;</a></h2>
 <p>仅渲染 UI 时安装 <code>ChatLogin[ui]</code> 即可；它只引入 Jinja2，不要求 FastAPI。<code>ChatLogin[web]</code> 包含 UI 与 FastAPI/Starlette 适配层。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>chatlogin.ui
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>└── LoginUI(
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>      title,
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>      subtitle,
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>      palette="indigo" | "forest" | "amber",
-<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>      layout="card" | "split",
-<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>      appearance="system" | "light" | "dark",
-<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>      guest_url=None,
-<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>      guest_label="以访客身份继续",
-<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>      template_dirs=(),
-<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>      template_name="chatlogin/login.html",
-<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>      stylesheet_url=None,
-<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>      renderer=None,
-<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a>      script_url=None,
-<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a>    )
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>chatlogin.ui
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>└── LoginUI(
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>      title,
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>      subtitle,
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>      palette="indigo" | "forest" | "amber",
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>      layout="card" | "split",
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>      appearance="system" | "light" | "dark",
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>      guest_url=None,
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a>      guest_label="以访客身份继续",
+<a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a>      template_dirs=(),
+<a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a>      template_name="chatlogin/login.html",
+<a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a>      stylesheet_url=None,
+<a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a>      renderer=None,
+<a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a>      script_url=None,
+<a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a>    )
 </code></pre></div>
 <p>宿主模板放在 <code>template_dirs</code> 中并优先于包内模板。可以 <code>{% extends "chatlogin/login.html" %}</code> 覆盖单个 block，也可以提供整页模板，或传入直接返回 HTML 的 renderer。</p>
 <h2 id="_3">最小后端接入<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">chatlogin</span><span class="w"> </span><span class="kn">import</span> <span class="n">CallbackBackend</span><span class="p">,</span> <span class="n">Principal</span><span class="p">,</span> <span class="n">Role</span><span class="p">,</span> <span class="n">verify_pbkdf2</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="k">def</span><span class="w"> </span><span class="nf">authenticate</span><span class="p">(</span><span class="n">username</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">password</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Principal</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>    <span class="n">row</span> <span class="o">=</span> <span class="n">my_user_database</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">username</span><span class="p">)</span>
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>    <span class="k">if</span> <span class="n">row</span> <span class="ow">and</span> <span class="n">verify_pbkdf2</span><span class="p">(</span><span class="n">password</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">salt</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">digest</span><span class="p">,</span> <span class="n">iterations</span><span class="o">=</span><span class="n">row</span><span class="o">.</span><span class="n">iterations</span><span class="p">):</span>
-<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>        <span class="k">return</span> <span class="n">Principal</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">display_name</span><span class="p">,</span> <span class="n">Role</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">role</span><span class="p">))</span>
-<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>    <span class="k">return</span> <span class="kc">None</span>
-<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>
-<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="n">backend</span> <span class="o">=</span> <span class="n">CallbackBackend</span><span class="p">(</span><span class="n">authenticate</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">chatlogin</span><span class="w"> </span><span class="kn">import</span> <span class="n">CallbackBackend</span><span class="p">,</span> <span class="n">Principal</span><span class="p">,</span> <span class="n">Role</span><span class="p">,</span> <span class="n">verify_pbkdf2</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="k">def</span><span class="w"> </span><span class="nf">authenticate</span><span class="p">(</span><span class="n">username</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">password</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Principal</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>    <span class="n">row</span> <span class="o">=</span> <span class="n">my_user_database</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">username</span><span class="p">)</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>    <span class="k">if</span> <span class="n">row</span> <span class="ow">and</span> <span class="n">verify_pbkdf2</span><span class="p">(</span><span class="n">password</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">salt</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">digest</span><span class="p">,</span> <span class="n">iterations</span><span class="o">=</span><span class="n">row</span><span class="o">.</span><span class="n">iterations</span><span class="p">):</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>        <span class="k">return</span> <span class="n">Principal</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">display_name</span><span class="p">,</span> <span class="n">Role</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">role</span><span class="p">))</span>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a>    <span class="k">return</span> <span class="kc">None</span>
+<a id="__codelineno-7-8" name="__codelineno-7-8" href="#__codelineno-7-8"></a>
+<a id="__codelineno-7-9" name="__codelineno-7-9" href="#__codelineno-7-9"></a><span class="n">backend</span> <span class="o">=</span> <span class="n">CallbackBackend</span><span class="p">(</span><span class="n">authenticate</span><span class="p">)</span>
 </code></pre></div>
 <p>异步上游使用 <code>AsyncCallbackBackend</code>：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">chatlogin</span><span class="w"> </span><span class="kn">import</span> <span class="n">AsyncCallbackBackend</span><span class="p">,</span> <span class="n">Principal</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">authenticate</span><span class="p">(</span><span class="n">username</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">password</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Principal</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>    <span class="n">row</span> <span class="o">=</span> <span class="k">await</span> <span class="n">upstream</span><span class="o">.</span><span class="n">verify</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">)</span>
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>    <span class="k">return</span> <span class="n">Principal</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">display_name</span><span class="p">)</span> <span class="k">if</span> <span class="n">row</span> <span class="k">else</span> <span class="kc">None</span>
-<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>
-<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="n">backend</span> <span class="o">=</span> <span class="n">AsyncCallbackBackend</span><span class="p">(</span><span class="n">authenticate</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">chatlogin</span><span class="w"> </span><span class="kn">import</span> <span class="n">AsyncCallbackBackend</span><span class="p">,</span> <span class="n">Principal</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">authenticate</span><span class="p">(</span><span class="n">username</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">password</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Principal</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a>    <span class="n">row</span> <span class="o">=</span> <span class="k">await</span> <span class="n">upstream</span><span class="o">.</span><span class="n">verify</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">)</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a>    <span class="k">return</span> <span class="n">Principal</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">display_name</span><span class="p">)</span> <span class="k">if</span> <span class="n">row</span> <span class="k">else</span> <span class="kc">None</span>
+<a id="__codelineno-8-6" name="__codelineno-8-6" href="#__codelineno-8-6"></a>
+<a id="__codelineno-8-7" name="__codelineno-8-7" href="#__codelineno-8-7"></a><span class="n">backend</span> <span class="o">=</span> <span class="n">AsyncCallbackBackend</span><span class="p">(</span><span class="n">authenticate</span><span class="p">)</span>
 </code></pre></div>
 <p>同步和异步 callback 都会先验证 username/password 的 UTF-8 字节上限。非法输入不会调用宿主回调；宿主必须返回已认证 <code>Principal</code> 或 <code>None</code>，guest/其他对象会失败关闭。</p>
 <p>宿主仍拥有账户表、密码材料、业务资源 owner 和权限策略。ChatLogin 不创建默认生产账号，也不把 <code>admin</code> 角色解释成可访问所有业务数据。</p>
 <h2 id="_4">运行态路径<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">chatlogin</span><span class="w"> </span><span class="kn">import</span> <span class="n">PrivateSQLite</span><span class="p">,</span> <span class="n">SQLiteSessionStore</span><span class="p">,</span> <span class="n">state_paths</span>
-<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
-<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="n">paths</span> <span class="o">=</span> <span class="n">state_paths</span><span class="p">(</span><span class="s2">"my-site"</span><span class="p">)</span>
-<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="n">store</span> <span class="o">=</span> <span class="n">SQLiteSessionStore</span><span class="o">.</span><span class="n">for_instance</span><span class="p">(</span><span class="s2">"my-site"</span><span class="p">)</span>
-<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="n">private</span> <span class="o">=</span> <span class="n">PrivateSQLite</span><span class="p">(</span><span class="n">paths</span><span class="o">.</span><span class="n">directory</span> <span class="o">/</span> <span class="s2">"leaf-package.sqlite3"</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-9-1" name="__codelineno-9-1" href="#__codelineno-9-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">chatlogin</span><span class="w"> </span><span class="kn">import</span> <span class="n">PrivateSQLite</span><span class="p">,</span> <span class="n">SQLiteSessionStore</span><span class="p">,</span> <span class="n">state_paths</span>
+<a id="__codelineno-9-2" name="__codelineno-9-2" href="#__codelineno-9-2"></a>
+<a id="__codelineno-9-3" name="__codelineno-9-3" href="#__codelineno-9-3"></a><span class="n">paths</span> <span class="o">=</span> <span class="n">state_paths</span><span class="p">(</span><span class="s2">"my-site"</span><span class="p">)</span>
+<a id="__codelineno-9-4" name="__codelineno-9-4" href="#__codelineno-9-4"></a><span class="n">store</span> <span class="o">=</span> <span class="n">SQLiteSessionStore</span><span class="o">.</span><span class="n">for_instance</span><span class="p">(</span><span class="s2">"my-site"</span><span class="p">)</span>
+<a id="__codelineno-9-5" name="__codelineno-9-5" href="#__codelineno-9-5"></a><span class="n">private</span> <span class="o">=</span> <span class="n">PrivateSQLite</span><span class="p">(</span><span class="n">paths</span><span class="o">.</span><span class="n">directory</span> <span class="o">/</span> <span class="s2">"leaf-package.sqlite3"</span><span class="p">)</span>
 </code></pre></div>
 <p>默认 session 路径为 <code>&lt;ChatArch home&gt;/chatlogin/instances/&lt;instance&gt;/sessions.sqlite3</code>。导入包和仅计算路径不会创建对象；初始化 <code>PrivateSQLite</code> 或 store 时才安全创建缺失的私有目录与主库。叶子包可以用 <code>with private.connect() as connection:</code> 复用相同边界，并在上下文正常退出时提交、异常时回滚；<code>immediate=True</code> 会在交付连接前执行 <code>BEGIN IMMEDIATE</code>。</p>
 <p>POSIX 实现逐级 no-follow 校验祖先 owner 与写权限，要求最终数据目录由服务 UID 拥有且恰为 <code>0700</code>。主库以真实 file URI 的 <code>mode=rw</code> 打开；已有主库和 sidecar 必须是服务 UID 拥有、单链接、恰为 <code>0600</code> 的普通文件，绝不 chmod 历史对象。SQLite 在可信父目录中新建的安全 sidecar 才可按需规范为 <code>0600</code>。这套边界不依赖 fd alias，也不排除同 UID 进程；同 UID 与 root 在信任边界内。</p>

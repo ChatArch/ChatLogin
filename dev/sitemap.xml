@@ -15,6 +15,13 @@
         <xhtml:link rel="alternate" hreflang="en" href="https://arch.gh.wzhecnu.cn/ChatLogin/deven/capability-map/"/>
     </url>
     <url>
+        <loc>https://arch.gh.wzhecnu.cn/ChatLogin/dev/chatvoice-managed/</loc>
+        <lastmod>2026-10-10</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://arch.gh.wzhecnu.cn/ChatLogin/dev/chatvoice-managed/"/>
+        <xhtml:link rel="alternate" hreflang="en" href="https://arch.gh.wzhecnu.cn/ChatLogin/deven/chatvoice-managed/"/>
+    </url>
+    <url>
         <loc>https://arch.gh.wzhecnu.cn/ChatLogin/dev/cli-tree/</loc>
         <lastmod>2026-10-10</lastmod>
         <changefreq>daily</changefreq>
@@ -69,6 +76,13 @@
         <changefreq>daily</changefreq>
         <xhtml:link rel="alternate" hreflang="en" href="https://arch.gh.wzhecnu.cn/ChatLogin/dev/en/capability-map/"/>
         <xhtml:link rel="alternate" hreflang="zh" href="https://arch.gh.wzhecnu.cn/ChatLogin/devcapability-map/"/>
+    </url>
+    <url>
+        <loc>https://arch.gh.wzhecnu.cn/ChatLogin/dev/en/chatvoice-managed/</loc>
+        <lastmod>2026-10-10</lastmod>
+        <changefreq>daily</changefreq>
+        <xhtml:link rel="alternate" hreflang="en" href="https://arch.gh.wzhecnu.cn/ChatLogin/dev/en/chatvoice-managed/"/>
+        <xhtml:link rel="alternate" hreflang="zh" href="https://arch.gh.wzhecnu.cn/ChatLogin/devchatvoice-managed/"/>
     </url>
     <url>
         <loc>https://arch.gh.wzhecnu.cn/ChatLogin/dev/en/cli-tree/</loc>

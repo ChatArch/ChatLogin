@@ -14,7 +14,7 @@
         <link rel="prev" href="../integration/">
       
       
-        <link rel="next" href="../cli-tree/">
+        <link rel="next" href="../chatvoice-managed/">
       
       
       <link rel="icon" href="../assets/images/favicon.png">
@@ -310,6 +310,25 @@
   
   
   
+    <li class="md-tabs__item">
+      <a href="../chatvoice-managed/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  ChatVoice legacy schema 集成
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
     
     
       <li class="md-tabs__item">
@@ -591,6 +610,28 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="../chatvoice-managed/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ChatVoice legacy schema 集成
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
     
     
     
@@ -607,10 +648,10 @@
         
           
         
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
         
           
-          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
             
   
   
@@ -623,8 +664,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_6">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
             <span class="md-nav__icon md-icon"></span>
             命令与接口
           </label>
@@ -851,9 +892,15 @@
 <td><code>ChatVoiceAuth</code></td>
 <td>兼容层不创建或迁移账户表</td>
 </tr>
+<tr>
+<td>保持既有 ChatVoice schema 并接入用户管理</td>
+<td><code>ChatVoiceManagedStore</code> + <code>ManagedUsers</code></td>
+<td>显式 additive 初始化与一次性 owner 采用；宿主继续拥有连接、锁、配置与业务 ACL</td>
+</tr>
 </tbody>
 </table>
 <p>托管用户是可选预设，不会自动迁移旧用户数据库、不会把旧后端转换为新数据库，也不是 SSO、OAuth 或 MFA。它也不把 <code>owner</code>、<code>admin</code> 解释为宿主业务数据的通行证；业务路由仍应执行自己的 <code>require_owner(user, record.owner_id)</code> 或等价授权。</p>
+<p>已有 ChatVoice <code>accounts</code> / <code>auth_sessions</code> 库的保留式接入见 <a href="../chatvoice-managed/">ChatVoice legacy schema 集成</a>。该路径不是公开注册或隐式导入；它由受信任同进程宿主显式执行 schema 初始化和 owner 采用。</p>
 <h2 id="plugin">作为插件集成<a class="headerlink" href="#plugin" title="Permanent link">&para;</a></h2>
 <p>ChatLogin 不拥有业务应用的服务器，也不要求额外建设登录微服务。应用安装依赖、选择账号后端并挂载插件；登录、身份、会话、CSRF、角色及默认页面由同一组件复用。宿主仍决定业务记录、下载、任务和数据归属的授权。</p>
 <table>

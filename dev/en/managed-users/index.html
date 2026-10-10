@@ -14,7 +14,7 @@
         <link rel="prev" href="../integration/">
       
       
-        <link rel="next" href="../cli-tree/">
+        <link rel="next" href="../chatvoice-managed/">
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
@@ -310,6 +310,25 @@
   
   
   
+    <li class="md-tabs__item">
+      <a href="../chatvoice-managed/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  ChatVoice Legacy Schema Integration
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
     
     
       <li class="md-tabs__item">
@@ -591,6 +610,28 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="../chatvoice-managed/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    ChatVoice Legacy Schema Integration
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
     
     
     
@@ -607,10 +648,10 @@
         
           
         
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_7" >
         
           
-          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
             
   
   
@@ -623,8 +664,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_6">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
             <span class="md-nav__icon md-icon"></span>
             Commands and APIs
           </label>
@@ -851,9 +892,15 @@
 <td><code>ChatVoiceAuth</code></td>
 <td>The compatibility layer does not create or migrate account tables</td>
 </tr>
+<tr>
+<td>Existing ChatVoice schema with user management</td>
+<td><code>ChatVoiceManagedStore</code> + <code>ManagedUsers</code></td>
+<td>Explicit additive initialization and one-time owner adoption; the host still owns connection, lock, configuration, and business ACLs</td>
+</tr>
 </tbody>
 </table>
 <p>Managed users are an opt-in preset. They do not migrate an old user database, convert legacy backends, or claim SSO, OAuth, or MFA. They also do not make <code>owner</code> or <code>admin</code> a bypass for host business data: routes still need host-owned checks such as <code>require_owner(user, record.owner_id)</code>.</p>
+<p>For preservation-first integration with an existing ChatVoice <code>accounts</code> / <code>auth_sessions</code> database, see <a href="../chatvoice-managed/">ChatVoice legacy schema integration</a>. That path is not public registration or implicit import; a trusted same-process host explicitly initializes schema and adopts one owner.</p>
 <h2 id="plugin">Integrate as a Plugin<a class="headerlink" href="#plugin" title="Permanent link">&para;</a></h2>
 <p>ChatLogin does not own the business server or require a separate identity microservice. Install it, select an account backend, and mount the plugin. Login, identity, sessions, CSRF, roles, and optional pages reuse one component. The host still authorizes business records, downloads, jobs, and data ownership.</p>
 <table>
