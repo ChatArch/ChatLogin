@@ -1,5 +1,11 @@
 # 更新日志
 
+## Unreleased — 0.2.0（计划）
+
+- 新增应用显式采用的 managed users 接入面：首个 owner 的环境变量 bootstrap、`ManagedUsers` / `create_managed_auth` 指引、owner/admin/user 角色矩阵，以及默认登录、用户管理和本人资料路由说明。
+- `chatlogin serve --managed-demo` 预留独立 in-memory 三角色公开合成演示；默认 `serve` 保持原四后端演示。该功能不迁移旧用户库，也不声明 SSO、OAuth 或 MFA。
+- 同步中英文 README、MkDocs、CLI 树、能力地图、接口树、快速接入与演示文档；新消费者应显式采用 `ChatLogin>=0.2.0,<0.3.0`，既有 ChatVoice `<0.2` 依赖不受影响。
+
 ## 0.1.6 — 2026-10-09
 
 - 四种后端均提供A/B两个独立合成用户，登录表单可选择并填入。

@@ -6,8 +6,19 @@
 - **已有账户数据库**：保留账户与密码材料，换用 [同步或异步回调](integration.md#backends)。
 - **已有前端**：保留页面，只挂载 `ui=None` 的 JSON 接口，按 [浏览器契约](integration.md#browser-contract) 传递会话与 CSRF。
 - **先选视觉风格**：运行 [演示站](demo.md) 的模板游乐场，再复制 `LoginUI(...)` 配置。
+- **应用需要用户目录**：使用 [托管用户](managed-users.md) 的 owner/admin/user 预设，不把业务数据授权交给角色本身。
 
 </div>
+
+## 托管用户快速开始（0.2.0）
+
+新应用需要自管账户时，显式依赖 `ChatLogin>=0.2.0,<0.3.0`。先由可信操作员在安全环境中提供 `APP_BOOTSTRAP_CREDENTIAL`，再把环境变量名交给 bootstrap；不要把凭据值写入命令行：
+
+```bash
+chatlogin users bootstrap operator --instance my-site --password-env APP_BOOTSTRAP_CREDENTIAL
+```
+
+然后用 `create_managed_auth(instance="my-site", origin=...)` 挂载默认登录、用户管理和本人资料页面。完整的角色矩阵、模板/headless 选择、owner 交接与会话失效说明见[托管用户](managed-users.md)。此路径不迁移已有账户库；固定账号、回调和 ChatVoice adapter 继续按原方式接入。
 
 ## 1. 安装并保存完整应用
 
@@ -94,4 +105,5 @@ python app.py
 
 - [接入与安全](integration.md)：四类后端、精确 ChatVoice schema、HTTP/角色/owner 边界。
 - [Python 接口树](interface-tree.md)：可导入的类与实际方法。
+- [托管用户](managed-users.md)：应用自管账户、角色矩阵、首个 owner 与默认 Web 预设。
 - [演示站](demo.md)：启动独立演示和查看配置效果。

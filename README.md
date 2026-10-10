@@ -24,6 +24,7 @@ ChatLogin 是面向 Python-backed 网站的可复用登录能力包：后端统�
 | 场景 | 文档 |
 | --- | --- |
 | FastAPI 快速接入 | [完整可运行应用](docs/quickstart.md) |
+| 应用自管 owner/admin/user | [托管用户](docs/managed-users.md) |
 | 默认 UI、模板覆盖与 headless | [能力地图](docs/capability-map.md) |
 | CLI 版本和命令树 | [CLI 树](docs/cli-tree.md) |
 
@@ -57,7 +58,13 @@ chatlogin serve --host 127.0.0.1 --port 8765 --origin https://login.example.com
 
 核心包不要求网站采用包内页面。已有静态 HTML/原生 JS 的网站可以只挂载 JSON 路由，继续保留原登录入口和用户数据库；标准库 HTTP 宿主也可以只使用 `LoginUI` 渲染登录页。
 
-## 选择认证后端（0.1.5）
+## 托管用户（0.2.0 目标）
+
+需要应用内 owner/admin/user、登录页、本人资料和用户管理时，新消费者显式采用 `ChatLogin>=0.2.0,<0.3.0`，并使用 `ManagedUsers` 与 `create_managed_auth`。第一个 owner 必须由操作员执行 `chatlogin users bootstrap USERNAME --instance NAME --password-env KEY` 创建；KEY 是环境变量名，绝不把密码放进 argv。它只允许空实例首次初始化，没有迁移、`--force` 或默认生产凭据。见[托管用户指南](docs/managed-users.md)。
+
+固定账号、同步/异步回调与 ChatVoice 兼容 adapter 保持原有账户管理边界；既有 ChatVoice 消费方的 `<0.2` 依赖不受影响，主动采用新预设时才升级。
+
+## 选择认证入口
 
 | 账户来源 | 可选后端 | 会话与宿主边界 |
 | --- | --- | --- |
@@ -65,12 +72,13 @@ chatlogin serve --host 127.0.0.1 --port 8765 --origin https://login.example.com
 | 其他宿主用户库 | `CallbackBackend(authenticate)` + 宿主 `SessionStore` | 宿主定义密码验证、schema 和会话映射 |
 | 异步上游校验 | `AsyncCallbackBackend(authenticate)` | 回调在事件循环中 `await`；非法输入不调用回调，非法结果失败关闭 |
 | 已有 ChatVoice 账户/会话 schema | `chatlogin.backends.ChatVoiceAuth` | 现成兼容后端；固定 `chatvoice` 命名空间，不建表或迁移 |
+| 应用托管账户目录 | `ManagedUsers` + `create_managed_auth` | 每实例 owner/admin/user 与管理 UI/API；宿主仍负责业务数据授权 |
 
 `ChatVoiceAuth` 随核心包提供，按需导入；不依赖 ChatVoice 包或 `web` extra，不是任意 SQLite 账户系统的通用 ORM。默认 UI、宿主覆盖和 headless 三种模式与后端选择相互独立。账户创建、业务 owner 权限与宿主 HTTP 契约仍由网站负责。见 [接入与安全](docs/integration.md)。
 
 ## 设计边界
 
-- `guest` / `user` / `admin` 是服务端可信身份，角色不能由请求体指定。
+- `guest` / `user` / `admin` 以及托管预设的 `owner` 是服务端可信身份，角色不能由请求体指定。
 - 固定账号、多账号和宿主回调均可；已有 PBKDF2 密码材料可验证，不强制迁移。
 - 会话 token 只以 SHA-256 摘要持久化，支持 TTL、轮换、撤销、CSRF、实例隔离和公开 `SessionManager.purge_expired()` 清理。
 - 公开 `PrivateSQLite` 供依赖包复用；POSIX 上以可信 `0700` 数据目录和真实路径 `mode=rw` 连接保护主库及 SQLite sidecar，拒绝不安全的已有路径且不 chmod 历史文件。同 UID 进程属于本地文件系统信任边界；非 POSIX 不把 mode bits 误称为 ACL。
@@ -78,7 +86,7 @@ chatlogin serve --host 127.0.0.1 --port 8765 --origin https://login.example.com
 - `ChatLogin[web]` 声明 `starlette>=0.40,<2.0`；兼容性测试覆盖 Starlette 0.x、1.3.1 和 1.6.0，CI 门禁继续固定 0.x 与 1.3.x 线路。
 - 默认模板提供色系、布局与浅色/深色/跟随系统选项；宿主可覆盖局部或整页，也可保留原 HTML/JS 走 headless。
 - Admin 不自动绕过资源 owner；业务数据授权仍由宿主决定。
-- 不提供默认生产密码、独立登录微服务、SSO/OAuth、MFA 或账户管理后台。
+- 不提供默认生产密码、独立登录微服务、SSO/OAuth 或 MFA。托管用户预设提供实例内账户管理；固定、回调和 ChatVoice adapter 仍不提供账户管理后台。
 
 ## 开发与验证
 
