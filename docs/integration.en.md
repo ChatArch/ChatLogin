@@ -6,6 +6,7 @@ Start with the [complete quick integration](quickstart.md). To explore the compo
 
 | Requirement | Entry point | Host responsibilities |
 | --- | --- | --- |
+| Application-owned owner/admin/user directory | `ManagedUsers` + `create_managed_auth` | Business-record authorization, deployment, and TLS; roles are not a business-owner bypass |
 | Ready-to-use login page | `FastAPIAuth(..., ui=LoginUI(...))` | User source, business routes, deployment and TLS |
 | Custom brand or layout | `LoginUI(template_dirs=..., template_name=...)` or `renderer` | Custom HTML/CSS and renderer safety |
 | Existing HTML/JS frontend | `FastAPIAuth(..., ui=None)` | Existing page, frontend state, all business data |
@@ -13,6 +14,12 @@ Start with the [complete quick integration](quickstart.md). To explore the compo
 | Standard-library HTTP page | `LoginUI(...).render(context)` + `ChatLogin[ui]` | HTTP handler, cookies, Origin/CSRF and response fields |
 
 Headless does not require another auth microservice. Mount JSON routes in the existing FastAPI process, or call the core Python API while keeping existing HTTP handlers and response fields. Python packages can carry HTML/CSS/JS; host templates take priority over package templates, without editing site-packages.
+
+## Managed-Users Preset (0.2.0)
+
+New consumers can require `ChatLogin>=0.2.0,<0.3.0` and use `ManagedUsers.for_instance(...)`, or let `create_managed_auth(instance=..., origin=...)` create the service. First run `chatlogin users bootstrap USERNAME --instance NAME --password-env KEY` for an empty instance; KEY names an environment variable. The default `/auth` mount supplies login, `/users`, `/profile`, and protected user APIs while retaining Host/Origin, session, CSRF, and role checks.
+
+This is an application-account-directory preset. It does not migrate old user stores or make owner/admin a business-resource bypass. Fixed accounts, callbacks, and the ChatVoice adapter keep host-owned account management, and an existing ChatVoice `<0.2` consumer does not change because of this preset. See [Managed Users](managed-users.md) for the role matrix, owner transfer, templates/renderers/headless, and standalone demo.
 
 ## Choose an Authentication Backend {#backends}
 
@@ -93,8 +100,8 @@ Use browser fetch with `credentials: 'same-origin'`. Read CSRF from session JSON
 ## Identity, Authorization and Storage
 
 - Guest is unauthenticated state, not automatic account/session creation or migration of guest history.
-- User/admin roles come only from a trusted backend. Use multiple explicit `PasswordBackend` entries or connect an existing database with `CallbackBackend`.
-- `require_owner` applies equally to admins. Any admin access to other users' data must be a separate host policy.
+- User/admin roles come only from a trusted backend; the managed preset additionally has one owner per instance. Use multiple explicit `PasswordBackend` entries or connect an existing database with `CallbackBackend`.
+- `require_owner` applies equally to admins and managed owners. Any access to another user's business data must be a separate host policy.
 - Random session tokens are delivered only through HttpOnly cookies; `SessionStore` receives digests. CSRF is a separate sensitive value, intentionally returned to same-origin clients but never logged.
 - Expiry cleanup is triggered through `SessionManager.purge_expired()`. The manager calls the store with its own validated instance and clock. Hosts that maintain private context indexes should clean them at this boundary instead of duplicating TTL math or touching store internals.
 - Bounded memory storage is for single-process tests/demos. SQLite is durable local storage; multi-host deployments need a shared `SessionStore`. Login limiting is a process-local backstop, not distributed abuse prevention.
@@ -116,7 +123,7 @@ The repository's `Web Compatibility` workflow still installs explicit 0.x and 1.
 
 ## Runnable Demo
 
-The packaged demo needs no checkout: install `ChatLogin[demo]` and run `chatlogin serve`. It uses an explicitly labelled public synthetic identity; see [Demo](demo.md).
+The packaged demo needs no checkout: install `ChatLogin[demo]` and run `chatlogin serve`. It uses an explicitly labelled public synthetic identity; explicitly running `chatlogin serve --managed-demo` exercises the real in-memory owner/admin/user preset. Neither reads a production/home account store; see [Demo](demo.md).
 
 The following separate source example demonstrates host-supplied credentials; it is not required by `serve`.
 

@@ -24,6 +24,7 @@ Documentation: <https://arch.gh.wzhecnu.cn/ChatLogin/en/>
 | Scenario | Document |
 | --- | --- |
 | FastAPI quick start | [Interface Tree](docs/interface-tree.en.md) |
+| Application-owned owner/admin/user directory | [Managed Users](docs/managed-users.en.md) |
 | Default UI, overrides, and headless mode | [Capability Map](docs/capability-map.en.md) |
 | CLI version and command tree | `docs/cli-tree.en.md` |
 
@@ -57,7 +58,13 @@ chatlogin serve --host 127.0.0.1 --port 8765 --origin https://login.example.com
 
 The core package does not require adopting the packaged page. An existing static HTML/vanilla-JS site can mount only JSON routes and retain its current entry page and user database; a standard-library HTTP host can use `LoginUI` for rendering without installing FastAPI.
 
-## Choose an Authentication Backend (0.1.5)
+## Managed Users (0.2.0 target)
+
+For an application-owned owner/admin/user directory, login, profile, and user management, new consumers explicitly adopt `ChatLogin>=0.2.0,<0.3.0` with `ManagedUsers` and `create_managed_auth`. An operator creates the first owner with `chatlogin users bootstrap USERNAME --instance NAME --password-env KEY`; KEY is an environment-variable name, never a password in argv. Bootstrap works only for an empty instance and has no migration, `--force`, or default production credential. See [Managed Users](docs/managed-users.en.md).
+
+Fixed accounts, synchronous/asynchronous callbacks, and the ChatVoice compatibility adapter retain their existing account-management boundary. A legacy ChatVoice consumer's `<0.2` dependency remains unaffected until it deliberately adopts the new preset.
+
+## Choose an Authentication Entry Point
 
 | Account source | Optional backend | Session and host boundary |
 | --- | --- | --- |
@@ -65,12 +72,13 @@ The core package does not require adopting the packaged page. An existing static
 | Other host user database | `CallbackBackend(authenticate)` + host `SessionStore` | Host defines password verification, schema and session mapping |
 | Async upstream verification | `AsyncCallbackBackend(authenticate)` | Callback is awaited in the event loop; invalid input is not called and invalid results fail closed |
 | Existing ChatVoice account/session schema | `chatlogin.backends.ChatVoiceAuth` | Ready-made compatibility backend; fixed `chatvoice` namespace, no table creation or migration |
+| Application-managed account directory | `ManagedUsers` + `create_managed_auth` | Per-instance owner/admin/user and management UI/API; the host still authorizes business data |
 
 `ChatVoiceAuth` ships in the core package for opt-in import; it requires neither ChatVoice nor the `web` extra. It is not a generic ORM for arbitrary SQLite account systems. Default UI, host overrides and headless mode remain independent of backend selection. Account creation, business owner permissions and host HTTP contracts remain host responsibilities. See [Integration and Security](docs/integration.en.md).
 
 ## Boundaries
 
-- `guest`, `user`, and `admin` are server-trusted identities and cannot be selected from a request body.
+- `guest`, `user`, and `admin`, plus managed preset `owner`, are server-trusted identities and cannot be selected from a request body.
 - Fixed credentials, multiple accounts, and host callbacks are supported; existing PBKDF2 material can be verified without forced migration.
 - Session tokens are persisted only as SHA-256 digests, with TTL, rotation, revocation, CSRF, instance isolation, and public `SessionManager.purge_expired()` cleanup.
 - Public `PrivateSQLite` is reusable by dependent packages. On POSIX it protects the main database and SQLite sidecars with a trusted `0700` data directory and real-path `mode=rw` connections, rejecting unsafe existing paths without chmodding historical files. Same-UID processes are inside the local-filesystem trust boundary; non-POSIX mode bits are not presented as ACL checks.
@@ -78,7 +86,7 @@ The core package does not require adopting the packaged page. An existing static
 - `ChatLogin[web]` declares `starlette>=0.40,<2.0`; compatibility tests cover Starlette 0.x, 1.3.1, and 1.6.0, while CI keeps explicit 0.x and 1.3.x gates.
 - Packaged templates provide independent palettes, layouts and light/dark/system appearance. Hosts can override part or all of the page, or keep their existing HTML/JS and use headless integration.
 - Admin does not bypass resource ownership; host applications retain business-data authorization.
-- There is no default production password, standalone login microservice, SSO/OAuth, MFA, or admin console.
+- There is no default production password, standalone login microservice, SSO/OAuth, or MFA. The managed-users preset has instance-local account management; fixed, callback, and ChatVoice adapters still have no account-management console.
 
 ## Development and Verification
 

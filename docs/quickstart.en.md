@@ -6,8 +6,19 @@
 - **Existing account database**: retain accounts/password material and use a [sync or async callback](integration.md#backends).
 - **Existing frontend**: mount `ui=None` JSON routes and follow the [browser contract](integration.md#browser-contract).
 - **Choose a visual style**: use the [demo](demo.md) template playground and copy its `LoginUI(...)` configuration.
+- **Application needs a user directory**: use the [managed-users](managed-users.md) owner/admin/user preset without handing business-data authorization to a role.
 
 </div>
+
+## Managed Users Quick Start (0.2.0)
+
+When a new application needs its own account directory, explicitly require `ChatLogin>=0.2.0,<0.3.0`. A trusted operator first makes `APP_BOOTSTRAP_CREDENTIAL` available in a protected environment, then passes its variable name to bootstrap; never put the credential value on the command line:
+
+```bash
+chatlogin users bootstrap operator --instance my-site --password-env APP_BOOTSTRAP_CREDENTIAL
+```
+
+Then mount `create_managed_auth(instance="my-site", origin=...)` for the default login, user-management, and profile pages. The full role matrix, template/headless choices, owner transfer, and session invalidation are in [Managed Users](managed-users.md). This route does not migrate an existing account store; fixed accounts, callbacks, and the ChatVoice adapter continue unchanged.
 
 ## 1. Install and Save the Application
 
@@ -94,4 +105,5 @@ The installed `chatlogin.demo_site/assets/demo.js` contains the runnable headles
 
 - [Integration and Security](integration.md): backend selection, exact ChatVoice schema and HTTP/role/owner boundaries.
 - [Python Interface Tree](interface-tree.md): importable classes and methods.
+- [Managed Users](managed-users.md): application-owned accounts, role matrix, first owner, and default web preset.
 - [Demo](demo.md): run the isolated site and preview configuration.

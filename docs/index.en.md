@@ -20,6 +20,12 @@ Site entry: <https://arch.gh.wzhecnu.cn/ChatLogin/en/>
 
     [Open Demo Guide](demo.md)
 
+- **Application-managed users**
+
+    For owner/admin/user accounts, management pages, and self-service profiles, use `ManagedUsers` and the default FastAPI preset while keeping business-data authorization in the host.
+
+    [Open Managed Users](managed-users.md)
+
 - **Keep an existing visual style**
 
     Choose packaged UI, host template overrides, or a fully headless host-owned frontend.
@@ -28,7 +34,7 @@ Site entry: <https://arch.gh.wzhecnu.cn/ChatLogin/en/>
 
 - **Review CLI and package boundaries**
 
-    The CLI exposes version, command trees, read-only paths, and the isolated `serve` product demo; reusable auth remains a Python API.
+    The CLI exposes version, command trees, read-only paths, first-owner bootstrap, and default or managed isolated `serve` demos; reusable auth remains a Python API.
 
     [Open CLI Tree](cli-tree.md)
 
@@ -79,6 +85,8 @@ def private(principal=Depends(auth.current_user)):
 
 See `examples/demo_fastapi.py` for a runnable synthetic-account demo.
 
+For application-managed accounts, new consumers explicitly require `ChatLogin>=0.2.0,<0.3.0`, let an operator run `chatlogin users bootstrap` with an environment-variable name, then mount `create_managed_auth(instance=..., origin=...)`. It does not migrate old user stores or replace host `require_owner` business authorization; see [Managed Users](managed-users.md).
+
 ## Three Frontend Levels
 
 | Level | Best for | Security boundary |
@@ -91,7 +99,7 @@ Themes affect presentation only. They cannot weaken CSRF, cookies, roles, or own
 
 ## Secure Defaults
 
-- Server-trusted identities are `guest`, `user`, and `admin`; login payloads cannot escalate role.
+- Server-trusted identities are `guest`, `user`, and `admin`, plus managed-preset `owner`; login payloads cannot escalate role.
 - Credential verification is injectable: fixed account, multiple accounts, or a host callback. Existing PBKDF2 material can be verified without forced migration.
 - Session tokens are random; only SHA-256 digests are stored. Expiry, rotation, revocation, and instance isolation are supported.
 - Cookies default to `HttpOnly`, `Secure`, and `SameSite=Lax`; cookie-authenticated writes require same-site Origin and CSRF.

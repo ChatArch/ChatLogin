@@ -43,6 +43,28 @@ chatlogin
 └── LoginRateLimiter(limit, window, max_keys)
 ```
 
+## 托管用户（0.2.0）
+
+```text
+chatlogin.managed
+├── UserRecord                         # 安全视图：不含密码、hash、CSRF 或 session token
+└── ManagedUsers
+    ├── for_instance(instance, home=None, ...)
+    ├── in_memory(instance, ttl=300, max_users=..., max_sessions=...)
+    ├── bootstrap_owner(username, password, display_name="") -> UserRecord
+    ├── authenticate(username, password) -> ManagedPrincipal | None
+    ├── create_user(actor, username, password, role=Role.USER, display_name="")
+    ├── update_user(...) / reset_password(...) / change_password(...)
+    ├── delete_user(...) / transfer_owner(...)
+    └── store / sessions
+
+chatlogin.managed_web
+└── create_managed_auth(instance, origin, users=None, prefix="/auth", ...)
+    └── ManagedAuth.router / .users / .current_user / .csrf_user / .admin_user / .cookie
+```
+
+这是显式采用的应用账户预设，不迁移固定账号、回调或 ChatVoice 用户库。`in_memory` 仅用于演示/测试且必须在 shutdown 关闭；角色不改变宿主 `require_owner` 的业务语义。完整接口与路由见[托管用户](managed-users.md)。
+
 ## 内建可选 ChatVoice 后端
 
 ```text

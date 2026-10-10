@@ -43,6 +43,28 @@ chatlogin
 └── LoginRateLimiter(limit, window, max_keys)
 ```
 
+## Managed Users (0.2.0)
+
+```text
+chatlogin.managed
+├── UserRecord                         # safe view: no password, hash, CSRF, or session token
+└── ManagedUsers
+    ├── for_instance(instance, home=None, ...)
+    ├── in_memory(instance, ttl=300, max_users=..., max_sessions=...)
+    ├── bootstrap_owner(username, password, display_name="") -> UserRecord
+    ├── authenticate(username, password) -> ManagedPrincipal | None
+    ├── create_user(actor, username, password, role=Role.USER, display_name="")
+    ├── update_user(...) / reset_password(...) / change_password(...)
+    ├── delete_user(...) / transfer_owner(...)
+    └── store / sessions
+
+chatlogin.managed_web
+└── create_managed_auth(instance, origin, users=None, prefix="/auth", ...)
+    └── ManagedAuth.router / .users / .current_user / .csrf_user / .admin_user / .cookie
+```
+
+This is an explicit application-account preset; it does not migrate fixed-account, callback, or ChatVoice user stores. `in_memory` is demo/test-only and must close at shutdown; roles do not change the host meaning of `require_owner`. See [Managed Users](managed-users.md) for routes and details.
+
 ## Built-in Optional ChatVoice Backend
 
 ```text

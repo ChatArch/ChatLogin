@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ChatLogin managed users demo</title>
+  <style>
+    :root { color-scheme: light dark; font-family: system-ui, sans-serif; }
+    body { margin: 0; background: Canvas; color: CanvasText; }
+    main { max-width: 56rem; margin: 0 auto; padding: 2rem 1.25rem 3rem; }
+    h1 { margin-bottom: .35rem; } .lead { color: GrayText; }
+    section { border: 1px solid color-mix(in srgb, CanvasText 20%, transparent); border-radius: .7rem; margin-top: 1.25rem; padding: 1.1rem; }
+    table { border-collapse: collapse; width: 100%; } th, td { border-bottom: 1px solid color-mix(in srgb, CanvasText 20%, transparent); padding: .55rem; text-align: left; }
+    nav { display: flex; flex-wrap: wrap; gap: .7rem; } a { color: LinkText; } code { overflow-wrap: anywhere; }
+  </style>
+</head>
+<body>
+  <main>
+    <p>Public synthetic fixture · disposable in-memory managed users</p>
+    <h1>Managed users demo</h1>
+    <p class="lead">This app has no user home, profile, production database, or default production credentials.</p>
+    <section id="managed-demo-fixtures">
+      <h2>Public fixtures</h2>
+      <p>These three intentionally public accounts exercise real owner, admin, and user boundaries.</p>
+      <table>
+        <thead><tr><th>Role</th><th>Username</th><th>Password</th></tr></thead>
+        <tbody>{{FIXTURES}}</tbody>
+      </table>
+    </section>
+    <section id="managed-demo-boundaries">
+      <h2>Role boundaries</h2>
+      <ul>
+        <li>Owner can manage administrators and transfer ownership with confirmation.</li>
+        <li>Admin can manage ordinary users, but not other administrators or the owner.</li>
+        <li>User can view and change only its own profile and password.</li>
+      </ul>
+    </section>
+    <nav aria-label="Managed demo entry points">
+      <a id="managed-demo-login" href="{{LOGIN_URL}}">Login</a>
+      <a id="managed-demo-users" href="{{USERS_URL}}">Manage users</a>
+      <a id="managed-demo-profile" href="{{PROFILE_URL}}">My profile</a>
+    </nav>
+  </main>
+</body>
+</html>

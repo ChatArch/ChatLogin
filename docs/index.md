@@ -20,6 +20,12 @@ ChatLogin 把网站登录中的**后端安全契约**做成可复用 Python 能�
 
     [打开演示指南](demo.md)
 
+- **应用自管用户目录**
+
+    需要 owner/admin/user、管理页面和本人资料时，采用 `ManagedUsers` 与默认 FastAPI 预设；业务数据授权仍归宿主。
+
+    [查看托管用户](managed-users.md)
+
 - **保留现有网站样式**
 
     默认模板、宿主模板覆盖、headless JSON 三种接入层级；ChatVoice 首个集成验收走 headless。
@@ -28,7 +34,7 @@ ChatLogin 把网站登录中的**后端安全契约**做成可复用 Python 能�
 
 - **校对 CLI 与包边界**
 
-    CLI 提供版本、命令树、只读路径解析和隔离的 `serve` 产品演示；可复用认证能力仍是 Python API。
+    CLI 提供版本、命令树、只读路径解析、首次 owner bootstrap，以及默认或 managed 的隔离 `serve` 产品演示；可复用认证能力仍是 Python API。
 
     [查看 CLI 树](cli-tree.md)
 
@@ -79,6 +85,8 @@ def private(principal=Depends(auth.current_user)):
 
 完整可运行示例见仓库 `examples/demo_fastapi.py`，仅使用临时合成账号。
 
+需要应用自管账户时，新消费者显式依赖 `ChatLogin>=0.2.0,<0.3.0`，由操作员先以环境变量名执行 `chatlogin users bootstrap`，再挂载 `create_managed_auth(instance=..., origin=...)`。它不会迁移旧用户库，也不替代宿主 `require_owner` 业务授权；见[托管用户](managed-users.md)。
+
 ## 前端三种接入
 
 | 层级 | 适用场景 | 安全边界 |
@@ -91,7 +99,7 @@ def private(principal=Depends(auth.current_user)):
 
 ## 安全默认值
 
-- 服务端可信身份：`guest`、`user`、`admin`；登录请求不能自行提升角色。
+- 服务端可信身份：`guest`、`user`、`admin`，以及托管预设的 `owner`；登录请求不能自行提升角色。
 - 密码校验后端可注入；支持固定账号、多账号和宿主回调，兼容已有 PBKDF2 材料但不强制迁移。
 - 会话 token 使用安全随机值，数据库仅保存 SHA-256 摘要；支持到期、轮换、撤销和实例隔离。
 - Cookie 默认 `HttpOnly`、`Secure`、`SameSite=Lax`；写操作需要同站 Origin 与 CSRF token。
