@@ -39,7 +39,7 @@ schema 初始化是显式、幂等、additive 的：为旧账号补充 role/stat
 
 ## 账号匹配规则
 
-启用 managed schema 后，`ChatVoiceAuth` 与 `ManagedUsers` 共用 `lower(account)` 账号键：ASCII 账号大小写变体可登录同一既有身份，原 `account` 字符串、ID、盐和密码哈希不改写。规范化键冲突时拒绝认证，不能选择任意匹配行；schema 初始化也会拒绝冲突，并在原表建立规范化唯一性约束。尚未启用管理元数据的旧库继续采用原来的精确账号匹配。
+启用 managed schema 后，`ChatVoiceAuth` 与 `ManagedUsers` 共用 `lower(account)` 账号键：ASCII 账号大小写变体可登录同一既有身份，原 `account` 字符串、ID、盐和密码哈希不改写。规范化键冲突时拒绝认证，不能选择任意匹配行；schema 初始化也会拒绝冲突，并在原表建立规范化唯一性约束。尚未启用管理元数据的旧库继续采用原来的精确账号匹配。管理资料、角色、状态、密码与删除操作也保持原账号字符串；初始化会在调用方事务内替换曾改写账号的旧版 package-owned update trigger，不修改既有账号行，已修正 trigger 不重复替换。
 
 ## Owner 采用
 

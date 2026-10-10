@@ -378,6 +378,62 @@ def test_managed_login_rejects_ambiguous_account_key_even_without_unique_index(t
         assert db.execute("SELECT COUNT(*) FROM auth_sessions").fetchone()[0] == 0
 
 
+def test_managed_writes_preserve_mixed_case_legacy_account_and_id(tmp_path):
+    path = tmp_path / "legacy.sqlite3"
+    _legacy_db(path)
+    with sqlite3.connect(path) as db:
+        db.execute("UPDATE accounts SET account='Alice@Example.Invalid' WHERE id='usr_alice'")
+    store = _store(path)
+    store.initialize()
+    adopt_owner(store, "usr_bob")
+    users = cl.ManagedUsers(store, clock=lambda: NOW.timestamp())
+    actor = users.authenticate("bob@example.invalid", PASSWORD)
+    for changes in ({"display_name": "Updated Alice"}, {"role": cl.Role.ADMIN}, {"enabled": False}, {"enabled": True}):
+        users.update_user(actor, "usr_alice", **changes)
+        with sqlite3.connect(path) as db:
+            assert db.execute("SELECT id, account FROM accounts WHERE id='usr_alice'").fetchone() == (
+                "usr_alice", "Alice@Example.Invalid"
+            )
+    subject = users.authenticate("ALICE@example.invalid", PASSWORD)
+    users.change_password(subject, PASSWORD, "new-synthetic-password")
+    users.delete_user(actor, "usr_alice")
+    with sqlite3.connect(path) as db:
+        assert db.execute("SELECT account, deleted FROM accounts WHERE id='usr_alice'").fetchone() == (
+            "Alice@Example.Invalid", 1
+        )
+
+
+def test_initializer_refreshes_historical_update_trigger_without_touching_account_rows(tmp_path):
+    path = tmp_path / "legacy.sqlite3"
+    _legacy_db(path)
+    store = _store(path)
+    store.initialize()
+    with sqlite3.connect(path) as db:
+        db.execute("DROP TRIGGER chatlogin_managed_users_update")
+        db.execute("""CREATE TRIGGER chatlogin_managed_users_update
+            INSTEAD OF UPDATE ON chatlogin_managed_users BEGIN
+                UPDATE accounts SET account=NEW.username_key, display_name=NEW.display_name
+                WHERE id=OLD.user_id;
+            END""")
+        db.execute("UPDATE accounts SET account='Alice@Example.Invalid' WHERE id='usr_alice'")
+        before = db.execute("SELECT * FROM accounts ORDER BY id").fetchall()
+        old_sql = db.execute("SELECT sql FROM sqlite_master WHERE name='chatlogin_managed_users_update'").fetchone()[0]
+        db.commit()
+        db.execute("BEGIN IMMEDIATE")
+        initialize_chatvoice_managed_schema(db)
+        assert db.in_transaction
+        new_sql = db.execute("SELECT sql FROM sqlite_master WHERE name='chatlogin_managed_users_update'").fetchone()[0]
+        assert "account=new.username_key" not in "".join(new_sql.split()).lower()
+        db.rollback()
+        assert db.execute("SELECT sql FROM sqlite_master WHERE name='chatlogin_managed_users_update'").fetchone()[0] == old_sql
+    store.initialize()
+    store.initialize()
+    with sqlite3.connect(path) as db:
+        assert db.execute("SELECT * FROM accounts ORDER BY id").fetchall() == before
+        db.execute("UPDATE chatlogin_managed_users SET display_name='Updated' WHERE user_id='usr_alice'")
+        assert db.execute("SELECT account FROM accounts WHERE id='usr_alice'").fetchone()[0] == "Alice@Example.Invalid"
+
+
 def test_no_import_side_effect_on_host_schema(tmp_path):
     path = tmp_path / "legacy.sqlite3"
     _legacy_db(path)
