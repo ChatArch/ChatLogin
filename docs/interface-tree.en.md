@@ -65,6 +65,10 @@ chatlogin.managed_web
 
 This is an explicit application-account preset; it does not migrate fixed-account, callback, or ChatVoice user stores. `in_memory` is demo/test-only and must close at shutdown; roles do not change the host meaning of `require_owner`. See [Managed Users](managed-users.md) for routes and details.
 
+## Embeddable Managed-user Plugin
+
+`create_managed_auth(..., pages=True)` mounts default pages and APIs; `pages=False` mounts APIs only and preserves the host frontend. See [plugin integration](managed-users.md#plugin).
+
 ## Built-in Optional ChatVoice Backend
 
 ```text

@@ -17,7 +17,7 @@
 
 # ChatLogin
 
-ChatLogin 是面向 Python-backed 网站的可复用登录能力包：后端统一处理身份、认证、会话、CSRF、回跳和角色边界；前端可以使用默认模板、覆盖模板/CSS，或保留网站原有 HTML/JS 走 headless JSON API。
+ChatLogin 是面向应用的可内嵌认证插件／集成组件，而不是独立的登录微服务。Python-backed 宿主挂载路由或调用库接口，即可复用登录与账号管理机制：后端统一处理身份、认证、会话、CSRF、回跳和角色边界；前端可以使用默认模板、覆盖模板/CSS，或保留网站原有 HTML/JS 走 headless JSON API。
 
 文档入口：<https://arch.gh.wzhecnu.cn/ChatLogin/>
 

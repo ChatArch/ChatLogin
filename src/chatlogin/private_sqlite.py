@@ -289,6 +289,11 @@ class _POSIXPrivateSQLite:
 
             try:
                 opened = os.fstat(sidecar_fd)
+                # Another SQLite connection may commit and unlink a journal
+                # after open. Retry the pathname; never accept or normalize the
+                # unlinked descriptor. Existing hardlinks still fail below.
+                if opened.st_nlink == 0:
+                    continue
                 _validate_file_shape(opened, label)
                 if opened.st_uid != self.service_uid:
                     raise ValueError(f"{label} must be owned by the service user")

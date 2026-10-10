@@ -201,15 +201,15 @@
     const viewerIsTarget = state.user && state.user.user_id === record.user_id;
     const ordinaryTarget = record.role === "user";
     const deleted = record.deleted === true;
-    const canEditDisplay = !deleted && Boolean(viewerOwner || ordinaryTarget || viewerIsTarget);
+    const canEditDisplay = !deleted && Boolean(viewerOwner || viewerIsTarget);
     const canChangeRole = !deleted && Boolean(viewerOwner && record.role !== "owner");
     const canEnable = !deleted && Boolean((viewerOwner && record.role !== "owner") || (!viewerOwner && ordinaryTarget));
-    const canPassword = !deleted && Boolean(viewerOwner || ordinaryTarget);
+    const canPassword = !deleted && record.role !== "owner" && Boolean(viewerOwner || ordinaryTarget);
     const canDelete = !deleted && Boolean((viewerOwner && record.role !== "owner") || (!viewerOwner && ordinaryTarget));
     const explanation = deleted
       ? words("该账号已删除，仅保留安全记录，不能再修改。", "This account is deleted and retained only as a safe record; it cannot be changed.")
       : viewerOwner
-      ? words("owner 账号不可直接降级、停用或删除；请使用 owner 交接。", "An owner cannot be directly demoted, disabled, or deleted; use owner handoff.")
+      ? words("owner 不可直接降级、停用或删除；请显式交接。本人改密请前往个人账号。", "An owner cannot be directly demoted, disabled, or deleted; use explicit handoff. Change your own password in My profile.")
       : words("管理员只能管理普通用户及自己的显示名称。", "Administrators can manage regular users and their own display name only.");
 
     const controls = document.createElement("form");
@@ -273,7 +273,7 @@
 
     const note = document.createElement("p");
     note.className = "chatlogin-users__readonly";
-    note.textContent = canEditDisplay || canChangeRole || canEnable || canPassword || canDelete ? "" : explanation;
+    note.textContent = record.role === "owner" || !(canEditDisplay || canChangeRole || canEnable || canPassword || canDelete) ? explanation : "";
     article.append(note);
 
     controls.addEventListener("submit", async (event) => {

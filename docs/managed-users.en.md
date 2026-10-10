@@ -13,6 +13,28 @@ This page describes the managed-users preset planned for `0.2.0`. New adopters s
 
 Managed users are an opt-in preset. They do not migrate an old user database, convert legacy backends, or claim SSO, OAuth, or MFA. They also do not make `owner` or `admin` a bypass for host business data: routes still need host-owned checks such as `require_owner(user, record.owner_id)`.
 
+
+## Integrate as a Plugin {#plugin}
+
+ChatLogin does not own the business server or require a separate identity microservice. Install it, select an account backend, and mount the plugin. Login, identity, sessions, CSRF, roles, and optional pages reuse one component. The host still authorizes business records, downloads, jobs, and data ownership.
+
+| Integration | Setting | Reused mechanisms |
+| --- | --- | --- |
+| Packaged pages | `create_managed_auth(..., pages=True)` | Login, account administration, profile templates and all protected APIs |
+| Existing frontend | `create_managed_auth(..., pages=False)` | Session/login/logout and account APIs only; no packaged HTML or asset routes |
+| Existing account database | Existing backend + `FastAPIAuth`/core APIs | Preserve schema and password material while reusing sessions and checks; no automatic account-lifecycle takeover |
+
+```python
+auth = create_managed_auth(
+    instance="mytool",
+    origin="https://app.example.com",
+    pages=False,  # Keep the application's own login and management frontend.
+)
+app.include_router(auth.router)
+```
+
+Consumers need not copy hashing, sessions, CSRF, or authorization implementations. Existing callback/ChatVoice/Dufs adapter accounts are not automatically imported into the managed directory. Other HTTP hosts can compose `ManagedUsers`, `SessionManager`, and security checks directly. Non-Python frontends call the host-mounted same-origin APIs; this is not an OAuth/cross-site SSO SDK.
+
 ## Minimal Mount
 
 An explicit operator creates the first owner before the web application starts. The password value stays in the environment; the command receives the environment-variable **name**, never a password argument:

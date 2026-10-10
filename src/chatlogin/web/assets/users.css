@@ -9,7 +9,7 @@
 .chatlogin-users__identity a, .chatlogin-users__identity button, .chatlogin-users__section-heading button { color: var(--cl-accent, var(--_cl-accent)); }
 .chatlogin-users button { border: 1px solid transparent; background: transparent; color: var(--cl-accent, var(--_cl-accent)); text-decoration: underline; text-underline-offset: .2em; font: inherit; font-weight: 700; cursor: pointer; }
 .chatlogin-users button:disabled { cursor: not-allowed; opacity: .62; }
-.chatlogin-users__status { min-height: 1.5rem; margin: 0; color: var(--cl-error, var(--_cl-error)); line-height: 1.5; }
+.chatlogin-users__status { min-height: 1.5rem; margin: 0; color: var(--cl-muted, var(--_cl-muted)); line-height: 1.5; }
 .chatlogin-users__section { min-width: 0; border-top: 1px solid var(--cl-border, var(--_cl-border)); padding-top: 1.5rem; }
 .chatlogin-users__section h2 { margin: .15rem 0 .9rem; font-size: 1.25rem; }
 .chatlogin-users__overline { margin: 0; color: var(--cl-muted, var(--_cl-muted)); font-size: .76rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }

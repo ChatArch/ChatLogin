@@ -65,6 +65,10 @@ chatlogin.managed_web
 
 这是显式采用的应用账户预设，不迁移固定账号、回调或 ChatVoice 用户库。`in_memory` 仅用于演示/测试且必须在 shutdown 关闭；角色不改变宿主 `require_owner` 的业务语义。完整接口与路由见[托管用户](managed-users.md)。
 
+## 可内嵌托管用户插件
+
+`create_managed_auth(..., pages=True)` 挂载默认页面与接口；`pages=False` 只挂载接口，保留宿主前端。详见[插件集成](managed-users.md#plugin)。
+
 ## 内建可选 ChatVoice 后端
 
 ```text

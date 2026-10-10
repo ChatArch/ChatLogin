@@ -64,7 +64,8 @@ def test_user_ui_honors_trusted_template_overrides_and_whole_renderers(tmp_path)
 
 
 def test_managed_client_binds_private_work_to_abortable_auth_generation_without_storage():
-    script = (Path(__file__).resolve().parents[2] / "src/chatlogin/web/assets/users.js").read_text()
+    from importlib import resources
+    script = (resources.files("chatlogin.web") / "assets/users.js").read_text()
     assert "AbortController" in script
     assert "generation" in script
     assert "credentials: \"same-origin\"" in script

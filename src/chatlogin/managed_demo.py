@@ -116,7 +116,7 @@ def create_managed_demo_app(*, origin: str):
             raise RuntimeError("Managed demo owner bootstrap did not authenticate")
         users.create_user(actor, admin.username, admin.password, role=Role.ADMIN, display_name=admin.display_name)
         users.create_user(actor, member.username, member.password, role=Role.USER, display_name=member.display_name)
-        auth = create_managed_auth(instance=DEMO_INSTANCE, origin=origin, users=users, prefix="/auth")
+        auth = create_managed_auth(instance=DEMO_INSTANCE, origin=origin, users=users, prefix="/auth", allow_insecure_loopback=True)
     except Exception:
         _close_in_memory_users(users)
         raise

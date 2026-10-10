@@ -13,6 +13,28 @@
 
 托管用户是可选预设，不会自动迁移旧用户数据库、不会把旧后端转换为新数据库，也不是 SSO、OAuth 或 MFA。它也不把 `owner`、`admin` 解释为宿主业务数据的通行证；业务路由仍应执行自己的 `require_owner(user, record.owner_id)` 或等价授权。
 
+
+## 作为插件集成 {#plugin}
+
+ChatLogin 不拥有业务应用的服务器，也不要求额外建设登录微服务。应用安装依赖、选择账号后端并挂载插件；登录、身份、会话、CSRF、角色及默认页面由同一组件复用。宿主仍决定业务记录、下载、任务和数据归属的授权。
+
+| 集成方式 | 配置 | 复用机制 |
+| --- | --- | --- |
+| 默认页面 | `create_managed_auth(..., pages=True)` | 登录、用户管理、本人账号模板与全部受保护接口 |
+| 自有前端 | `create_managed_auth(..., pages=False)` | 只注册会话／登录／退出及账号管理接口，不注册包内 HTML 或 assets |
+| 已有账号库 | 现有 backend + `FastAPIAuth`／核心库接口 | 保留数据库和密码材料，复用会话与安全检查；不会自动接管旧库的账号生命周期 |
+
+```python
+auth = create_managed_auth(
+    instance="mytool",
+    origin="https://app.example.com",
+    pages=False,  # 保留应用自己的登录和管理前端
+)
+app.include_router(auth.router)
+```
+
+已有消费者不必复制哈希、会话、CSRF 或权限校验实现；但现有 callback/ChatVoice/Dufs 等适配账户不会被自动迁入托管目录。其他 HTTP 宿主可直接组合 `ManagedUsers`、`SessionManager` 与安全检查；非 Python 前端调用宿主已挂载的同源接口，这不等于 OAuth／跨站 SSO SDK。
+
 ## 最小挂载
 
 先由显式操作员创建该实例的第一个 owner，再启动 Web 应用。密码值只存在于环境中；命令行接收的是环境变量**名称**，不是密码：

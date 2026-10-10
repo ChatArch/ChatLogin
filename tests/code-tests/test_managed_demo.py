@@ -22,7 +22,7 @@ def test_managed_demo_exposes_only_public_synthetic_fixture_metadata():
     from chatlogin import __version__
     from chatlogin.managed_demo import create_managed_demo_app
 
-    with TestClient(create_managed_demo_app(origin="http://managed-demo.test"), base_url="http://managed-demo.test") as client:
+    with TestClient(create_managed_demo_app(origin="https://managed-demo.test"), base_url="https://managed-demo.test") as client:
         assert client.get("/health").json() == {
             "version": __version__,
             "mode": "managed-demo",

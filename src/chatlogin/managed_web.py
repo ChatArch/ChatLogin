@@ -66,6 +66,7 @@ def _managed_cookie(
     cookie: CookieSettings | None,
     *,
     allow_insecure_loopback: bool,
+    namespace: str,
 ) -> CookieSettings:
     if type(allow_insecure_loopback) is not bool:
         raise ValueError("allow_insecure_loopback must be a boolean")
@@ -75,7 +76,7 @@ def _managed_cookie(
     if scheme == "http" and (not allow_insecure_loopback or not loopback):
         raise ValueError("HTTP managed authentication requires explicit loopback convenience")
     if cookie is None:
-        return CookieSettings(name="chatlogin_managed_session", secure=scheme == "https")
+        return CookieSettings(name=f"chatlogin_{namespace}_session", secure=scheme == "https")
     if not isinstance(cookie, CookieSettings):
         raise ValueError("cookie must be CookieSettings")
     if not cookie.secure and (scheme != "http" or not loopback or not allow_insecure_loopback):
@@ -97,6 +98,7 @@ class ManagedAuth(FastAPIAuth):
         origin: str,
         prefix: str = "/auth",
         ui: LoginUI | None = None,
+        pages: bool = True,
         admin_ui: UserAdminUI | None = None,
         profile_ui: UserProfileUI | None = None,
         cookie: CookieSettings | None = None,
@@ -106,6 +108,9 @@ class ManagedAuth(FastAPIAuth):
         login_max_body_bytes: int = 4096,
         managed_max_body_bytes: int = _MANAGED_BODY_MAX,
     ) -> None:
+        if type(pages) is not bool:
+            raise ValueError("pages must be boolean")
+        self.pages = pages
         managed_type = _managed_users_type()
         if not isinstance(users, managed_type):
             raise TypeError("users must be a ManagedUsers service")
@@ -127,17 +132,18 @@ class ManagedAuth(FastAPIAuth):
             users.sessions,
             origin=origin,
             prefix=prefix,
-            ui=login_ui,
+            ui=login_ui if pages else None,
             allow_native=allow_native,
             limiter=limiter,
-            cookie=_managed_cookie(origin, cookie, allow_insecure_loopback=allow_insecure_loopback),
+            cookie=_managed_cookie(origin, cookie, allow_insecure_loopback=allow_insecure_loopback, namespace=users.session_namespace),
             max_body_bytes=login_max_body_bytes,
         )
 
     def _install_routes(self) -> None:
         super()._install_routes()
-        self.router.add_api_route("/users", self.users_page, methods=["GET"], response_class=HTMLResponse)
-        self.router.add_api_route("/profile", self.profile_page, methods=["GET"], response_class=HTMLResponse)
+        if self.pages:
+            self.router.add_api_route("/users", self.users_page, methods=["GET"], response_class=HTMLResponse)
+            self.router.add_api_route("/profile", self.profile_page, methods=["GET"], response_class=HTMLResponse)
         self.router.add_api_route("/api/users", self.users_api, methods=["GET"])
         self.router.add_api_route("/api/users", self.create_user_api, methods=["POST"])
         self.router.add_api_route("/api/users/{user_id}/password", self.reset_user_password_api, methods=["POST"])
@@ -381,8 +387,10 @@ def create_managed_auth(
     *,
     origin: str,
     home=None,
+    users: "ManagedUsers | None" = None,
     prefix: str = "/auth",
     ui: LoginUI | None = None,
+    pages: bool = True,
     admin_ui: UserAdminUI | None = None,
     profile_ui: UserProfileUI | None = None,
     cookie: CookieSettings | None = None,
@@ -399,18 +407,29 @@ def create_managed_auth(
     """
     # Validate the externally supplied security boundary before opening or
     # creating an instance database through the core factory.
+    from .paths import validate_instance
+    instance = validate_instance(instance)
     validated_cookie = _managed_cookie(
         origin,
         cookie,
         allow_insecure_loopback=allow_insecure_loopback,
+        namespace=instance,
     )
     managed_type = _managed_users_type()
-    users = managed_type.for_instance(instance, home=home)
+    if users is None:
+        users = managed_type.for_instance(instance, home=home)
+    elif not isinstance(users, managed_type):
+        raise TypeError("users must be a ManagedUsers service")
+    elif users.session_namespace != instance:
+        raise ValueError("Provided users must use the requested session namespace")
+    elif home is not None:
+        raise ValueError("home cannot override an explicitly provided managed service")
     return ManagedAuth(
         users,
         origin=origin,
         prefix=prefix,
         ui=ui,
+        pages=pages,
         admin_ui=admin_ui,
         profile_ui=profile_ui,
         cookie=validated_cookie,

@@ -602,7 +602,7 @@ class ManagedUsers:
 
     def list_users(self, actor: ManagedPrincipal, offset: int = 0, limit: int = 100) -> list[UserRecord]:
         offset, limit = _validate_paging(offset, limit, self.store.max_users)
-        with self.store._connection() as connection:
+        with self.store._connection(immediate=True) as connection:
             actor_row = self._actor(connection, actor)
             if self._owner(actor_row):
                 rows = connection.execute(
@@ -623,7 +623,7 @@ class ManagedUsers:
 
     def get_user(self, actor: ManagedPrincipal, user_id: str) -> UserRecord:
         user_id = _validate_user_id(user_id)
-        with self.store._connection() as connection:
+        with self.store._connection(immediate=True) as connection:
             actor_row = self._actor(connection, actor)
             target = self._live_target(self.store._user_by_id(connection, user_id))
             if self._same_actor(actor_row, target) or self._owner(actor_row):

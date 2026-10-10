@@ -17,7 +17,7 @@
 
 # ChatLogin
 
-ChatLogin provides reusable login primitives for Python-backed websites. The backend owns identity, credential verification, sessions, CSRF, safe redirects, and role boundaries. The frontend can use the packaged templates, override templates/CSS, or keep the host's original HTML/JavaScript against a headless JSON API.
+ChatLogin is an embeddable authentication plugin/integration component, not a standalone identity microservice. Python-backed hosts mount its routes or call its library APIs to reuse login and managed-account mechanisms. The backend owns identity, credential verification, sessions, CSRF, safe redirects, and role boundaries. The frontend can use the packaged templates, override templates/CSS, or keep the host's original HTML/JavaScript against a headless JSON API.
 
 Documentation: <https://arch.gh.wzhecnu.cn/ChatLogin/en/>
 
