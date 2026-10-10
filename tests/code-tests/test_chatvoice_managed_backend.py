@@ -301,6 +301,83 @@ def test_chatvoice_auth_rechecks_revision_status_and_uses_stored_iterations(tmp_
     assert auth.manager.resolve(issued.token) is None
 
 
+@pytest.mark.parametrize("stored_account", ["alice@example.invalid", "Alice@Example.Invalid"])
+@pytest.mark.parametrize("login_account", ["alice@example.invalid", "ALICE@EXAMPLE.INVALID", "Alice@Example.Invalid"])
+def test_managed_legacy_login_uses_same_account_key_without_rewriting_credentials(
+    tmp_path, stored_account, login_account
+):
+    path = tmp_path / "legacy.sqlite3"
+    _legacy_db(path)
+    with sqlite3.connect(path) as db:
+        db.execute("UPDATE accounts SET account=? WHERE id='usr_alice'", (stored_account,))
+        before = db.execute(
+            "SELECT id, account, password_salt, password_hash FROM accounts ORDER BY id"
+        ).fetchall()
+    store = _store(path)
+    store.initialize()
+    users = cl.ManagedUsers(store, clock=lambda: NOW.timestamp())
+    expected = users.authenticate(login_account, PASSWORD)
+    auth = ChatVoiceAuth(store.connect, store.lock, lambda: NOW.timestamp(), ttl=3600)
+    issued = auth.login(login_account, PASSWORD)
+    assert issued is not None
+    assert issued.session.principal == expected
+    assert auth.resolve_row(issued.token)["user_id"] == "usr_alice"
+    assert auth.login(login_account, "incorrect-synthetic-password") is None
+    with sqlite3.connect(path) as db:
+        after = db.execute(
+            "SELECT id, account, password_salt, password_hash FROM accounts ORDER BY id"
+        ).fetchall()
+    assert after == before
+
+
+def test_unmanaged_legacy_login_retains_exact_account_matching(tmp_path):
+    path = tmp_path / "legacy.sqlite3"
+    _legacy_db(path)
+    with sqlite3.connect(path) as db:
+        db.execute("UPDATE accounts SET account='Alice@Example.Invalid' WHERE id='usr_alice'")
+    store = _store(path)
+    auth = ChatVoiceAuth(store.connect, store.lock, lambda: NOW.timestamp(), ttl=3600)
+    assert auth.login("Alice@Example.Invalid", PASSWORD) is not None
+    assert auth.login("alice@example.invalid", PASSWORD) is None
+
+
+@pytest.mark.parametrize("column", ["enabled", "deleted"])
+def test_managed_case_variant_login_still_rejects_inactive_account(tmp_path, column):
+    path = tmp_path / "legacy.sqlite3"
+    _legacy_db(path)
+    store = _store(path)
+    store.initialize()
+    with sqlite3.connect(path) as db:
+        db.execute("UPDATE accounts SET " + column + "=? WHERE id='usr_alice'", (0 if column == "enabled" else 1,))
+    auth = ChatVoiceAuth(store.connect, store.lock, lambda: NOW.timestamp(), ttl=3600)
+    assert auth.login("ALICE@example.invalid", PASSWORD) is None
+    assert auth.login("alice@example.invalid", PASSWORD) is None
+
+
+def test_managed_login_rejects_ambiguous_account_key_even_without_unique_index(tmp_path):
+    path = tmp_path / "legacy.sqlite3"
+    _legacy_db(path)
+    # A host supplying metadata without the initializer is not allowed to choose
+    # an arbitrary identity if multiple rows share the normalized key.
+    with sqlite3.connect(path) as db:
+        db.execute("ALTER TABLE accounts ADD COLUMN role TEXT DEFAULT 'user'")
+        db.execute("ALTER TABLE accounts ADD COLUMN enabled INTEGER DEFAULT 1")
+        db.execute("ALTER TABLE accounts ADD COLUMN deleted INTEGER DEFAULT 0")
+        db.execute("ALTER TABLE accounts ADD COLUMN auth_revision INTEGER DEFAULT 0")
+        salt = b"ambiguity-salt!!"
+        db.execute(
+            "INSERT INTO accounts (id, account, display_name, password_salt, password_hash, created_at) "
+            "VALUES (?, ?, ?, ?, ?, ?)",
+            ("usr_collision", "ALICE@example.invalid", "Collision", salt, _digest(PASSWORD, salt), NOW.isoformat()),
+        )
+    store = _store(path)
+    auth = ChatVoiceAuth(store.connect, store.lock, lambda: NOW.timestamp(), ttl=3600)
+    assert auth.login("alice@example.invalid", PASSWORD) is None
+    assert auth.login("ALICE@example.invalid", PASSWORD) is None
+    with sqlite3.connect(path) as db:
+        assert db.execute("SELECT COUNT(*) FROM auth_sessions").fetchone()[0] == 0
+
+
 def test_no_import_side_effect_on_host_schema(tmp_path):
     path = tmp_path / "legacy.sqlite3"
     _legacy_db(path)
