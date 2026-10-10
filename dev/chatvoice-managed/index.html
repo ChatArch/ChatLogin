@@ -574,6 +574,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      账号匹配规则
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#owner" class="md-nav__link">
     <span class="md-ellipsis">
       Owner 采用
@@ -583,7 +592,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       权限与信任边界
     </span>
@@ -765,6 +774,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      账号匹配规则
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#owner" class="md-nav__link">
     <span class="md-ellipsis">
       Owner 采用
@@ -774,7 +792,7 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
+  <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
       权限与信任边界
     </span>
@@ -863,6 +881,8 @@
 </tbody>
 </table>
 <p>schema 初始化是显式、幂等、additive 的：为旧账号补充 role/status/revision 等管理列，默认旧账号为 enabled <code>USER</code>，并建立唯一有效 owner 约束。它不删除旧行、不复制账号到第二个用户库，也不改写业务归属。</p>
+<h2 id="_2">账号匹配规则<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>启用 managed schema 后，<code>ChatVoiceAuth</code> 与 <code>ManagedUsers</code> 共用 <code>lower(account)</code> 账号键：ASCII 账号大小写变体可登录同一既有身份，原 <code>account</code> 字符串、ID、盐和密码哈希不改写。规范化键冲突时拒绝认证，不能选择任意匹配行；schema 初始化也会拒绝冲突，并在原表建立规范化唯一性约束。尚未启用管理元数据的旧库继续采用原来的精确账号匹配。</p>
 <h2 id="owner">Owner 采用<a class="headerlink" href="#owner" title="Permanent link">&para;</a></h2>
 <p><code>adopt_owner(store, exact_existing_account_or_id) -&gt; UserRecord</code> 只用于一次性采用精确既有账号或 ID：</p>
 <ul>
@@ -872,7 +892,7 @@
 <li>其他既有账号保持 <code>USER</code> / enabled，除非后续由 owner/admin 通过管理 API 修改。</li>
 </ul>
 <p>示例中的 <code>admin@example.invalid</code> 是合成占位账号。生产选择由宿主的受信任 Python setup 执行，不在公共文档、命令历史或日志中写入真实账号、用户 ID、哈希或 token。</p>
-<h2 id="_2">权限与信任边界<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<h2 id="_3">权限与信任边界<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
