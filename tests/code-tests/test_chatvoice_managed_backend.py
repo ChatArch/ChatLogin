@@ -144,6 +144,48 @@ def test_explicit_owner_adoption_and_shared_policy_matrix(tmp_path):
     assert users.authenticate("carol@example.invalid", PASSWORD) is None
 
 
+def test_owner_adoption_rejects_selector_matching_id_and_other_account(tmp_path):
+    path = tmp_path / "legacy.sqlite3"
+    _legacy_db(path)
+    with sqlite3.connect(path) as db:
+        db.execute(
+            "UPDATE accounts SET id=? WHERE id=?",
+            ("bob@example.invalid", "usr_alice"),
+        )
+        db.execute(
+            "INSERT INTO auth_sessions VALUES (?, ?, ?, ?, ?)",
+            ("a" * 64, "bob@example.invalid", "s" * 32, NOW.isoformat(), (NOW + timedelta(days=1)).isoformat()),
+        )
+        before_accounts = db.execute(
+            "SELECT id, account, display_name, password_salt, password_hash, created_at FROM accounts ORDER BY account"
+        ).fetchall()
+        before_sessions = db.execute("SELECT * FROM auth_sessions ORDER BY token_hash").fetchall()
+
+    store = _store(path)
+    with pytest.raises(cl.ManagedConflictError):
+        adopt_owner(store, "bob@example.invalid")
+
+    with sqlite3.connect(path) as db:
+        after_accounts = db.execute(
+            "SELECT id, account, display_name, password_salt, password_hash, created_at FROM accounts ORDER BY account"
+        ).fetchall()
+        after_sessions = db.execute("SELECT * FROM auth_sessions ORDER BY token_hash").fetchall()
+    assert after_accounts == before_accounts
+    assert after_sessions == before_sessions
+
+
+def test_owner_adoption_accepts_same_account_by_id_or_account(tmp_path):
+    path = tmp_path / "legacy.sqlite3"
+    _legacy_db(path)
+    with sqlite3.connect(path) as db:
+        db.execute("UPDATE accounts SET id=account WHERE account='alice@example.invalid'")
+        db.commit()
+
+    store = _store(path)
+    owner = adopt_owner(store, "alice@example.invalid")
+    assert owner.user_id == "alice@example.invalid"
+
+
 def test_owner_adoption_rolls_back_if_post_update_fails(tmp_path, monkeypatch):
     path = tmp_path / "legacy.sqlite3"
     _legacy_db(path)
@@ -163,6 +205,46 @@ def test_owner_adoption_rolls_back_if_post_update_fails(tmp_path, monkeypatch):
         columns = {row[1] for row in db.execute("PRAGMA table_info(accounts)").fetchall()}
         if "role" in columns:
             assert db.execute("SELECT count(*) FROM accounts WHERE role='owner'").fetchone()[0] == 0
+
+
+def test_initializer_rejects_lower_account_collisions_and_rolls_back(tmp_path):
+    path = tmp_path / "legacy.sqlite3"
+    _legacy_db(path)
+    with sqlite3.connect(path) as db:
+        salt = b"collision-salt!!"
+        db.execute(
+            "INSERT INTO accounts VALUES (?, ?, ?, ?, ?, ?)",
+            ("usr_collision", "ALICE@example.invalid", "Collision", salt, _digest(PASSWORD, salt), NOW.isoformat()),
+        )
+        before = db.execute(
+            "SELECT id, account, display_name, password_salt, password_hash, created_at FROM accounts ORDER BY id"
+        ).fetchall()
+
+    store = _store(path)
+    with pytest.raises(cl.ManagedConflictError):
+        store.initialize()
+
+    with sqlite3.connect(path) as db:
+        after = db.execute(
+            "SELECT id, account, display_name, password_salt, password_hash, created_at FROM accounts ORDER BY id"
+        ).fetchall()
+        columns = {row[1] for row in db.execute("PRAGMA table_info(accounts)").fetchall()}
+    assert after == before
+    assert "role" not in columns
+
+
+def test_initializer_unique_index_blocks_new_case_collisions(tmp_path):
+    path = tmp_path / "legacy.sqlite3"
+    _legacy_db(path)
+    _store(path).initialize()
+    with sqlite3.connect(path) as db:
+        salt = b"new-collision!!"
+        with pytest.raises(sqlite3.IntegrityError):
+            db.execute(
+                "INSERT INTO accounts (id, account, display_name, password_salt, password_hash, created_at) "
+                "VALUES (?, ?, ?, ?, ?, ?)",
+                ("usr_new_collision", "ALICE@example.invalid", "Collision", salt, _digest(PASSWORD, salt), NOW.isoformat()),
+            )
 
 
 def test_revision_bound_sessions_and_password_reset_invalidate_legacy_rows(tmp_path):

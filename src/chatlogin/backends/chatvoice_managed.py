@@ -196,6 +196,14 @@ class ChatVoiceManagedStore(SQLiteUserStore):
                     "ALTER TABLE accounts ADD COLUMN password_iterations INTEGER NOT NULL DEFAULT "
                     f"{PASSWORD_ITERATIONS}"
                 )
+            if db.execute(
+                "SELECT lower(account) FROM accounts GROUP BY lower(account) HAVING count(*) > 1 LIMIT 1"
+            ).fetchone():
+                raise ManagedConflictError("Legacy account directory contains ambiguous account names")
+            db.execute(
+                "CREATE UNIQUE INDEX IF NOT EXISTS chatvoice_accounts_username_key "
+                "ON accounts(lower(account))"
+            )
             session_columns = {row[1] for row in db.execute("PRAGMA table_info(auth_sessions)").fetchall()}
             if "auth_revision" not in session_columns:
                 db.execute("ALTER TABLE auth_sessions ADD COLUMN auth_revision INTEGER NOT NULL DEFAULT 0")
@@ -220,22 +228,28 @@ def adopt_owner(store: ChatVoiceManagedStore, existing_account_or_id: str) -> Us
         if connection.execute("SELECT 1 FROM accounts WHERE role=?", (Role.OWNER.value,)).fetchone():
             raise ManagedConflictError("A managed owner already exists")
         if account_key is None:
-            row = connection.execute("SELECT id FROM accounts WHERE id=?", (existing_account_or_id,)).fetchone()
+            rows = connection.execute(
+                "SELECT DISTINCT id FROM accounts WHERE id=?",
+                (existing_account_or_id,),
+            ).fetchall()
         else:
-            row = connection.execute(
-                "SELECT id FROM accounts WHERE id=? OR lower(account)=?",
+            rows = connection.execute(
+                "SELECT DISTINCT id FROM accounts WHERE id=? OR lower(account)=? ORDER BY id",
                 (existing_account_or_id, account_key),
-            ).fetchone()
-        if row is None:
+            ).fetchall()
+        if not rows:
             raise ManagedNotFoundError()
+        if len(rows) > 1:
+            raise ManagedConflictError("Owner adoption selector matches multiple accounts")
+        user_id = rows[0]["id"] if isinstance(rows[0], sqlite3.Row) else rows[0][0]
         now = _iso(store.clock())
         connection.execute(
             "UPDATE accounts SET role=?, enabled=1, deleted=0, auth_revision=auth_revision+1, updated_at=? "
             "WHERE id=?",
-            (Role.OWNER.value, now, row["id"] if isinstance(row, sqlite3.Row) else row[0]),
+            (Role.OWNER.value, now, user_id),
         )
-        connection.execute("DELETE FROM auth_sessions WHERE user_id=?", (row["id"] if isinstance(row, sqlite3.Row) else row[0],))
-        return store._record(store._user_by_id(connection, row["id"] if isinstance(row, sqlite3.Row) else row[0]))
+        connection.execute("DELETE FROM auth_sessions WHERE user_id=?", (user_id,))
+        return store._record(store._user_by_id(connection, user_id))
 
 
 __all__ = ["ChatVoiceManagedStore", "adopt_owner", "initialize_chatvoice_managed_schema"]
