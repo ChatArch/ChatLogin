@@ -73,7 +73,6 @@ _MANAGED_SCHEMA_STATEMENTS = (
     BEGIN
         SELECT CASE WHEN NEW.account_instance != 'chatvoice' THEN RAISE(ABORT, 'invalid account instance') END;
         UPDATE accounts SET
-            account = NEW.username_key,
             display_name = NEW.display_name,
             role = NEW.role,
             enabled = NEW.enabled,
@@ -211,6 +210,16 @@ class ChatVoiceManagedStore(SQLiteUserStore):
                 "CREATE UNIQUE INDEX IF NOT EXISTS chatvoice_accounts_one_owner "
                 "ON accounts(role) WHERE role='owner' AND deleted=0"
             )
+            # Replace only the historical package-owned trigger that rewrote
+            # immutable legacy account text. DDL participates in the caller's
+            # transaction; current triggers need no destructive refresh.
+            old_trigger = db.execute(
+                "SELECT sql FROM sqlite_master WHERE type='trigger' AND name=?",
+                ("chatlogin_managed_users_update",),
+            ).fetchone()
+            if (old_trigger and old_trigger[0]
+                    and "account=new.username_key" in "".join(old_trigger[0].split()).lower()):
+                db.execute("DROP TRIGGER chatlogin_managed_users_update")
             for statement in _MANAGED_SCHEMA_STATEMENTS:
                 db.execute(statement)
 

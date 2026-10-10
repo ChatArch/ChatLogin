@@ -39,7 +39,7 @@ Schema initialization is explicit, idempotent, and additive. It adds management 
 
 ## Account Matching
 
-After managed schema adoption, `ChatVoiceAuth` and `ManagedUsers` share the `lower(account)` key: ASCII case variants authenticate the same existing identity without rewriting the original account text, ID, salt, or password hash. Ambiguous normalized keys are rejected rather than selecting an arbitrary row; schema initialization also rejects collisions and adds a normalized unique constraint on the authoritative table. Legacy databases without management metadata retain exact account matching.
+After managed schema adoption, `ChatVoiceAuth` and `ManagedUsers` share the `lower(account)` key: ASCII case variants authenticate the same existing identity without rewriting the original account text, ID, salt, or password hash. Ambiguous normalized keys are rejected rather than selecting an arbitrary row; schema initialization also rejects collisions and adds a normalized unique constraint on the authoritative table. Legacy databases without management metadata retain exact account matching. Profile, role, status, password and deletion operations also preserve the original account text. Initialization replaces the historical package-owned account-rewriting update trigger within the caller's transaction without modifying existing account rows; an already-corrected trigger is not repeatedly replaced.
 
 ## Owner Adoption
 
