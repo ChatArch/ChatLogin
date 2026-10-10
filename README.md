@@ -25,6 +25,7 @@ ChatLogin 是面向应用的可内嵌认证插件／集成组件，而不是独�
 | --- | --- |
 | FastAPI 快速接入 | [完整可运行应用](docs/quickstart.md) |
 | 应用自管 owner/admin/user | [托管用户](docs/managed-users.md) |
+| 既有 ChatVoice 账号库接入管理 | [ChatVoice legacy schema 集成](docs/chatvoice-managed.md) |
 | 默认 UI、模板覆盖与 headless | [能力地图](docs/capability-map.md) |
 | CLI 版本和命令树 | [CLI 树](docs/cli-tree.md) |
 
@@ -62,7 +63,7 @@ chatlogin serve --host 127.0.0.1 --port 8765 --origin https://login.example.com
 
 需要应用内 owner/admin/user、登录页、本人资料和用户管理时，新消费者显式采用 `ChatLogin>=0.2.0,<0.3.0`，并使用 `ManagedUsers` 与 `create_managed_auth`。第一个 owner 必须由操作员执行 `chatlogin users bootstrap USERNAME --instance NAME --password-env KEY` 创建；KEY 是环境变量名，绝不把密码放进 argv。它只允许空实例首次初始化，没有迁移、`--force` 或默认生产凭据。见[托管用户指南](docs/managed-users.md)。
 
-固定账号、同步/异步回调与 ChatVoice 兼容 adapter 保持原有账户管理边界；既有 ChatVoice 消费方的 `<0.2` 依赖不受影响，主动采用新预设时才升级。
+固定账号、同步/异步回调与 ChatVoice 兼容 adapter 保持原有账户管理边界；既有 ChatVoice 消费方的 `<0.2` 依赖不受影响，主动采用新预设时才升级。ChatVoice legacy schema 托管集成仍处于未发布预览；稳定安装只在匹配 provider/consumer 发布后包含该能力，本预览应使用已审查的成对候选 wheel。
 
 ## 选择认证入口
 
@@ -72,6 +73,7 @@ chatlogin serve --host 127.0.0.1 --port 8765 --origin https://login.example.com
 | 其他宿主用户库 | `CallbackBackend(authenticate)` + 宿主 `SessionStore` | 宿主定义密码验证、schema 和会话映射 |
 | 异步上游校验 | `AsyncCallbackBackend(authenticate)` | 回调在事件循环中 `await`；非法输入不调用回调，非法结果失败关闭 |
 | 已有 ChatVoice 账户/会话 schema | `chatlogin.backends.ChatVoiceAuth` | 现成兼容后端；固定 `chatvoice` 命名空间，不建表或迁移 |
+| 已有 ChatVoice schema + 用户管理 | `chatlogin.backends.ChatVoiceManagedStore` | 显式初始化 additive schema，并一次性采用精确既有 owner；保留旧 ID、哈希与业务归属 |
 | 应用托管账户目录 | `ManagedUsers` + `create_managed_auth` | 每实例 owner/admin/user 与管理 UI/API；宿主仍负责业务数据授权 |
 
 `ChatVoiceAuth` 随核心包提供，按需导入；不依赖 ChatVoice 包或 `web` extra，不是任意 SQLite 账户系统的通用 ORM。默认 UI、宿主覆盖和 headless 三种模式与后端选择相互独立。账户创建、业务 owner 权限与宿主 HTTP 契约仍由网站负责。见 [接入与安全](docs/integration.md)。

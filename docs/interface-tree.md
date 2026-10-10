@@ -89,6 +89,18 @@ chatlogin.backends.chatvoice
 
 核心包即可导入，两类也从 `chatlogin.backends` 导出。固定 ChatVoice schema / `chatvoice` 命名空间，只产生 USER 身份；不建表、不迁移、不负责账号创建、HTTP 或 owner 权限。接入与三种 UI 模式见 [接入文档](integration.md)。
 
+## ChatVoice 托管 facade（未发布预览）
+
+```text
+chatlogin.backends
+├── ChatVoiceManagedStore(connect, lock, clock, *, max_users=10000, max_sessions=10000)
+│   └── initialize()
+├── initialize_chatvoice_managed_schema(connection) -> None
+└── adopt_owner(store, exact_existing_account_or_id) -> UserRecord
+```
+
+该 facade 面向受信任同进程 ChatVoice 宿主，复用原 `accounts` 与 `auth_sessions`。schema 初始化是显式、幂等、additive 的；owner 采用只接受精确既有账号或 ID，已有 owner 时失败。完整边界见 [ChatVoice legacy schema 集成](chatvoice-managed.md)。
+
 ## FastAPI 适配层
 
 安装 `ChatLogin[web]` 后可用。`FastAPIAuth` 可接收同步 `CredentialBackend` 或异步 `AsyncCredentialBackend`；同步调用会在线程池执行，异步调用会被 await。

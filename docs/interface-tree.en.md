@@ -89,6 +89,18 @@ chatlogin.backends.chatvoice
 
 Available in the core package, also exported from `chatlogin.backends`. Fixed ChatVoice schema / `chatvoice` namespace, USER identities only; no table creation, migration, account management, HTTP or owner policy. See [Integration](integration.en.md) for all three UI modes.
 
+## ChatVoice Managed Facade (Unreleased Preview)
+
+```text
+chatlogin.backends
+├── ChatVoiceManagedStore(connect, lock, clock, *, max_users=10000, max_sessions=10000)
+│   └── initialize()
+├── initialize_chatvoice_managed_schema(connection) -> None
+└── adopt_owner(store, exact_existing_account_or_id) -> UserRecord
+```
+
+This facade is for a trusted same-process ChatVoice host and reuses the original `accounts` and `auth_sessions` tables. Schema initialization is explicit, idempotent, and additive. Owner adoption accepts only an exact existing account or id and fails when an owner already exists. See [ChatVoice legacy schema integration](chatvoice-managed.en.md) for boundaries.
+
 ## FastAPI Adapter
 
 Available with `ChatLogin[web]`. `FastAPIAuth` accepts a sync `CredentialBackend` or an async `AsyncCredentialBackend`; sync calls run in the threadpool and async calls are awaited.

@@ -13,6 +13,7 @@ import sqlite3
 
 from ..credentials import CallbackBackend, verify_pbkdf2
 from ..identity import Principal, Role
+from ..managed import ManagedPermissionError, ManagedPrincipal
 from ..security import require_csrf
 from ..sessions import Session, SessionManager, StoreFull
 
@@ -24,8 +25,29 @@ def _iso(timestamp: float) -> str:
     return datetime.fromtimestamp(timestamp, timezone.utc).isoformat()
 
 
+def _has_column(row, name: str) -> bool:
+    return hasattr(row, "keys") and name in row.keys()
+
+
 def _principal(row) -> Principal:
-    return Principal(row["user_id"], row["display_name"], Role.USER)
+    role = Role(row["role"]) if _has_column(row, "role") else Role.USER
+    if _has_column(row, "auth_revision"):
+        return ManagedPrincipal(row["user_id"], row["display_name"], role, int(row["auth_revision"]))
+    if _has_column(row, "account_auth_revision"):
+        return ManagedPrincipal(row["user_id"], row["display_name"], role, int(row["account_auth_revision"]))
+    return Principal(row["user_id"], row["display_name"], role)
+
+
+def _table_columns(db: sqlite3.Connection, table: str) -> set[str]:
+    return {row[1] for row in db.execute(f"PRAGMA table_info({table})").fetchall()}
+
+
+def _valid_iterations(value) -> int:
+    try:
+        iterations = int(value)
+    except (TypeError, ValueError):
+        return PASSWORD_ITERATIONS
+    return iterations if 1 <= iterations <= 10_000_000 else PASSWORD_ITERATIONS
 
 
 class ChatVoiceSessionStore:
@@ -52,11 +74,27 @@ class ChatVoiceSessionStore:
 
     def put(self, instance, digest, session, *, previous_digest=None):
         self._namespace(instance)
-        if not isinstance(session, Session) or session.principal.role is not Role.USER:
-            raise ValueError("ChatVoice sessions require a validated ordinary user")
+        if not isinstance(session, Session):
+            raise ValueError("ChatVoice sessions require an ordinary user or verified managed user")
         with self.lock(), closing(self.connect()) as db, db:
             # SQLite also serializes capacity/replacement across processes.
             db.execute("BEGIN IMMEDIATE")
+            account_columns = _table_columns(db, "accounts")
+            metadata = {"role", "enabled", "deleted", "auth_revision"}.issubset(account_columns)
+            if metadata:
+                if not isinstance(session.principal, ManagedPrincipal):
+                    raise ManagedPermissionError("ChatVoice managed sessions require revision-bound principals")
+                live = db.execute(
+                    "SELECT id AS user_id, display_name, role, enabled, deleted, auth_revision "
+                    "FROM accounts WHERE id = ?",
+                    (session.principal.user_id,),
+                ).fetchone()
+                if (live is None or bool(live["deleted"]) or not bool(live["enabled"])
+                        or live["role"] != session.principal.role.value
+                        or int(live["auth_revision"]) != session.principal.auth_revision):
+                    raise ManagedPermissionError("ChatVoice session principal is no longer valid")
+            elif session.principal.role is not Role.USER:
+                raise ValueError("ChatVoice legacy sessions require an ordinary user")
             if db.execute("SELECT 1 FROM auth_sessions WHERE token_hash = ?", (digest,)).fetchone():
                 raise ValueError("Session digest already exists")
             replaces = db.execute("SELECT 1 FROM auth_sessions WHERE token_hash = ?", (previous_digest,)).fetchone()
@@ -64,17 +102,47 @@ class ChatVoiceSessionStore:
                 raise StoreFull("Session capacity exhausted")
             if replaces:
                 db.execute("DELETE FROM auth_sessions WHERE token_hash = ?", (previous_digest,))
-            db.execute("INSERT INTO auth_sessions (token_hash, user_id, csrf_token, created_at, expires_at) VALUES (?, ?, ?, ?, ?)",
-                       (digest, session.principal.user_id, session.csrf_token,
-                        _iso(self.clock()), _iso(session.expires_at)))
+            if metadata and "auth_revision" in _table_columns(db, "auth_sessions"):
+                db.execute(
+                    "INSERT INTO auth_sessions (token_hash, user_id, csrf_token, created_at, expires_at, auth_revision) "
+                    "VALUES (?, ?, ?, ?, ?, ?)",
+                    (digest, session.principal.user_id, session.csrf_token,
+                     _iso(self.clock()), _iso(session.expires_at), int(session.principal.auth_revision)),
+                )
+            else:
+                db.execute("INSERT INTO auth_sessions (token_hash, user_id, csrf_token, created_at, expires_at) VALUES (?, ?, ?, ?, ?)",
+                           (digest, session.principal.user_id, session.csrf_token,
+                            _iso(self.clock()), _iso(session.expires_at)))
 
     def read_row(self, instance, digest):
         self._namespace(instance)
         with self.lock(), closing(self.connect()) as db:
-            return db.execute("""SELECT s.token_hash, s.user_id, s.csrf_token, s.expires_at,
-                                 a.account, a.display_name FROM auth_sessions s
-                                 JOIN accounts a ON a.id = s.user_id WHERE s.token_hash = ?""",
-                              (digest,)).fetchone()
+            account_columns = _table_columns(db, "accounts")
+            session_columns = _table_columns(db, "auth_sessions")
+            account_select = ["a.account", "a.display_name"]
+            if {"role", "enabled", "deleted", "auth_revision"}.issubset(account_columns):
+                account_select.extend([
+                    "a.role", "a.enabled", "a.deleted", "a.auth_revision AS account_auth_revision",
+                    "a.auth_revision",
+                ])
+            session_select = ["s.token_hash", "s.user_id", "s.csrf_token", "s.expires_at"]
+            if "auth_revision" in session_columns:
+                session_select.append("s.auth_revision AS session_auth_revision")
+            row = db.execute(
+                f"SELECT {', '.join(session_select + account_select)} FROM auth_sessions s "
+                "JOIN accounts a ON a.id = s.user_id WHERE s.token_hash = ?",
+                (digest,),
+            ).fetchone()
+        if row is None:
+            return None
+        if _has_column(row, "deleted") and (bool(row["deleted"]) or not bool(row["enabled"])):
+            self.delete(instance, digest)
+            return None
+        if (_has_column(row, "account_auth_revision") and _has_column(row, "session_auth_revision")
+                and int(row["account_auth_revision"]) != int(row["session_auth_revision"])):
+            self.delete(instance, digest)
+            return None
+        return row
 
     @staticmethod
     def session_from_row(row):
@@ -118,11 +186,26 @@ class ChatVoiceAuth:
 
     def _authenticate(self, account, password):
         with self.store.lock(), closing(self.store.connect()) as db:
-            row = db.execute("SELECT id AS user_id, display_name, password_salt, password_hash FROM accounts WHERE account = ?", (account,)).fetchone()
+            columns = _table_columns(db, "accounts")
+            extra = ""
+            if {"role", "enabled", "deleted", "auth_revision"}.issubset(columns):
+                extra = ", role, enabled, deleted, auth_revision"
+            if "password_iterations" in columns:
+                extra += ", password_iterations"
+            row = db.execute(
+                "SELECT id AS user_id, display_name, password_salt, password_hash" + extra
+                + " FROM accounts WHERE account = ?",
+                (account,),
+            ).fetchone()
         # Missing users still incur the same legacy PBKDF2 work; no dummy account.
         salt, digest = (row["password_salt"], row["password_hash"]) if row else (b"\0" * 16, b"\0" * 32)
-        valid = verify_pbkdf2(password, salt, digest, iterations=PASSWORD_ITERATIONS)
-        return _principal(row) if row and valid else None
+        iterations = _valid_iterations(row["password_iterations"]) if row and _has_column(row, "password_iterations") else PASSWORD_ITERATIONS
+        valid = verify_pbkdf2(password, salt, digest, iterations=iterations)
+        if not row or not valid:
+            return None
+        if _has_column(row, "deleted") and (bool(row["deleted"]) or not bool(row["enabled"])):
+            return None
+        return _principal(row)
 
     def login(self, account, password):
         principal = self.backend.authenticate(account, password)

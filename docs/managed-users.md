@@ -10,8 +10,11 @@
 | 账号已在宿主或上游系统 | `CallbackBackend` / `AsyncCallbackBackend` | 宿主继续管理账户、密码材料与生命周期 |
 | 少量显式固定账号 | `PasswordBackend` | 账户条目由宿主配置 |
 | 保持既有 ChatVoice schema | `ChatVoiceAuth` | 兼容层不创建或迁移账户表 |
+| 保持既有 ChatVoice schema 并接入用户管理 | `ChatVoiceManagedStore` + `ManagedUsers` | 显式 additive 初始化与一次性 owner 采用；宿主继续拥有连接、锁、配置与业务 ACL |
 
 托管用户是可选预设，不会自动迁移旧用户数据库、不会把旧后端转换为新数据库，也不是 SSO、OAuth 或 MFA。它也不把 `owner`、`admin` 解释为宿主业务数据的通行证；业务路由仍应执行自己的 `require_owner(user, record.owner_id)` 或等价授权。
+
+已有 ChatVoice `accounts` / `auth_sessions` 库的保留式接入见 [ChatVoice legacy schema 集成](chatvoice-managed.md)。该路径不是公开注册或隐式导入；它由受信任同进程宿主显式执行 schema 初始化和 owner 采用。
 
 
 ## 作为插件集成 {#plugin}

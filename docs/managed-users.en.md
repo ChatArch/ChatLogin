@@ -10,8 +10,11 @@ This page describes the managed-users preset planned for `0.2.0`. New adopters s
 | Accounts already belong to a host or upstream service | `CallbackBackend` / `AsyncCallbackBackend` | The host keeps accounts, password material, and lifecycle |
 | A few explicit fixed accounts | `PasswordBackend` | The host configures account entries |
 | An existing ChatVoice schema | `ChatVoiceAuth` | The compatibility layer does not create or migrate account tables |
+| Existing ChatVoice schema with user management | `ChatVoiceManagedStore` + `ManagedUsers` | Explicit additive initialization and one-time owner adoption; the host still owns connection, lock, configuration, and business ACLs |
 
 Managed users are an opt-in preset. They do not migrate an old user database, convert legacy backends, or claim SSO, OAuth, or MFA. They also do not make `owner` or `admin` a bypass for host business data: routes still need host-owned checks such as `require_owner(user, record.owner_id)`.
+
+For preservation-first integration with an existing ChatVoice `accounts` / `auth_sessions` database, see [ChatVoice legacy schema integration](chatvoice-managed.en.md). That path is not public registration or implicit import; a trusted same-process host explicitly initializes schema and adopts one owner.
 
 
 ## Integrate as a Plugin {#plugin}

@@ -3,6 +3,7 @@
 ## Unreleased — 0.2.0（计划）
 
 - 新增应用显式采用的 managed users 接入面：首个 owner 的环境变量 bootstrap、`ManagedUsers` / `create_managed_auth` 指引、owner/admin/user 角色矩阵，以及默认登录、用户管理和本人资料路由说明。
+- 新增未发布的 ChatVoice legacy schema 托管用户 facade 文档：`ChatVoiceManagedStore`、`initialize_chatvoice_managed_schema` 与一次性 `adopt_owner`，用于在保留原 `accounts` / `auth_sessions`、稳定用户 ID、密码材料和业务 `owner_id` 的前提下接入用户管理。
 - `chatlogin serve --managed-demo` 预留独立 in-memory 三角色公开合成演示；默认 `serve` 保持原四后端演示。该功能不迁移旧用户库，也不声明 SSO、OAuth 或 MFA。
 - 同步中英文 README、MkDocs、CLI 树、能力地图、接口树、快速接入与演示文档；新消费者应显式采用 `ChatLogin>=0.2.0,<0.3.0`，既有 ChatVoice `<0.2` 依赖不受影响。
 

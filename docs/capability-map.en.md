@@ -6,6 +6,7 @@
 | --- | --- | --- |
 | Packaged demo | Implemented (`demo` extra) | `chatlogin serve`, four backend experiences, a template playground, and copyable integration examples; no production data |
 | Managed-users preset | `0.2.0` | `ManagedUsers`, per-instance owner/admin/user, and default login/management/profile UI/API; explicit adoption only, with no old-store migration |
+| ChatVoice legacy managed facade | Unreleased preview | Additive initialization over existing `accounts` / `auth_sessions`, one-time owner adoption, and managed-users CRUD; requires a matching candidate provider/consumer pair |
 | Identity and authorization | Implemented | `Principal`, `Role`, 401/403, `require_role`, and `require_owner`; admin does not bypass ownership |
 | Credential backends | Implemented | `PasswordBackend` supports one or more explicit accounts; `CallbackBackend` integrates host user stores; `AsyncCallbackBackend` awaits async upstream verification |
 | ChatVoice compatibility backend | Implemented (core, opt-in import) | `ChatVoiceAuth` / `ChatVoiceSessionStore`; existing ChatVoice schema, fixed namespace and USER only; no schema migration or ChatVoice/web dependency |

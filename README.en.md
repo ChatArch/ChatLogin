@@ -25,6 +25,7 @@ Documentation: <https://arch.gh.wzhecnu.cn/ChatLogin/en/>
 | --- | --- |
 | FastAPI quick start | [Interface Tree](docs/interface-tree.en.md) |
 | Application-owned owner/admin/user directory | [Managed Users](docs/managed-users.en.md) |
+| Existing ChatVoice account database with management | [ChatVoice legacy schema integration](docs/chatvoice-managed.en.md) |
 | Default UI, overrides, and headless mode | [Capability Map](docs/capability-map.en.md) |
 | CLI version and command tree | `docs/cli-tree.en.md` |
 
@@ -62,7 +63,7 @@ The core package does not require adopting the packaged page. An existing static
 
 For an application-owned owner/admin/user directory, login, profile, and user management, new consumers explicitly adopt `ChatLogin>=0.2.0,<0.3.0` with `ManagedUsers` and `create_managed_auth`. An operator creates the first owner with `chatlogin users bootstrap USERNAME --instance NAME --password-env KEY`; KEY is an environment-variable name, never a password in argv. Bootstrap works only for an empty instance and has no migration, `--force`, or default production credential. See [Managed Users](docs/managed-users.en.md).
 
-Fixed accounts, synchronous/asynchronous callbacks, and the ChatVoice compatibility adapter retain their existing account-management boundary. A legacy ChatVoice consumer's `<0.2` dependency remains unaffected until it deliberately adopts the new preset.
+Fixed accounts, synchronous/asynchronous callbacks, and the ChatVoice compatibility adapter retain their existing account-management boundary. A legacy ChatVoice consumer's `<0.2` dependency remains unaffected until it deliberately adopts the new preset. The ChatVoice legacy-schema managed integration is an unreleased preview; stable installation includes it only after a matching provider/consumer release. For this preview, use the reviewed paired candidate wheels.
 
 ## Choose an Authentication Entry Point
 
@@ -72,6 +73,7 @@ Fixed accounts, synchronous/asynchronous callbacks, and the ChatVoice compatibil
 | Other host user database | `CallbackBackend(authenticate)` + host `SessionStore` | Host defines password verification, schema and session mapping |
 | Async upstream verification | `AsyncCallbackBackend(authenticate)` | Callback is awaited in the event loop; invalid input is not called and invalid results fail closed |
 | Existing ChatVoice account/session schema | `chatlogin.backends.ChatVoiceAuth` | Ready-made compatibility backend; fixed `chatvoice` namespace, no table creation or migration |
+| Existing ChatVoice schema plus user management | `chatlogin.backends.ChatVoiceManagedStore` | Explicit additive schema initialization and one-time exact-owner adoption; preserves IDs, hashes, and business ownership |
 | Application-managed account directory | `ManagedUsers` + `create_managed_auth` | Per-instance owner/admin/user and management UI/API; the host still authorizes business data |
 
 `ChatVoiceAuth` ships in the core package for opt-in import; it requires neither ChatVoice nor the `web` extra. It is not a generic ORM for arbitrary SQLite account systems. Default UI, host overrides and headless mode remain independent of backend selection. Account creation, business owner permissions and host HTTP contracts remain host responsibilities. See [Integration and Security](docs/integration.en.md).
