@@ -5,6 +5,8 @@
 | Capability | Status | Boundary |
 | --- | --- | --- |
 | Packaged demo | Implemented (`demo` extra) | `chatlogin serve`, four backend experiences, a template playground, and copyable integration examples; no production data |
+| Managed-users preset | `0.2.0` | `ManagedUsers`, per-instance owner/admin/user, and default login/management/profile UI/API; explicit adoption only, with no old-store migration |
+| ChatVoice legacy managed facade | Unreleased preview | Additive initialization over existing `accounts` / `auth_sessions`, one-time owner adoption, and managed-users CRUD; requires a matching candidate provider/consumer pair |
 | Identity and authorization | Implemented | `Principal`, `Role`, 401/403, `require_role`, and `require_owner`; admin does not bypass ownership |
 | Credential backends | Implemented | `PasswordBackend` supports one or more explicit accounts; `CallbackBackend` integrates host user stores; `AsyncCallbackBackend` awaits async upstream verification |
 | ChatVoice compatibility backend | Implemented (core, opt-in import) | `ChatVoiceAuth` / `ChatVoiceSessionStore`; existing ChatVoice schema, fixed namespace and USER only; no schema migration or ChatVoice/web dependency |
@@ -19,15 +21,16 @@
 
 ## Integration Choices
 
-1. **New site:** start with default UI plus `PasswordBackend` or a host callback.
-2. **Custom visual identity:** keep the FastAPI adapter and replace template directories, template name, or renderer through `LoginUI`.
-3. **Existing ChatVoice schema:** select `ChatVoiceAuth`; keep host HTTP/frontend or pass its `backend` / `manager` to the generic FastAPI adapter. Default UI, overrides and headless are all supported.
+1. **New site with application-managed accounts:** explicitly adopt `ManagedUsers` + `create_managed_auth`, then let an operator bootstrap the first owner.
+2. **New site whose accounts remain host-owned:** start with default UI plus `PasswordBackend` or a host callback.
+3. **Custom visual identity:** keep the FastAPI adapter and replace template directories, template name, or renderer through `LoginUI`.
+4. **Existing ChatVoice schema:** select `ChatVoiceAuth`; keep host HTTP/frontend or pass its `backend` / `manager` to the generic FastAPI adapter. Default UI, overrides and headless are all supported.
 
 Backend selection: fixed/multiple accounts use `PasswordBackend`; sync host databases use `CallbackBackend`; async host databases use `AsyncCallbackBackend`; the ChatVoice schema uses ready-made `ChatVoiceAuth`. See the [selection matrix](integration.en.md).
 
 ## Out of Scope
 
-- No standalone production login microservice, SSO, OAuth/email login, MFA, or admin console.
+- No standalone production login microservice, SSO, OAuth/email login, or MFA. Managed users provide instance-local account administration; fixed, callback, and ChatVoice adapter account management remains host-owned.
 - ChatLogin does not own meetings, files, cards, or other business data; hosts retain owner and policy decisions.
 - Guest is not a database account; guest experiences must be explicitly declared by the host.
 - No universal ORM or backend registry; the ChatVoice backend promotes our existing bridge with synthetic legacy-schema regression coverage.
@@ -35,4 +38,4 @@ Backend selection: fixed/multiple accounts use `PasswordBackend`; sync host data
 
 ## Multi-User Boundary
 
-Account mappings, callbacks, and the ChatVoice-compatible backend support multiple identities. `require_owner` is a host-invoked ownership check, not automatic database row-level security. Different users require distinct stable user IDs. See the [A/B lab and responsibility split](demo.en.md#user-isolation).
+Account mappings, callbacks, the ChatVoice-compatible backend, and managed users support multiple identities. `require_owner` is a host-invoked ownership check, not automatic database row-level security; a managed `owner` does not bypass it. Different users require distinct stable user IDs. See [Managed Users](managed-users.md) and the [A/B lab and responsibility split](demo.en.md#user-isolation).

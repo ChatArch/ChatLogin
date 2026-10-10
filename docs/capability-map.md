@@ -5,6 +5,8 @@
 | 能力 | 状态 | 边界 |
 | --- | --- | --- |
 | 包内演示站 | 已实现（`demo` extra） | `chatlogin serve`、四类真实后端体验、模板游乐场与可复制接入示例；不连接生产数据 |
+| 托管用户预设 | `0.2.0` | `ManagedUsers`、每实例 owner/admin/user、默认登录/管理/本人资料 UI/API；需显式采用，不迁移旧账户库 |
+| ChatVoice legacy 托管 facade | 未发布预览 | 保留原 `accounts` / `auth_sessions` 的 additive 初始化、一次性 owner 采用和 managed users CRUD；需匹配候选 provider/consumer |
 | 身份与授权 | 已实现 | `Principal`、`Role`、401/403、`require_role`、`require_owner`；admin 不自动绕过 owner |
 | 认证后端 | 已实现 | `PasswordBackend` 支持一个或多个显式账号；`CallbackBackend` 接入宿主用户库；`AsyncCallbackBackend` await 异步上游校验 |
 | ChatVoice 兼容后端 | 已实现（核心包，按需导入） | `ChatVoiceAuth` / `ChatVoiceSessionStore`；仅现有 ChatVoice schema、固定命名空间与 USER，不建表/迁移，无 ChatVoice/web 依赖 |
@@ -19,15 +21,16 @@
 
 ## 接入选择
 
-1. **新网站**：默认 UI + `PasswordBackend` 或宿主回调即可起步。
-2. **需要自有视觉**：保留 FastAPI adapter，替换 `LoginUI` 的模板目录、模板名或 renderer。
-3. **已有 ChatVoice schema**：直接选用 `ChatVoiceAuth`；保留原 HTTP/前端，或将 `backend` / `manager` 交给通用 FastAPI adapter。默认 UI、宿主覆盖和 headless 均可使用。
+1. **新网站且需要应用自管账户**：显式采用 `ManagedUsers` + `create_managed_auth`，先由操作员 bootstrap 首个 owner。
+2. **新网站且账户仍归宿主**：默认 UI + `PasswordBackend` 或宿主回调即可起步。
+3. **需要自有视觉**：保留 FastAPI adapter，替换 `LoginUI` 的模板目录、模板名或 renderer。
+4. **已有 ChatVoice schema**：直接选用 `ChatVoiceAuth`；保留原 HTTP/前端，或将 `backend` / `manager` 交给通用 FastAPI adapter。默认 UI、宿主覆盖和 headless 均可使用。
 
 后端选择：固定/多账号 `PasswordBackend`；同步宿主库 `CallbackBackend`；异步宿主库 `AsyncCallbackBackend`；ChatVoice schema 用现成 `ChatVoiceAuth`。详见 [选择矩阵](integration.md)。
 
 ## 不在当前范围
 
-- 不提供独立生产登录微服务、SSO、OAuth/邮箱登录、MFA 或账户管理后台。
+- 不提供独立生产登录微服务、SSO、OAuth/邮箱登录或 MFA。托管用户提供实例内账户管理；固定、回调和 ChatVoice adapter 的账户管理仍归宿主。
 - 不接管会议、文件、卡片等业务数据；每个宿主继续定义资源 owner 和 policy。
 - 不把 guest 当成数据库账户；访客体验由宿主显式声明。
 - 不提供万能 ORM 或后端注册中心；ChatVoice 兼容后端来自自有桥接实现，并以旧 schema 合成测试验证。
@@ -35,4 +38,4 @@
 
 ## 多用户边界
 
-多账号认证已由账号映射、回调及ChatVoice兼容后端提供。`require_owner`只是宿主可复用的归属校验，不是自动数据库行级权限。不同账号必须返回不同的稳定user_id。[A/B实验及责任划分](demo.md#user-isolation)。
+多账号认证已由账号映射、回调、ChatVoice兼容后端和托管用户预设提供。`require_owner`只是宿主可复用的归属校验，不是自动数据库行级权限；托管 `owner` 也不绕过它。不同账号必须返回不同的稳定user_id。见[托管用户](managed-users.md)与[A/B实验及责任划分](demo.md#user-isolation)。

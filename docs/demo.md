@@ -20,6 +20,7 @@ Options:
   --host TEXT           Bind address; loopback by default.  [default: 127.0.0.1]
   --port INTEGER RANGE  TCP port.  [default: 8765; 1<=x<=65535]
   --origin TEXT         Fixed trusted public origin for browser Host/Origin checks.
+  --managed-demo        运行一次性托管用户演示。
   --help                Show this message and exit.
 ```
 
@@ -33,6 +34,16 @@ chatlogin serve \
 ```
 
 `--origin` 是固定安全配置，不从 `Host`、`X-Forwarded-Host` 或 `X-Forwarded-Proto` 自动推导。代理、TLS、进程监督和公网限流仍由部署方负责。
+
+## 托管用户演示
+
+默认 `chatlogin serve` 保持本页所述的四种旧后端演示。要体验新的实例内 owner/admin/user 预设，显式选择：
+
+```bash
+chatlogin serve --managed-demo
+```
+
+它创建仅驻留当前进程、须在 shutdown 关闭的 `ManagedUsers.in_memory(...)`，并用真实 `bootstrap_owner`、`authenticate` 与 `create_user` 创建三组**公开合成** owner、admin 与 user 账号。首页列出这些刻意公开的凭据、角色边界，以及登录、管理用户、本人资料入口；管理与资料页面仍使用默认 `UserAdminUI` / `UserProfileUI` 和受保护 API。它不读取 ChatEnv home/profile、生产账户库或生产会话。`GET /health` 只含安装版本、`mode: "managed-demo"` 与 `synthetic: true`；`GET /api/managed-demo/accounts` 只含刻意公开的合成值。详见[托管用户](managed-users.md)。
 
 ## 可以实际体验什么
 
@@ -52,8 +63,8 @@ chatlogin serve \
 健康与版本读回：
 
 ```text
-GET /health   -> {"status":"ok","version":"0.1.6"}
-GET /version  -> {"version":"0.1.6"}
+GET /health   -> {"status":"ok","version":"<installed-version>"}
+GET /version  -> {"version":"<installed-version>"}
 ```
 
 ## 多账号与数据隔离 {#user-isolation}
@@ -91,4 +102,4 @@ A/B隔离实验从 `0.1.6` 起提供；`0.1.5` 的认证核心已经支持多账
 - [能力地图](capability-map.md)：当前实现与明确排除项。
 - [Python 接口树](interface-tree.md)：实际构造签名与 HTTP 路由。
 
-ChatLogin 不提供默认生产密码、OAuth、SSO、MFA、邮件/短信验证码、扫码登录、账号后台或跨业务身份中心。
+ChatLogin 不提供默认生产密码、OAuth、SSO、MFA、邮件/短信验证码、扫码登录或跨业务身份中心。托管用户只提供实例内账户管理；固定账号、回调和 ChatVoice adapter 仍不提供账号后台。

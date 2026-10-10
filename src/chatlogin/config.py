@@ -1,4 +1,4 @@
-"""ChatEnv extension point for ChatLogin; no login configuration yet."""
+"""ChatEnv extension point for ChatLogin; runtime auth settings stay explicit."""
 
 from chatenv import BaseEnvConfig
 
@@ -13,7 +13,7 @@ class ChatLoginConfig(BaseEnvConfig):
     @classmethod
     def test(cls) -> None:
         """Validate schema registration without network or storage writes."""
-        print("ChatLogin schema loaded; login features are not implemented yet.")
+        print("ChatLogin schema loaded; configure auth explicitly through its factory.")
 
 
 __all__ = ["ChatLoginConfig"]

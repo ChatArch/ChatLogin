@@ -6,6 +6,7 @@
 
 | 需求 | 入口 | 网站保留的责任 |
 | --- | --- | --- |
+| 应用自管 owner/admin/user | `ManagedUsers` + `create_managed_auth` | 业务记录授权、部署和 TLS；角色不是业务 owner bypass |
 | 新站直接获得登录页 | `FastAPIAuth(..., ui=LoginUI(...))` | 用户来源、业务路由、部署与 TLS |
 | 自有品牌和样式 | `LoginUI(template_dirs=..., template_name=...)` 或 `renderer` | 自定义 HTML/CSS、renderer 内容安全 |
 | 已有 HTML/JS 前端 | `FastAPIAuth(..., ui=None)` | 原页面、前端状态与所有业务数据 |
@@ -13,6 +14,12 @@
 | 标准库 HTTP 页面 | `LoginUI(...).render(context)` + `ChatLogin[ui]` | HTTP handler、cookie、Origin/CSRF、响应字段 |
 
 Headless 不等于另起认证微服务。可以在同一个 FastAPI 进程挂载 JSON 路由，也可以只调用核心 Python API，保留既有 HTTP handler 与 JSON 字段。普通 Python 包即可携带 HTML/CSS/JS；安装位置不是定制入口，宿主模板目录优先于包内模板。
+
+## 托管用户预设（0.2.0）
+
+新消费者可声明 `ChatLogin>=0.2.0,<0.3.0`，使用 `ManagedUsers.for_instance(...)` 或由 `create_managed_auth(instance=..., origin=...)` 创建的服务。先用 `chatlogin users bootstrap USERNAME --instance NAME --password-env KEY` 创建空实例的第一个 owner；KEY 是环境变量名。默认 `/auth` 挂载登录、`/users`、`/profile` 与受保护用户 API，保留 Host/Origin、session、CSRF 和角色检查。
+
+这是应用账户目录预设，不自动迁移旧账户库，也不把 owner/admin 变成业务资源绕过。固定账号、回调与 ChatVoice adapter 继续由宿主管理账户，既有 ChatVoice `<0.2` 消费方不因本预设改变。角色矩阵、owner 交接、模板/renderer/headless 和独立演示见[托管用户](managed-users.md)。
 
 ## 选择认证后端 {#backends}
 
@@ -92,8 +99,8 @@ app.include_router(web.router)
 ## 身份、权限与存储
 
 - `guest` 是未认证状态，不自动创建用户、持久会话或复制访客历史。
-- `user`/`admin` 只能来自受信任认证后端。多账户可使用 `PasswordBackend` 的多个显式条目，或接入已有数据库的 `CallbackBackend`。
-- `require_owner` 对 admin 也执行相同的 owner 检查；宿主若允许管理员访问他人数据，必须另行明确授权。
+- `user`/`admin` 只能来自受信任认证后端；托管预设还包含每实例唯一 `owner`。多账户可使用 `PasswordBackend` 的多个显式条目，或接入已有数据库的 `CallbackBackend`。
+- `require_owner` 对 admin 和托管 owner 都执行相同的 owner 检查；宿主若允许管理员访问他人数据，必须另行明确授权。
 - 会话随机 token 只交付 HttpOnly cookie；`SessionStore` 接收摘要，不接收原 token。CSRF 是单独的敏感值，允许传给同源客户端但不得记录。
 - 过期清理通过 `SessionManager.purge_expired()` 触发，manager 会使用自身已验证的 instance 和 clock 调用 store。宿主需要维护私有上下文索引时，应以此为边界清理，不复制 TTL 或访问 store 私有字段。
 - 内存 store 有容量上限，仅用于单进程演示/测试。SQLite 是持久本地方案；多主机部署需提供共享的 `SessionStore`。登录频率限制是进程级后备保护，不是分布式抗滥用服务。
@@ -115,7 +122,7 @@ app.include_router(web.router)
 
 ## 可运行演示
 
-包内演示不需要源码：`python -m pip install "ChatLogin[demo]"` 后执行 `chatlogin serve`。它使用明确标记的公开合成身份，详见 [演示站](demo.md)。
+包内演示不需要源码：`python -m pip install "ChatLogin[demo]"` 后执行 `chatlogin serve`。它使用明确标记的公开合成身份；显式 `chatlogin serve --managed-demo` 可运行真实的 in-memory owner/admin/user 预设，二者都不读取生产/home 账户库。详见 [演示站](demo.md)。
 
 下面是另一个需要源码的宿主示例，用于演示自行指定口令的接入方式，不是 `serve` 的启动条件。
 

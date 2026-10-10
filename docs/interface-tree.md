@@ -43,6 +43,32 @@ chatlogin
 └── LoginRateLimiter(limit, window, max_keys)
 ```
 
+## 托管用户（0.2.0）
+
+```text
+chatlogin.managed
+├── UserRecord                         # 安全视图：不含密码、hash、CSRF 或 session token
+└── ManagedUsers
+    ├── for_instance(instance, home=None, ...)
+    ├── in_memory(instance, ttl=300, max_users=..., max_sessions=...)
+    ├── bootstrap_owner(username, password, display_name="") -> UserRecord
+    ├── authenticate(username, password) -> ManagedPrincipal | None
+    ├── create_user(actor, username, password, role=Role.USER, display_name="")
+    ├── update_user(...) / reset_password(...) / change_password(...)
+    ├── delete_user(...) / transfer_owner(...)
+    └── store / sessions
+
+chatlogin.managed_web
+└── create_managed_auth(instance, origin, users=None, prefix="/auth", ...)
+    └── ManagedAuth.router / .users / .current_user / .csrf_user / .admin_user / .cookie
+```
+
+这是显式采用的应用账户预设，不迁移固定账号、回调或 ChatVoice 用户库。`in_memory` 仅用于演示/测试且必须在 shutdown 关闭；角色不改变宿主 `require_owner` 的业务语义。完整接口与路由见[托管用户](managed-users.md)。
+
+## 可内嵌托管用户插件
+
+`create_managed_auth(..., pages=True)` 挂载默认页面与接口；`pages=False` 只挂载接口，保留宿主前端。详见[插件集成](managed-users.md#plugin)。
+
 ## 内建可选 ChatVoice 后端
 
 ```text
@@ -62,6 +88,18 @@ chatlogin.backends.chatvoice
 ```
 
 核心包即可导入，两类也从 `chatlogin.backends` 导出。固定 ChatVoice schema / `chatvoice` 命名空间，只产生 USER 身份；不建表、不迁移、不负责账号创建、HTTP 或 owner 权限。接入与三种 UI 模式见 [接入文档](integration.md)。
+
+## ChatVoice 托管 facade（未发布预览）
+
+```text
+chatlogin.backends
+├── ChatVoiceManagedStore(connect, lock, clock, *, max_users=10000, max_sessions=10000)
+│   └── initialize()
+├── initialize_chatvoice_managed_schema(connection) -> None
+└── adopt_owner(store, exact_existing_account_or_id) -> UserRecord
+```
+
+该 facade 面向受信任同进程 ChatVoice 宿主，复用原 `accounts` 与 `auth_sessions`。schema 初始化是显式、幂等、additive 的；owner 采用只接受精确既有账号或 ID，已有 owner 时失败。完整边界见 [ChatVoice legacy schema 集成](chatvoice-managed.md)。
 
 ## FastAPI 适配层
 

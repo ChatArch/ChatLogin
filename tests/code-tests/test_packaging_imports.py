@@ -85,7 +85,7 @@ def test_web_compatibility_install_command_quotes_each_requirement():
                 .replace("${{ matrix.starlette }}", "starlette>=0.40,<1.0"))
     script = f'python() {{ printf "<%s>\\n" "$@"; }}; {rendered}'
     with tempfile.TemporaryDirectory() as directory:
-        result = subprocess.run(["bash", "-lc", script], cwd=directory, text=True,
+        result = subprocess.run(["bash", "-c", script], cwd=directory, text=True,
                                 capture_output=True, check=True)
     assert result.stdout.splitlines()[-2:] == ["<fastapi>=0.110,<1.0>", "<starlette>=0.40,<1.0>"]
 

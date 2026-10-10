@@ -43,6 +43,32 @@ chatlogin
 └── LoginRateLimiter(limit, window, max_keys)
 ```
 
+## Managed Users (0.2.0)
+
+```text
+chatlogin.managed
+├── UserRecord                         # safe view: no password, hash, CSRF, or session token
+└── ManagedUsers
+    ├── for_instance(instance, home=None, ...)
+    ├── in_memory(instance, ttl=300, max_users=..., max_sessions=...)
+    ├── bootstrap_owner(username, password, display_name="") -> UserRecord
+    ├── authenticate(username, password) -> ManagedPrincipal | None
+    ├── create_user(actor, username, password, role=Role.USER, display_name="")
+    ├── update_user(...) / reset_password(...) / change_password(...)
+    ├── delete_user(...) / transfer_owner(...)
+    └── store / sessions
+
+chatlogin.managed_web
+└── create_managed_auth(instance, origin, users=None, prefix="/auth", ...)
+    └── ManagedAuth.router / .users / .current_user / .csrf_user / .admin_user / .cookie
+```
+
+This is an explicit application-account preset; it does not migrate fixed-account, callback, or ChatVoice user stores. `in_memory` is demo/test-only and must close at shutdown; roles do not change the host meaning of `require_owner`. See [Managed Users](managed-users.md) for routes and details.
+
+## Embeddable Managed-user Plugin
+
+`create_managed_auth(..., pages=True)` mounts default pages and APIs; `pages=False` mounts APIs only and preserves the host frontend. See [plugin integration](managed-users.md#plugin).
+
 ## Built-in Optional ChatVoice Backend
 
 ```text
@@ -62,6 +88,18 @@ chatlogin.backends.chatvoice
 ```
 
 Available in the core package, also exported from `chatlogin.backends`. Fixed ChatVoice schema / `chatvoice` namespace, USER identities only; no table creation, migration, account management, HTTP or owner policy. See [Integration](integration.en.md) for all three UI modes.
+
+## ChatVoice Managed Facade (Unreleased Preview)
+
+```text
+chatlogin.backends
+├── ChatVoiceManagedStore(connect, lock, clock, *, max_users=10000, max_sessions=10000)
+│   └── initialize()
+├── initialize_chatvoice_managed_schema(connection) -> None
+└── adopt_owner(store, exact_existing_account_or_id) -> UserRecord
+```
+
+This facade is for a trusted same-process ChatVoice host and reuses the original `accounts` and `auth_sessions` tables. Schema initialization is explicit, idempotent, and additive. Owner adoption accepts only an exact existing account or id and fails when an owner already exists. See [ChatVoice legacy schema integration](chatvoice-managed.en.md) for boundaries.
 
 ## FastAPI Adapter
 

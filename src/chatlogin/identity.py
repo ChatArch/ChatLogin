@@ -7,6 +7,7 @@ class Role(str, Enum):
     GUEST = "guest"
     USER = "user"
     ADMIN = "admin"
+    OWNER = "owner"
 
 
 @dataclass(frozen=True)
@@ -55,6 +56,11 @@ def require_role(principal: Principal, *roles: Role) -> Principal:
     if principal.role not in roles:
         raise AccessDenied(403, "Role not permitted")
     return principal
+
+
+def require_admin(principal: Principal) -> Principal:
+    """Require one of the administrative managed roles without changing require_role."""
+    return require_role(principal, Role.OWNER, Role.ADMIN)
 
 
 def require_owner(principal: Principal, owner_id: str) -> Principal:

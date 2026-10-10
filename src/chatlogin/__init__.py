@@ -9,7 +9,23 @@ from .credentials import (
     hash_password,
     verify_pbkdf2,
 )
-from .identity import AccessDenied, Principal, Role, require_owner, require_role, require_user
+from .identity import AccessDenied, Principal, Role, require_admin, require_owner, require_role, require_user
+from .managed import (
+    ConflictError,
+    ManagedConflictError,
+    ManagedError,
+    ManagedNotFoundError,
+    ManagedPermissionError,
+    ManagedPrincipal,
+    ManagedSessionStore,
+    ManagedUsers,
+    ManagedValidationError,
+    NotFoundError,
+    PermissionDenied,
+    SQLiteUserStore,
+    UserRecord,
+    ValidationError,
+)
 from .paths import StatePaths, state_paths
 from .private_sqlite import PrivateSQLite
 from .security import LoginRateLimiter, require_csrf, safe_next
@@ -18,10 +34,14 @@ from .sqlite import SQLiteSessionStore
 
 __version__ = "0.1.6"
 __all__ = [
-    "__version__", "AccessDenied", "Principal", "Role", "require_owner", "require_role", "require_user",
+    "__version__", "AccessDenied", "Principal", "Role", "require_admin", "require_owner", "require_role", "require_user",
     "AsyncCallbackBackend", "AsyncCredentialBackend", "CallbackBackend", "CredentialBackend",
     "PasswordBackend", "PasswordHash", "hash_password", "verify_pbkdf2",
     "StatePaths", "state_paths", "LoginRateLimiter", "require_csrf", "safe_next", "IssuedSession",
     "MemorySessionStore", "PrivateSQLite", "Session", "SessionManager", "SessionStore", "StoreFull",
     "SQLiteSessionStore",
+    "ConflictError", "ManagedConflictError", "ManagedError", "ManagedNotFoundError",
+    "ManagedPermissionError", "ManagedPrincipal", "ManagedSessionStore", "ManagedUsers",
+    "ManagedValidationError", "NotFoundError", "PermissionDenied", "SQLiteUserStore", "UserRecord",
+    "ValidationError",
 ]

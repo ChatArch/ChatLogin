@@ -10,6 +10,7 @@
 - Prompt defaults must match actual execution defaults.
 - Sensitive values must stay masked in prompts and summaries.
 - Prefer lazy imports in CLI wiring and keep implementation imports local when possible.
+- Managed-user bootstrap accepts an environment-variable name, never a raw password argument; keep it explicit, non-forcing, and backed by `ManagedUsers` rather than CLI policy.
 
 ## Docs and Tests
 
@@ -17,6 +18,7 @@
 - Put real CLI coverage under `tests/cli-tests/`.
 - Put mock/fake CLI coverage under `tests/mock-cli-tests/`.
 - Keep `README.md`, `docs/`, and `CHANGELOG.md` in sync with user-facing changes.
+- Keep managed-user CLI trees and bilingual `managed-users` guidance synchronized with actual registered commands and provider APIs.
 
 ## Automation
 

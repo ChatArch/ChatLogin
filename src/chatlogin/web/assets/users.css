@@ -1,0 +1,43 @@
+/* Managed pages extend the packaged LoginUI tokens without resetting a host. */
+.chatlogin-users { place-items: start center; padding-block: clamp(1rem, 4vw, 3rem); }
+.chatlogin-users__panel { width: min(100%, 70rem); display: grid; gap: 1.5rem; }
+.chatlogin-users__header { display: flex; align-items: start; justify-content: space-between; gap: 1.25rem; }
+.chatlogin-users__header h1 { font-size: clamp(2rem, 5vw, 3rem); }
+.chatlogin-users__identity { display: grid; justify-items: end; gap: .65rem; text-align: right; }
+.chatlogin-users__identity-name { max-width: 20rem; margin: 0; color: var(--cl-muted, var(--_cl-muted)); font-size: .95rem; }
+.chatlogin-users__identity nav { display: flex; flex-wrap: wrap; justify-content: end; gap: .6rem; }
+.chatlogin-users__identity a, .chatlogin-users__identity button, .chatlogin-users__section-heading button { color: var(--cl-accent, var(--_cl-accent)); }
+.chatlogin-users button { border: 1px solid transparent; background: transparent; color: var(--cl-accent, var(--_cl-accent)); text-decoration: underline; text-underline-offset: .2em; font: inherit; font-weight: 700; cursor: pointer; }
+.chatlogin-users button:disabled { cursor: not-allowed; opacity: .62; }
+.chatlogin-users__status { min-height: 1.5rem; margin: 0; color: var(--cl-muted, var(--_cl-muted)); line-height: 1.5; }
+.chatlogin-users__section { min-width: 0; border-top: 1px solid var(--cl-border, var(--_cl-border)); padding-top: 1.5rem; }
+.chatlogin-users__section h2 { margin: .15rem 0 .9rem; font-size: 1.25rem; }
+.chatlogin-users__overline { margin: 0; color: var(--cl-muted, var(--_cl-muted)); font-size: .76rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+.chatlogin-users__section-heading { display: flex; justify-content: space-between; align-items: end; gap: 1rem; }
+.chatlogin-users__list { display: grid; gap: .8rem; }
+.chatlogin-users__empty { margin: 0; color: var(--cl-muted, var(--_cl-muted)); }
+.chatlogin-users__record { display: grid; gap: .85rem; border: 1px solid var(--cl-border, var(--_cl-border)); border-radius: 1rem; padding: 1rem; }
+.chatlogin-users__record-heading { display: flex; align-items: baseline; justify-content: space-between; gap: 1rem; }
+.chatlogin-users__record-title { margin: 0; font-size: 1rem; overflow-wrap: anywhere; }
+.chatlogin-users__record-meta { margin: 0; color: var(--cl-muted, var(--_cl-muted)); font-size: .88rem; overflow-wrap: anywhere; }
+.chatlogin-users__record-controls, .chatlogin-users__form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .8rem 1rem; align-items: end; }
+.chatlogin-users__record-controls label, .chatlogin-users__form label { display: grid; gap: .35rem; min-width: 0; font-weight: 650; }
+.chatlogin-users__record-controls input, .chatlogin-users__record-controls select, .chatlogin-users__form input, .chatlogin-users__form select { width: 100%; min-width: 0; border: 1px solid var(--cl-border, var(--_cl-border)); border-radius: .75rem; padding: .72rem .85rem; background: var(--cl-input, var(--_cl-input)); color: inherit; font: inherit; }
+.chatlogin-users__record-controls input:focus, .chatlogin-users__record-controls select:focus, .chatlogin-users__form input:focus, .chatlogin-users__form select:focus, .chatlogin-users button:focus-visible { outline: 3px solid var(--cl-ring, var(--_cl-ring)); outline-offset: 2px; }
+.chatlogin-users__enabled { display: flex !important; grid-template-columns: auto 1fr; align-items: center; }
+.chatlogin-users__enabled input { width: 1rem; height: 1rem; }
+.chatlogin-users__form-actions { grid-column: 1 / -1; display: flex; align-items: center; flex-wrap: wrap; gap: .8rem; }
+.chatlogin-users__form-actions > button, .chatlogin-users__record-actions > button { border: 0; border-radius: .75rem; padding: .72rem 1rem; color: var(--cl-button-text, white); background: var(--cl-accent, var(--_cl-accent)); text-decoration: none; }
+.chatlogin-users__record-actions { display: flex; flex-wrap: wrap; gap: .65rem; }
+.chatlogin-users__record-actions .chatlogin-users__delete { color: var(--cl-error, var(--_cl-error)); }
+.chatlogin-users__hint { margin: 0; color: var(--cl-muted, var(--_cl-muted)); font-size: .9rem; line-height: 1.45; }
+.chatlogin-users__danger { border-inline-start: .3rem solid var(--cl-error, var(--_cl-error)); padding-inline-start: 1rem; }
+.chatlogin-users__readonly { margin: 0; color: var(--cl-muted, var(--_cl-muted)); font-size: .9rem; }
+@media (max-width: 720px) {
+  .chatlogin-users__header, .chatlogin-users__section-heading { align-items: start; flex-direction: column; }
+  .chatlogin-users__identity { justify-items: start; text-align: left; }
+  .chatlogin-users__identity nav { justify-content: start; }
+  .chatlogin-users__record-controls, .chatlogin-users__form { grid-template-columns: minmax(0, 1fr); }
+}
+
+.chatlogin-users fieldset[data-cl-credential-form] { display: contents; }

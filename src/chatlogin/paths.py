@@ -16,6 +16,11 @@ class StatePaths:
     directory: Path
     database: Path
 
+    @property
+    def users_database(self) -> Path:
+        """Read-only location for managed users; legacy session storage is unchanged."""
+        return self.directory / "users.sqlite3"
+
 
 def state_paths(instance: str, *, home: str | Path | None = None) -> StatePaths:
     from chatenv import get_paths
