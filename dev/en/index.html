@@ -289,6 +289,25 @@
   
   
   
+    <li class="md-tabs__item">
+      <a href="managed-users/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Managed Users
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
     
     
       <li class="md-tabs__item">
@@ -521,6 +540,28 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="managed-users/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Managed Users
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
     
     
     
@@ -537,10 +578,10 @@
         
           
         
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
         
           
-          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
             
   
   
@@ -553,8 +594,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_5">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
             <span class="md-nav__icon md-icon"></span>
             Commands and APIs
           </label>
@@ -739,13 +780,18 @@
 <p><a href="demo/">Open Demo Guide</a></p>
 </li>
 <li>
+<p><strong>Application-managed users</strong></p>
+<p>For owner/admin/user accounts, management pages, and self-service profiles, use <code>ManagedUsers</code> and the default FastAPI preset while keeping business-data authorization in the host.</p>
+<p><a href="managed-users/">Open Managed Users</a></p>
+</li>
+<li>
 <p><strong>Keep an existing visual style</strong></p>
 <p>Choose packaged UI, host template overrides, or a fully headless host-owned frontend.</p>
 <p><a href="capability-map/">Open Capability Map</a></p>
 </li>
 <li>
 <p><strong>Review CLI and package boundaries</strong></p>
-<p>The CLI exposes version, command trees, read-only paths, and the isolated <code>serve</code> product demo; reusable auth remains a Python API.</p>
+<p>The CLI exposes version, command trees, read-only paths, first-owner bootstrap, and default or managed isolated <code>serve</code> demos; reusable auth remains a Python API.</p>
 <p><a href="cli-tree/">Open CLI Tree</a></p>
 </li>
 </ul>
@@ -784,6 +830,7 @@
 <a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a>    <span class="k">return</span> <span class="n">principal</span><span class="o">.</span><span class="n">as_dict</span><span class="p">()</span>
 </code></pre></div>
 <p>See <code>examples/demo_fastapi.py</code> for a runnable synthetic-account demo.</p>
+<p>For application-managed accounts, new consumers explicitly require <code>ChatLogin&gt;=0.2.0,&lt;0.3.0</code>, let an operator run <code>chatlogin users bootstrap</code> with an environment-variable name, then mount <code>create_managed_auth(instance=..., origin=...)</code>. It does not migrate old user stores or replace host <code>require_owner</code> business authorization; see <a href="managed-users/">Managed Users</a>.</p>
 <h2 id="three-frontend-levels">Three Frontend Levels<a class="headerlink" href="#three-frontend-levels" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -814,7 +861,7 @@
 <p>Themes affect presentation only. They cannot weaken CSRF, cookies, roles, or owner checks. Default resources use scoped <code>.chatlogin</code> classes and CSS variables rather than global resets.</p>
 <h2 id="secure-defaults">Secure Defaults<a class="headerlink" href="#secure-defaults" title="Permanent link">&para;</a></h2>
 <ul>
-<li>Server-trusted identities are <code>guest</code>, <code>user</code>, and <code>admin</code>; login payloads cannot escalate role.</li>
+<li>Server-trusted identities are <code>guest</code>, <code>user</code>, and <code>admin</code>, plus managed-preset <code>owner</code>; login payloads cannot escalate role.</li>
 <li>Credential verification is injectable: fixed account, multiple accounts, or a host callback. Existing PBKDF2 material can be verified without forced migration.</li>
 <li>Session tokens are random; only SHA-256 digests are stored. Expiry, rotation, revocation, and instance isolation are supported.</li>
 <li>Cookies default to <code>HttpOnly</code>, <code>Secure</code>, and <code>SameSite=Lax</code>; cookie-authenticated writes require same-site Origin and CSRF.</li>

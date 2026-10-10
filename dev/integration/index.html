@@ -14,7 +14,7 @@
         <link rel="prev" href="../quickstart/">
       
       
-        <link rel="next" href="../cli-tree/">
+        <link rel="next" href="../managed-users/">
       
       
       <link rel="icon" href="../assets/images/favicon.png">
@@ -291,6 +291,25 @@
   
   
   
+    <li class="md-tabs__item">
+      <a href="../managed-users/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  托管用户
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
     
     
       <li class="md-tabs__item">
@@ -483,6 +502,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#020" class="md-nav__link">
+    <span class="md-ellipsis">
+      托管用户预设（0.2.0）
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#backends" class="md-nav__link">
     <span class="md-ellipsis">
       选择认证后端
@@ -574,6 +602,28 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="../managed-users/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    托管用户
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
     
     
     
@@ -590,10 +640,10 @@
         
           
         
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
         
           
-          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
             
   
   
@@ -606,8 +656,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_5">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
             <span class="md-nav__icon md-icon"></span>
             命令与接口
           </label>
@@ -719,6 +769,15 @@
   <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
       选择接入层级
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#020" class="md-nav__link">
+    <span class="md-ellipsis">
+      托管用户预设（0.2.0）
     </span>
   </a>
   
@@ -839,6 +898,11 @@
 </thead>
 <tbody>
 <tr>
+<td>应用自管 owner/admin/user</td>
+<td><code>ManagedUsers</code> + <code>create_managed_auth</code></td>
+<td>业务记录授权、部署和 TLS；角色不是业务 owner bypass</td>
+</tr>
+<tr>
 <td>新站直接获得登录页</td>
 <td><code>FastAPIAuth(..., ui=LoginUI(...))</code></td>
 <td>用户来源、业务路由、部署与 TLS</td>
@@ -866,6 +930,9 @@
 </tbody>
 </table>
 <p>Headless 不等于另起认证微服务。可以在同一个 FastAPI 进程挂载 JSON 路由，也可以只调用核心 Python API，保留既有 HTTP handler 与 JSON 字段。普通 Python 包即可携带 HTML/CSS/JS；安装位置不是定制入口，宿主模板目录优先于包内模板。</p>
+<h2 id="020">托管用户预设（0.2.0）<a class="headerlink" href="#020" title="Permanent link">&para;</a></h2>
+<p>新消费者可声明 <code>ChatLogin&gt;=0.2.0,&lt;0.3.0</code>，使用 <code>ManagedUsers.for_instance(...)</code> 或由 <code>create_managed_auth(instance=..., origin=...)</code> 创建的服务。先用 <code>chatlogin users bootstrap USERNAME --instance NAME --password-env KEY</code> 创建空实例的第一个 owner；KEY 是环境变量名。默认 <code>/auth</code> 挂载登录、<code>/users</code>、<code>/profile</code> 与受保护用户 API，保留 Host/Origin、session、CSRF 和角色检查。</p>
+<p>这是应用账户目录预设，不自动迁移旧账户库，也不把 owner/admin 变成业务资源绕过。固定账号、回调与 ChatVoice adapter 继续由宿主管理账户，既有 ChatVoice <code>&lt;0.2</code> 消费方不因本预设改变。角色矩阵、owner 交接、模板/renderer/headless 和独立演示见<a href="../managed-users/">托管用户</a>。</p>
 <h2 id="backends">选择认证后端<a class="headerlink" href="#backends" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -983,8 +1050,8 @@
 <h2 id="_3">身份、权限与存储<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <ul>
 <li><code>guest</code> 是未认证状态，不自动创建用户、持久会话或复制访客历史。</li>
-<li><code>user</code>/<code>admin</code> 只能来自受信任认证后端。多账户可使用 <code>PasswordBackend</code> 的多个显式条目，或接入已有数据库的 <code>CallbackBackend</code>。</li>
-<li><code>require_owner</code> 对 admin 也执行相同的 owner 检查；宿主若允许管理员访问他人数据，必须另行明确授权。</li>
+<li><code>user</code>/<code>admin</code> 只能来自受信任认证后端；托管预设还包含每实例唯一 <code>owner</code>。多账户可使用 <code>PasswordBackend</code> 的多个显式条目，或接入已有数据库的 <code>CallbackBackend</code>。</li>
+<li><code>require_owner</code> 对 admin 和托管 owner 都执行相同的 owner 检查；宿主若允许管理员访问他人数据，必须另行明确授权。</li>
 <li>会话随机 token 只交付 HttpOnly cookie；<code>SessionStore</code> 接收摘要，不接收原 token。CSRF 是单独的敏感值，允许传给同源客户端但不得记录。</li>
 <li>过期清理通过 <code>SessionManager.purge_expired()</code> 触发，manager 会使用自身已验证的 instance 和 clock 调用 store。宿主需要维护私有上下文索引时，应以此为边界清理，不复制 TTL 或访问 store 私有字段。</li>
 <li>内存 store 有容量上限，仅用于单进程演示/测试。SQLite 是持久本地方案；多主机部署需提供共享的 <code>SessionStore</code>。登录频率限制是进程级后备保护，不是分布式抗滥用服务。</li>
@@ -1003,7 +1070,7 @@
 </ul>
 <p>仓库的 <code>Web Compatibility</code> workflow 继续显式安装 0.x 与 1.3.x 线路，用正常 resolver 验证 <code>web</code> extra。1.x 功能探针已证明代码行为兼容；发布前仍需运行标准依赖解析与最低 Python wheel gate。</p>
 <h2 id="_5">可运行演示<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
-<p>包内演示不需要源码：<code>python -m pip install "ChatLogin[demo]"</code> 后执行 <code>chatlogin serve</code>。它使用明确标记的公开合成身份，详见 <a href="../demo/">演示站</a>。</p>
+<p>包内演示不需要源码：<code>python -m pip install "ChatLogin[demo]"</code> 后执行 <code>chatlogin serve</code>。它使用明确标记的公开合成身份；显式 <code>chatlogin serve --managed-demo</code> 可运行真实的 in-memory owner/admin/user 预设，二者都不读取生产/home 账户库。详见 <a href="../demo/">演示站</a>。</p>
 <p>下面是另一个需要源码的宿主示例，用于演示自行指定口令的接入方式，不是 <code>serve</code> 的启动条件。</p>
 <p>从源码分发或仓库根目录执行。演示不含默认口令，使用临时合成账号，不连接生产数据：</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">".[web,demo]"</span>

@@ -8,13 +8,13 @@
       
       
       
-        <link rel="canonical" href="https://arch.gh.wzhecnu.cn/ChatLogin/dev/demo/">
+        <link rel="canonical" href="https://arch.gh.wzhecnu.cn/ChatLogin/dev/managed-users/">
       
       
-        <link rel="prev" href="..">
+        <link rel="prev" href="../integration/">
       
       
-        <link rel="next" href="../quickstart/">
+        <link rel="next" href="../cli-tree/">
       
       
       <link rel="icon" href="../assets/images/favicon.png">
@@ -22,7 +22,7 @@
     
     
       
-        <title>演示站与快速开始 - ChatLogin 文档</title>
+        <title>托管用户 - ChatLogin 文档</title>
       
     
     
@@ -98,7 +98,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              演示站与快速开始
+              托管用户
             
           </span>
         </div>
@@ -125,7 +125,7 @@
           </li>
         
           <li class="md-select__item">
-            <a href="../en/demo/" hreflang="en" class="md-select__link">
+            <a href="../en/managed-users/" hreflang="en" class="md-select__link">
               English
             </a>
           </li>
@@ -231,11 +231,9 @@
   
   
   
-    
   
-  
-    <li class="md-tabs__item md-tabs__item--active">
-      <a href="./" class="md-tabs__link">
+    <li class="md-tabs__item">
+      <a href="../demo/" class="md-tabs__link">
         
   
   
@@ -290,9 +288,11 @@
   
   
   
+    
   
-    <li class="md-tabs__item">
-      <a href="../managed-users/" class="md-tabs__link">
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
         
   
   
@@ -396,32 +396,10 @@
       
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    演示站与快速开始
-    
-  </span>
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../demo/" class="md-nav__link">
         
   
   
@@ -432,80 +410,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="目录">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      目录
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#_2" class="md-nav__link">
-    <span class="md-ellipsis">
-      安装与启动
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_3" class="md-nav__link">
-    <span class="md-ellipsis">
-      托管用户演示
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_4" class="md-nav__link">
-    <span class="md-ellipsis">
-      可以实际体验什么
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#user-isolation" class="md-nav__link">
-    <span class="md-ellipsis">
-      多账号与数据隔离
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_5" class="md-nav__link">
-    <span class="md-ellipsis">
-      演示安全边界
-    </span>
-  </a>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#_6" class="md-nav__link">
-    <span class="md-ellipsis">
-      用于真实项目
-    </span>
-  </a>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -558,10 +462,32 @@
       
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../managed-users/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    托管用户
+    
+  </span>
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -572,6 +498,89 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="目录">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      目录
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      先选择合适的入口
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#plugin" class="md-nav__link">
+    <span class="md-ellipsis">
+      作为插件集成
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      最小挂载
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      角色与操作
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#web-headless" class="md-nav__link">
+    <span class="md-ellipsis">
+      Web、模板与 headless
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      独立合成演示
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      迁移与安全边界
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -726,7 +735,16 @@
         <li class="md-nav__item">
   <a href="#_2" class="md-nav__link">
     <span class="md-ellipsis">
-      安装与启动
+      先选择合适的入口
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#plugin" class="md-nav__link">
+    <span class="md-ellipsis">
+      作为插件集成
     </span>
   </a>
   
@@ -735,7 +753,7 @@
         <li class="md-nav__item">
   <a href="#_3" class="md-nav__link">
     <span class="md-ellipsis">
-      托管用户演示
+      最小挂载
     </span>
   </a>
   
@@ -744,16 +762,16 @@
         <li class="md-nav__item">
   <a href="#_4" class="md-nav__link">
     <span class="md-ellipsis">
-      可以实际体验什么
+      角色与操作
     </span>
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#user-isolation" class="md-nav__link">
+  <a href="#web-headless" class="md-nav__link">
     <span class="md-ellipsis">
-      多账号与数据隔离
+      Web、模板与 headless
     </span>
   </a>
   
@@ -762,7 +780,7 @@
         <li class="md-nav__item">
   <a href="#_5" class="md-nav__link">
     <span class="md-ellipsis">
-      演示安全边界
+      独立合成演示
     </span>
   </a>
   
@@ -771,7 +789,7 @@
         <li class="md-nav__item">
   <a href="#_6" class="md-nav__link">
     <span class="md-ellipsis">
-      用于真实项目
+      迁移与安全边界
     </span>
   </a>
   
@@ -793,7 +811,7 @@
 
 
   
-    <a href="https://github.com/ChatArch/ChatLogin/edit/main/docs/demo.md" title="编辑此页" class="md-content__button md-icon" rel="edit">
+    <a href="https://github.com/ChatArch/ChatLogin/edit/main/docs/managed-users.md" title="编辑此页" class="md-content__button md-icon" rel="edit">
       
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M10 20H6V4h7v5h5v3.1l2-2V8l-6-6H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h4zm10.2-7c.1 0 .3.1.4.2l1.3 1.3c.2.2.2.6 0 .8l-1 1-2.1-2.1 1-1c.1-.1.2-.2.4-.2m0 3.9L14.1 23H12v-2.1l6.1-6.1z"/></svg>
     </a>
@@ -801,128 +819,228 @@
   
 
 
-<h1 id="_1">演示站与快速开始<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
-<p>在线体验：<a href="https://login.public.wzhecnu.cn/">ChatLogin 演示站</a> · <a href="https://login.public.wzhecnu.cn/templates">模板游乐场</a>。这是公开合成账号环境，不连接真实业务数据。</p>
-<p><code>chatlogin serve</code> 从<strong>已安装的 ChatLogin wheel</strong> 读取并运行产品演示，不依赖源码相对路径。它用于选择认证后端、前端接入方式和 <code>LoginUI</code> 配置，不是共享生产身份服务。</p>
-<h2 id="_2">安装与启动<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">"ChatLogin[demo]"</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>chatlogin<span class="w"> </span>serve
-</code></pre></div>
-<p>默认地址为 <a href="http://127.0.0.1:8765/">http://127.0.0.1:8765/</a>。<code>demo</code> extra 自包含 FastAPI、Starlette、Jinja2 与 Uvicorn；核心包仍不强制安装这些 Web 依赖。</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>Usage: chatlogin serve [OPTIONS]
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>Options:
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>  --host TEXT           Bind address; loopback by default.  [default: 127.0.0.1]
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>  --port INTEGER RANGE  TCP port.  [default: 8765; 1&lt;=x&lt;=65535]
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>  --origin TEXT         Fixed trusted public origin for browser Host/Origin checks.
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>  --managed-demo        运行一次性托管用户演示。
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>  --help                Show this message and exit.
-</code></pre></div>
-<p>如果由反向代理提供 TLS，仍把进程绑定到 loopback，并显式传入浏览器实际访问的可信 origin：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>chatlogin<span class="w"> </span>serve<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="w">  </span>--host<span class="w"> </span><span class="m">127</span>.0.0.1<span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span>--port<span class="w"> </span><span class="m">8765</span><span class="w"> </span><span class="se">\</span>
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span>--origin<span class="w"> </span>https://login.example.com
-</code></pre></div>
-<p><code>--origin</code> 是固定安全配置，不从 <code>Host</code>、<code>X-Forwarded-Host</code> 或 <code>X-Forwarded-Proto</code> 自动推导。代理、TLS、进程监督和公网限流仍由部署方负责。</p>
-<h2 id="_3">托管用户演示<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
-<p>默认 <code>chatlogin serve</code> 保持本页所述的四种旧后端演示。要体验新的实例内 owner/admin/user 预设，显式选择：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>chatlogin<span class="w"> </span>serve<span class="w"> </span>--managed-demo
-</code></pre></div>
-<p>它创建仅驻留当前进程、须在 shutdown 关闭的 <code>ManagedUsers.in_memory(...)</code>，并用真实 <code>bootstrap_owner</code>、<code>authenticate</code> 与 <code>create_user</code> 创建三组<strong>公开合成</strong> owner、admin 与 user 账号。首页列出这些刻意公开的凭据、角色边界，以及登录、管理用户、本人资料入口；管理与资料页面仍使用默认 <code>UserAdminUI</code> / <code>UserProfileUI</code> 和受保护 API。它不读取 ChatEnv home/profile、生产账户库或生产会话。<code>GET /health</code> 只含安装版本、<code>mode: "managed-demo"</code> 与 <code>synthetic: true</code>；<code>GET /api/managed-demo/accounts</code> 只含刻意公开的合成值。详见<a href="../managed-users/">托管用户</a>。</p>
-<h2 id="_4">可以实际体验什么<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
-<p>开发预览提供公开合成A/B账号，登录页可选择并填入。它们不对应真实账户或客户数据，详见<a href="#user-isolation">多账号与数据隔离</a>。</p>
+<h1 id="_1">托管用户<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h1>
+<p>本页说明计划随 <code>0.2.0</code> 提供的托管用户预设。新接入方应显式声明 <code>ChatLogin&gt;=0.2.0,&lt;0.3.0</code>；已使用固定账号、回调或 ChatVoice 兼容后端的应用不必改变。ChatVoice 既有消费者的 <code>&lt;0.2</code> 依赖保持不受影响，只有主动采用托管用户时才升级和接入。</p>
+<h2 id="_2">先选择合适的入口<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
-<th>后端</th>
-<th>前端</th>
+<th>需求</th>
 <th>入口</th>
-<th>数据来源</th>
+<th>账户与业务边界</th>
 </tr>
 </thead>
 <tbody>
 <tr>
+<td>应用需要自己的 owner/admin/user 账户、登录页、本人资料与用户管理</td>
+<td><code>ManagedUsers</code> + <code>create_managed_auth</code></td>
+<td>ChatLogin 管理该实例的账户与会话；宿主仍管理业务数据授权</td>
+</tr>
+<tr>
+<td>账号已在宿主或上游系统</td>
+<td><code>CallbackBackend</code> / <code>AsyncCallbackBackend</code></td>
+<td>宿主继续管理账户、密码材料与生命周期</td>
+</tr>
+<tr>
+<td>少量显式固定账号</td>
 <td><code>PasswordBackend</code></td>
-<td>默认 <code>LoginUI</code></td>
-<td><code>/demo/password/</code></td>
-<td>显式构造的两个独立账号与密码hash</td>
+<td>账户条目由宿主配置</td>
 </tr>
 <tr>
-<td><code>CallbackBackend</code></td>
-<td>宿主 <code>renderer</code> 覆盖</td>
-<td><code>/demo/callback/</code></td>
-<td>本地同步合成回调</td>
-</tr>
-<tr>
-<td><code>AsyncCallbackBackend</code></td>
-<td><code>ui=None</code> + 自有 HTML/JS</td>
-<td><code>/experience/async</code></td>
-<td>本地异步合成回调</td>
-</tr>
-<tr>
+<td>保持既有 ChatVoice schema</td>
 <td><code>ChatVoiceAuth</code></td>
-<td><code>LoginUI</code> split/dark</td>
-<td><code>/demo/chatvoice/</code></td>
-<td>一次性共享内存 SQLite 旧 schema fixture</td>
+<td>兼容层不创建或迁移账户表</td>
 </tr>
 </tbody>
 </table>
-<p>四种模式各自使用 cookie 名与 session namespace。登录成功后的工作区显示安全身份、宿主拥有的合成记录、真实数据归属校验，以及受保护读取、CSRF检查与退出操作。页面与日志不展示 session token、cookie、密码 hash 或 CSRF 值。CSRF 只在同源 session/login JSON 中返回给浏览器以执行安全写操作；会话 token 只通过 HttpOnly Cookie 交付。</p>
-<p>模板游乐场在 <code>/templates</code>，预览由实际 <code>LoginUI.render()</code> 生成。它只接受三个色板、两个布局、<code>light</code>/<code>dark</code>/<code>system</code> 与 guest 开关，并生成可复制的精确 Python 配置；不接受任意 HTML 或文件路径。</p>
-<p>健康与版本读回：</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>GET /health   -&gt; {"status":"ok","version":"&lt;installed-version&gt;"}
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>GET /version  -&gt; {"version":"&lt;installed-version&gt;"}
-</code></pre></div>
-<h2 id="user-isolation">多账号与数据隔离<a class="headerlink" href="#user-isolation" title="Permanent link">&para;</a></h2>
-<p>A/B隔离实验从 <code>0.1.6</code> 起提供；<code>0.1.5</code> 的认证核心已经支持多账号，但它的演示只公示一个账号。以站点页眉或 <code>chatlogin --version</code> 为准。</p>
+<p>托管用户是可选预设，不会自动迁移旧用户数据库、不会把旧后端转换为新数据库，也不是 SSO、OAuth 或 MFA。它也不把 <code>owner</code>、<code>admin</code> 解释为宿主业务数据的通行证；业务路由仍应执行自己的 <code>require_owner(user, record.owner_id)</code> 或等价授权。</p>
+<h2 id="plugin">作为插件集成<a class="headerlink" href="#plugin" title="Permanent link">&para;</a></h2>
+<p>ChatLogin 不拥有业务应用的服务器，也不要求额外建设登录微服务。应用安装依赖、选择账号后端并挂载插件；登录、身份、会话、CSRF、角色及默认页面由同一组件复用。宿主仍决定业务记录、下载、任务和数据归属的授权。</p>
 <table>
 <thead>
 <tr>
-<th>层次</th>
-<th>负责方</th>
-<th>验证方式</th>
+<th>集成方式</th>
+<th>配置</th>
+<th>复用机制</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td>多账号认证</td>
-<td><code>PasswordBackend</code> 映射、同步/异步回调、<code>ChatVoiceAuth</code> 账户库</td>
-<td>A/B返回不同且稳定的 <code>user_id</code></td>
+<td>默认页面</td>
+<td><code>create_managed_auth(..., pages=True)</code></td>
+<td>登录、用户管理、本人账号模板与全部受保护接口</td>
 </tr>
 <tr>
-<td>用户会话</td>
-<td>ChatLogin会话存储与HttpOnly Cookie</td>
-<td>两个独立浏览器会话互不串号；退出A不影响B</td>
+<td>自有前端</td>
+<td><code>create_managed_auth(..., pages=False)</code></td>
+<td>只注册会话／登录／退出及账号管理接口，不注册包内 HTML 或 assets</td>
 </tr>
 <tr>
-<td>业务数据</td>
-<td>宿主按可信身份过滤、调用 <code>require_owner</code></td>
-<td>本人列表/详情/写入成功；持A会话读写B样例返回403，反向相同</td>
+<td>已有账号库</td>
+<td>现有 backend + <code>FastAPIAuth</code>／核心库接口</td>
+<td>保留数据库和密码材料，复用会话与安全检查；不会自动接管旧库的账号生命周期</td>
 </tr>
 </tbody>
 </table>
-<p>每个后端演示都有两组<strong>公开合成凭据</strong>：A为 <code>demo</code> / <code>chatlogin-demo</code>，B为 <code>demo-b</code> / <code>chatlogin-demo-b</code>。登录页选择账号并填入，再点击登录。不要用两个普通标签假装独立用户：它们共享Cookie；并行验证使用普通与无痕窗口，或两个浏览器。</p>
-<p>登录后的“用户数据隔离”提供本人读取、本人修改、读取对方、修改对方四个真实API操作。修订号由服务端修改；数据未预先全部下发再由前端隐藏。归属来自服务端 <code>Principal.user_id</code>，不接受客户端指定 <code>owner_id</code>。公开的对方资源ID仅用于合成越权测试，不应成为真实产品的目录枚举接口。</p>
-<p>这是应用层逻辑隔离，不是每人独立数据库。ChatVoice宿主也可按 <code>(owner_id, record_id)</code> 查询并对不存在于当前用户空间的详情返回404。登录库不自动隔离会议、文件、下载、后台任务或其他业务表：宿主必须在每个入口执行自己的授权规则。每个真实用户必须拥有稳定且不同的 <code>user_id</code>，不能让多个账号都返回同一Principal。</p>
-<p>样例业务记录仅驻留当前演示进程，重启清空；它们没有任何真实业务权限。演示账号公开，所以任何访问者都可主动登录A或B；隔离结论是<strong>持A会话不能越权访问B资源</strong>，不是对知道B凭据的访问者保密。</p>
-<h2 id="_5">演示安全边界<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">auth</span> <span class="o">=</span> <span class="n">create_managed_auth</span><span class="p">(</span>
+<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="n">instance</span><span class="o">=</span><span class="s2">"mytool"</span><span class="p">,</span>
+<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    <span class="n">origin</span><span class="o">=</span><span class="s2">"https://app.example.com"</span><span class="p">,</span>
+<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="n">pages</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>  <span class="c1"># 保留应用自己的登录和管理前端</span>
+<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="p">)</span>
+<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span><span class="n">auth</span><span class="o">.</span><span class="n">router</span><span class="p">)</span>
+</code></pre></div>
+<p>已有消费者不必复制哈希、会话、CSRF 或权限校验实现；但现有 callback/ChatVoice/Dufs 等适配账户不会被自动迁入托管目录。其他 HTTP 宿主可直接组合 <code>ManagedUsers</code>、<code>SessionManager</code> 与安全检查；非 Python 前端调用宿主已挂载的同源接口，这不等于 OAuth／跨站 SSO SDK。</p>
+<h2 id="_3">最小挂载<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<p>先由显式操作员创建该实例的第一个 owner，再启动 Web 应用。密码值只存在于环境中；命令行接收的是环境变量<strong>名称</strong>，不是密码：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># 在安全的进程环境中提供 APP_BOOTSTRAP_CREDENTIAL；不要把值写进命令历史。</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>chatlogin<span class="w"> </span>users<span class="w"> </span>bootstrap<span class="w"> </span>operator<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span>--instance<span class="w"> </span>mytool<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span>--password-env<span class="w"> </span>APP_BOOTSTRAP_CREDENTIAL<span class="w"> </span><span class="se">\</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span>--display-name<span class="w"> </span><span class="s2">"Operator"</span>
+</code></pre></div>
+<p>该命令只允许空的账户实例进行首次 bootstrap。重复 bootstrap、不安全状态路径或无效输入会非零失败；没有 <code>--force</code>、chmod 修复或自动确认。<code>--home</code> 仅在需要显式 ChatArch home 时传入，<code>--json</code> 只输出安全的 <code>UserRecord</code> 字段，绝不输出凭据、哈希、cookie 或 CSRF。</p>
+<p>应用的最小 FastAPI 挂载如下：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">fastapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">Depends</span><span class="p">,</span> <span class="n">FastAPI</span>
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">chatlogin.managed_web</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_managed_auth</span>
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">()</span>
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="n">auth</span> <span class="o">=</span> <span class="n">create_managed_auth</span><span class="p">(</span>
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>    <span class="n">instance</span><span class="o">=</span><span class="s2">"mytool"</span><span class="p">,</span>
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>    <span class="n">origin</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">"MYTOOL_ORIGIN"</span><span class="p">],</span>
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="p">)</span>
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="n">app</span><span class="o">.</span><span class="n">include_router</span><span class="p">(</span><span class="n">auth</span><span class="o">.</span><span class="n">router</span><span class="p">)</span>
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="nd">@app</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/private"</span><span class="p">)</span>
+<a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">private</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="n">Depends</span><span class="p">(</span><span class="n">auth</span><span class="o">.</span><span class="n">current_user</span><span class="p">)):</span>
+<a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>    <span class="k">return</span> <span class="p">{</span><span class="s2">"user_id"</span><span class="p">:</span> <span class="n">user</span><span class="o">.</span><span class="n">user_id</span><span class="p">}</span>
+</code></pre></div>
+<p>需要显式拥有服务对象（例如测试或自定义生命周期）时，先创建再传入同一个实例：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">chatlogin.managed</span><span class="w"> </span><span class="kn">import</span> <span class="n">ManagedUsers</span>
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">chatlogin.managed_web</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_managed_auth</span>
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="n">users</span> <span class="o">=</span> <span class="n">ManagedUsers</span><span class="o">.</span><span class="n">for_instance</span><span class="p">(</span><span class="s2">"mytool"</span><span class="p">)</span>
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="n">auth</span> <span class="o">=</span> <span class="n">create_managed_auth</span><span class="p">(</span><span class="n">instance</span><span class="o">=</span><span class="s2">"mytool"</span><span class="p">,</span> <span class="n">origin</span><span class="o">=</span><span class="s2">"https://app.example"</span><span class="p">,</span> <span class="n">users</span><span class="o">=</span><span class="n">users</span><span class="p">)</span>
+</code></pre></div>
+<p><code>ManagedUsers.for_instance(instance, home=None, ...)</code> 使用该账户实例受控的持久存储。<code>ManagedUsers.in_memory(instance, ttl=300, max_users=..., max_sessions=...)</code> 只用于显式测试或演示；它不读取 profile/home，也必须在应用 shutdown 时关闭其生命周期。</p>
+<h2 id="_4">角色与操作<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>操作</th>
+<th>owner</th>
+<th>admin</th>
+<th>user</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>登录、查看/修改本人资料、修改本人密码</td>
+<td>是</td>
+<td>是</td>
+<td>是</td>
+</tr>
+<tr>
+<td>用户管理页与列表</td>
+<td>全部安全元数据</td>
+<td>普通用户及本人</td>
+<td>否</td>
+</tr>
+<tr>
+<td>创建普通用户</td>
+<td>是</td>
+<td>是</td>
+<td>否</td>
+</tr>
+<tr>
+<td>创建或授予 admin</td>
+<td>是</td>
+<td>否</td>
+<td>否</td>
+</tr>
+<tr>
+<td>停用、删除、重置普通用户密码</td>
+<td>是</td>
+<td>是</td>
+<td>否</td>
+</tr>
+<tr>
+<td>管理其他 admin</td>
+<td>是</td>
+<td>否</td>
+<td>否</td>
+</tr>
+<tr>
+<td>直接停用、删除或降级 owner</td>
+<td>否</td>
+<td>否</td>
+<td>否</td>
+</tr>
+<tr>
+<td>owner 交接</td>
+<td>显式目标用户名确认、当前密码复验、原子交接</td>
+<td>否</td>
+<td>否</td>
+</tr>
+</tbody>
+</table>
+<p>每个账户实例只有一个有效 owner。交接会使旧 owner 与目标用户的会话失效；角色、状态、删除和改密也会使受影响账户的旧会话失效。不要把应用自己的记录所有权混入这一角色表：<code>require_owner</code> 仍是宿主拥有的业务规则。</p>
+<h2 id="web-headless">Web、模板与 headless<a class="headerlink" href="#web-headless" title="Permanent link">&para;</a></h2>
+<p><code>create_managed_auth(...)</code> 返回 <code>ManagedAuth</code>，提供 <code>.router</code>、<code>.users</code>、<code>.current_user</code>、<code>.csrf_user</code>、<code>.admin_user</code> 和 <code>.cookie</code>。默认挂载前缀为 <code>/auth</code>：</p>
+<table>
+<thead>
+<tr>
+<th>路径</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>/auth/</code></td>
+<td>登录页</td>
+</tr>
+<tr>
+<td><code>/auth/users</code></td>
+<td>用户管理页</td>
+</tr>
+<tr>
+<td><code>/auth/profile</code></td>
+<td>本人资料页</td>
+</tr>
+<tr>
+<td><code>/auth/api/users</code></td>
+<td>用户列表、创建与用户管理 API</td>
+</tr>
+<tr>
+<td><code>/auth/api/profile</code></td>
+<td>本人资料和改密 API</td>
+</tr>
+<tr>
+<td><code>/auth/api/owner/transfer</code></td>
+<td>owner 交接 API</td>
+</tr>
+<tr>
+<td><code>/auth/session</code>、<code>/auth/login</code>、<code>/auth/logout</code>、<code>/auth/assets</code></td>
+<td>继承的会话、登录、退出和静态资源接口</td>
+</tr>
+</tbody>
+</table>
+<p>默认 <code>LoginUI</code>、<code>UserAdminUI</code> 与 <code>UserProfileUI</code> 使用同一主题、色板与外观约定。可信宿主可覆盖相应模板或 renderer；<code>headless</code> 接入则保留宿主页面并调用受保护 API。无论页面怎么替换，后台仍执行 Host/Origin、会话、CSRF 和角色校验。</p>
+<p>账户与会话的<strong>目录/实例命名空间</strong>由 <code>instance</code> 决定；<code>origin</code> 是浏览器 Host/Origin 校验和 cookie 安全配置，不能用 URL、proxy 头或请求体来选择账户库。挂载在子路径时，生成的 UI 与静态资源 URL 仍使用受信任的 mount/root path。</p>
+<h2 id="_5">独立合成演示<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
+<p>安装 <code>demo</code> extra 后可启动独立的真实预设演示：</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>chatlogin<span class="w"> </span>serve<span class="w"> </span>--managed-demo
+</code></pre></div>
+<p>它用 <code>ManagedUsers.in_memory(...)</code> 创建三组明确标记为公开合成的 owner、admin 与 user 账号，并通过真实 <code>bootstrap_owner</code>、<code>authenticate</code> 和 <code>create_user</code> 构建身份。演示不会读取用户 home/profile、生产账号库或生产会话；<code>/health</code> 只返回版本、<code>managed-demo</code> 模式和合成标记，公开 fixtures API 也只返回刻意公开的合成账号值。默认 <code>chatlogin serve</code> 继续是原有的四后端演示，行为不变。</p>
+<h2 id="_6">迁移与安全边界<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
 <ul>
-<li>每个后端最多 16 个有效 session，TTL 为 5 分钟；满载时返回可重试的 HTTP 503，不驱逐其他有效 session。</li>
-<li>Memory 模式仅存在于当前进程；ChatVoice fixture 只存在于当前共享内存 SQLite 生命周期，不写用户 home。</li>
-<li>认证与私有响应使用 <code>no-store</code>，cookie 为 <code>HttpOnly</code>、固定 path、<code>SameSite=Strict</code>，HTTPS origin 时启用 <code>Secure</code>。</li>
-<li>所有浏览器 POST 使用固定同源检查；已有 cookie 的重复登录先读取 session，并携带当前 CSRF 后再轮换。</li>
-<li>静态资源经 <code>importlib.resources</code> 从包内 allowlist 读取，带正确 content type；页面 CSP 不依赖外部 CDN。</li>
-<li>演示不读取 ChatEnv profile、生产 provider、真实账号数据库或任意 forwarded header。</li>
+<li>没有旧用户库的自动迁移，也不删除或改写宿主业务数据。</li>
+<li>没有 SSO、OAuth、MFA、邮件、短信或扫码认证声明。</li>
+<li>固定账号、回调和 ChatVoice adapter 的账户管理职责仍在宿主；它们不会因此获得托管用户管理页。</li>
+<li>生产部署仍由宿主管理固定 HTTPS origin、TLS、反向代理、服务进程和业务授权。</li>
+<li>只将 <code>--password-env</code> 指向受控环境变量，勿记录其值、cookie、CSRF、密码哈希或 session token。</li>
 </ul>
-<h2 id="_6">用于真实项目<a class="headerlink" href="#_6" title="Permanent link">&para;</a></h2>
-<p>生产项目应安装 <code>ChatLogin[web]</code>，选择自己的 <code>CredentialBackend</code>、<code>SessionStore</code>、固定 origin 和业务授权策略。默认 UI、宿主模板覆盖与 headless 是彼此独立的前端选择，不是 OAuth/短信等认证协议。</p>
-<ul>
-<li><a href="../integration/">接入与安全</a>：完整 FastAPI、覆盖模板、headless sequence、回调、ChatVoice schema 与 store 选择。</li>
-<li><a href="../capability-map/">能力地图</a>：当前实现与明确排除项。</li>
-<li><a href="../interface-tree/">Python 接口树</a>：实际构造签名与 HTTP 路由。</li>
-</ul>
-<p>ChatLogin 不提供默认生产密码、OAuth、SSO、MFA、邮件/短信验证码、扫码登录或跨业务身份中心。托管用户只提供实例内账户管理；固定账号、回调和 ChatVoice adapter 仍不提供账号后台。</p>
 
 
 

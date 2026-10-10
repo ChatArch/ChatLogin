@@ -286,6 +286,25 @@
   
   
   
+  
+    <li class="md-tabs__item">
+      <a href="../managed-users/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Managed Users
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
     
   
   
@@ -441,6 +460,28 @@
       
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../managed-users/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Managed Users
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
     
   
   
@@ -462,10 +503,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
         
           
-          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
             
   
   
@@ -478,8 +519,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_5">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6">
             <span class="md-nav__icon md-icon"></span>
             Commands and APIs
           </label>
@@ -597,6 +638,24 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#managed-users-020" class="md-nav__link">
+    <span class="md-ellipsis">
+      Managed Users (0.2.0)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#embeddable-managed-user-plugin" class="md-nav__link">
+    <span class="md-ellipsis">
+      Embeddable Managed-user Plugin
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#built-in-optional-chatvoice-backend" class="md-nav__link">
     <span class="md-ellipsis">
       Built-in Optional ChatVoice Backend
@@ -705,6 +764,24 @@
   <a href="#core-layer" class="md-nav__link">
     <span class="md-ellipsis">
       Core Layer
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#managed-users-020" class="md-nav__link">
+    <span class="md-ellipsis">
+      Managed Users (0.2.0)
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#embeddable-managed-user-plugin" class="md-nav__link">
+    <span class="md-ellipsis">
+      Embeddable Managed-user Plugin
     </span>
   </a>
   
@@ -838,89 +915,109 @@
 <a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>├── safe_next(value, default="/")
 <a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>└── LoginRateLimiter(limit, window, max_keys)
 </code></pre></div>
+<h2 id="managed-users-020">Managed Users (0.2.0)<a class="headerlink" href="#managed-users-020" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>chatlogin.managed
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>├── UserRecord                         # safe view: no password, hash, CSRF, or session token
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>└── ManagedUsers
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    ├── for_instance(instance, home=None, ...)
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>    ├── in_memory(instance, ttl=300, max_users=..., max_sessions=...)
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    ├── bootstrap_owner(username, password, display_name="") -&gt; UserRecord
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    ├── authenticate(username, password) -&gt; ManagedPrincipal | None
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>    ├── create_user(actor, username, password, role=Role.USER, display_name="")
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>    ├── update_user(...) / reset_password(...) / change_password(...)
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>    ├── delete_user(...) / transfer_owner(...)
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>    └── store / sessions
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>
+<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>chatlogin.managed_web
+<a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>└── create_managed_auth(instance, origin, users=None, prefix="/auth", ...)
+<a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>    └── ManagedAuth.router / .users / .current_user / .csrf_user / .admin_user / .cookie
+</code></pre></div>
+<p>This is an explicit application-account preset; it does not migrate fixed-account, callback, or ChatVoice user stores. <code>in_memory</code> is demo/test-only and must close at shutdown; roles do not change the host meaning of <code>require_owner</code>. See <a href="../managed-users/">Managed Users</a> for routes and details.</p>
+<h2 id="embeddable-managed-user-plugin">Embeddable Managed-user Plugin<a class="headerlink" href="#embeddable-managed-user-plugin" title="Permanent link">&para;</a></h2>
+<p><code>create_managed_auth(..., pages=True)</code> mounts default pages and APIs; <code>pages=False</code> mounts APIs only and preserves the host frontend. See <a href="../managed-users/#plugin">plugin integration</a>.</p>
 <h2 id="built-in-optional-chatvoice-backend">Built-in Optional ChatVoice Backend<a class="headerlink" href="#built-in-optional-chatvoice-backend" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>chatlogin.backends.chatvoice
-<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>├── ChatVoiceAuth(connect, lock, clock, *, ttl, max_sessions=10000)
-<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>│   ├── login(account, password) -&gt; IssuedSession | None
-<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>│   ├── resolve_row(token) -&gt; dict | None
-<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>│   ├── check_csrf(auth, submitted)
-<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>│   ├── logout(token)
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>│   └── store / backend / manager
-<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>└── ChatVoiceSessionStore(connect, lock, clock, *, max_sessions=10000)
-<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>    ├── put(instance, digest, session, *, previous_digest=None)
-<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>    ├── get(instance, digest) / read_row(instance, digest)
-<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>    ├── session_from_row(row)
-<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>    ├── delete(instance, digest)
-<a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>    └── purge_expired(instance, now)
+<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>chatlogin.backends.chatvoice
+<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>├── ChatVoiceAuth(connect, lock, clock, *, ttl, max_sessions=10000)
+<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>│   ├── login(account, password) -&gt; IssuedSession | None
+<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>│   ├── resolve_row(token) -&gt; dict | None
+<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>│   ├── check_csrf(auth, submitted)
+<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>│   ├── logout(token)
+<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>│   └── store / backend / manager
+<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>└── ChatVoiceSessionStore(connect, lock, clock, *, max_sessions=10000)
+<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>    ├── put(instance, digest, session, *, previous_digest=None)
+<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>    ├── get(instance, digest) / read_row(instance, digest)
+<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>    ├── session_from_row(row)
+<a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a>    ├── delete(instance, digest)
+<a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>    └── purge_expired(instance, now)
 </code></pre></div>
 <p>Available in the core package, also exported from <code>chatlogin.backends</code>. Fixed ChatVoice schema / <code>chatvoice</code> namespace, USER identities only; no table creation, migration, account management, HTTP or owner policy. See <a href="../integration/">Integration</a> for all three UI modes.</p>
 <h2 id="fastapi-adapter">FastAPI Adapter<a class="headerlink" href="#fastapi-adapter" title="Permanent link">&para;</a></h2>
 <p>Available with <code>ChatLogin[web]</code>. <code>FastAPIAuth</code> accepts a sync <code>CredentialBackend</code> or an async <code>AsyncCredentialBackend</code>; sync calls run in the threadpool and async calls are awaited.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>chatlogin.fastapi
-<a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a>├── FastAPIAuth
-<a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a>│   ├── router
-<a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a>│   ├── current_user(request) -&gt; Principal
-<a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>│   ├── csrf_user(request) -&gt; Principal
-<a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a>│   ├── roles(*roles) -&gt; FastAPI dependency
-<a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>│   └── cookie / sessions / ui
-<a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>├── CookieSettings(name, path, max_age, secure, same_site, http_only)
-<a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a>├── GET  {prefix}/session
-<a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a>├── POST {prefix}/login
-<a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>└── POST {prefix}/logout
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>chatlogin.fastapi
+<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>├── FastAPIAuth
+<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>│   ├── router
+<a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>│   ├── current_user(request) -&gt; Principal
+<a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>│   ├── csrf_user(request) -&gt; Principal
+<a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a>│   ├── roles(*roles) -&gt; FastAPI dependency
+<a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a>│   └── cookie / sessions / ui
+<a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a>├── CookieSettings(name, path, max_age, secure, same_site, http_only)
+<a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a>├── GET  {prefix}/session
+<a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a>├── POST {prefix}/login
+<a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a>└── POST {prefix}/logout
 </code></pre></div>
 <p>When <code>LoginUI</code> is provided, these routes are also registered:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>GET {prefix}/                  # packaged or host-overridden login page
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>GET {prefix}/assets/login.css
-<a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>GET {prefix}/assets/login.js
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>GET {prefix}/                  # packaged or host-overridden login page
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>GET {prefix}/assets/login.css
+<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>GET {prefix}/assets/login.js
 </code></pre></div>
 <p>Without <code>LoginUI</code>, no page or asset route is registered. This is the headless mode for hosts that keep their own HTML and JavaScript.</p>
 <h2 id="ui-layer">UI Layer<a class="headerlink" href="#ui-layer" title="Permanent link">&para;</a></h2>
 <p>Install <code>ChatLogin[ui]</code> when only UI rendering is needed; it installs Jinja2 without FastAPI. <code>ChatLogin[web]</code> includes the UI dependency plus FastAPI/Starlette.</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>chatlogin.ui
-<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>└── LoginUI(
-<a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>      title,
-<a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>      subtitle,
-<a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>      palette="indigo" | "forest" | "amber",
-<a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>      layout="card" | "split",
-<a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>      appearance="system" | "light" | "dark",
-<a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>      guest_url=None,
-<a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a>      guest_label="Continue as guest",  # explicit localization override
-<a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a>      template_dirs=(),
-<a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a>      template_name="chatlogin/login.html",
-<a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a>      stylesheet_url=None,
-<a id="__codelineno-4-13" name="__codelineno-4-13" href="#__codelineno-4-13"></a>      renderer=None,
-<a id="__codelineno-4-14" name="__codelineno-4-14" href="#__codelineno-4-14"></a>      script_url=None,
-<a id="__codelineno-4-15" name="__codelineno-4-15" href="#__codelineno-4-15"></a>    )
+<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>chatlogin.ui
+<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>└── LoginUI(
+<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>      title,
+<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>      subtitle,
+<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>      palette="indigo" | "forest" | "amber",
+<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>      layout="card" | "split",
+<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>      appearance="system" | "light" | "dark",
+<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>      guest_url=None,
+<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a>      guest_label="Continue as guest",  # explicit localization override
+<a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a>      template_dirs=(),
+<a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a>      template_name="chatlogin/login.html",
+<a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a>      stylesheet_url=None,
+<a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a>      renderer=None,
+<a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a>      script_url=None,
+<a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a>    )
 </code></pre></div>
 <p>Host templates in <code>template_dirs</code> take precedence over packaged templates. A host template can extend <code>chatlogin/login.html</code> and override one block, replace the whole page, or a callable renderer can return HTML directly.</p>
 <h2 id="minimal-host-backend">Minimal Host Backend<a class="headerlink" href="#minimal-host-backend" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">chatlogin</span><span class="w"> </span><span class="kn">import</span> <span class="n">CallbackBackend</span><span class="p">,</span> <span class="n">Principal</span><span class="p">,</span> <span class="n">Role</span><span class="p">,</span> <span class="n">verify_pbkdf2</span>
-<a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>
-<a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="k">def</span><span class="w"> </span><span class="nf">authenticate</span><span class="p">(</span><span class="n">username</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">password</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Principal</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-<a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>    <span class="n">row</span> <span class="o">=</span> <span class="n">my_user_database</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">username</span><span class="p">)</span>
-<a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>    <span class="k">if</span> <span class="n">row</span> <span class="ow">and</span> <span class="n">verify_pbkdf2</span><span class="p">(</span><span class="n">password</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">salt</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">digest</span><span class="p">,</span> <span class="n">iterations</span><span class="o">=</span><span class="n">row</span><span class="o">.</span><span class="n">iterations</span><span class="p">):</span>
-<a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>        <span class="k">return</span> <span class="n">Principal</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">display_name</span><span class="p">,</span> <span class="n">Role</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">role</span><span class="p">))</span>
-<a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>    <span class="k">return</span> <span class="kc">None</span>
-<a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>
-<a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="n">backend</span> <span class="o">=</span> <span class="n">CallbackBackend</span><span class="p">(</span><span class="n">authenticate</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">chatlogin</span><span class="w"> </span><span class="kn">import</span> <span class="n">CallbackBackend</span><span class="p">,</span> <span class="n">Principal</span><span class="p">,</span> <span class="n">Role</span><span class="p">,</span> <span class="n">verify_pbkdf2</span>
+<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>
+<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="k">def</span><span class="w"> </span><span class="nf">authenticate</span><span class="p">(</span><span class="n">username</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">password</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Principal</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>    <span class="n">row</span> <span class="o">=</span> <span class="n">my_user_database</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="n">username</span><span class="p">)</span>
+<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>    <span class="k">if</span> <span class="n">row</span> <span class="ow">and</span> <span class="n">verify_pbkdf2</span><span class="p">(</span><span class="n">password</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">salt</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">digest</span><span class="p">,</span> <span class="n">iterations</span><span class="o">=</span><span class="n">row</span><span class="o">.</span><span class="n">iterations</span><span class="p">):</span>
+<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>        <span class="k">return</span> <span class="n">Principal</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">display_name</span><span class="p">,</span> <span class="n">Role</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">role</span><span class="p">))</span>
+<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a>    <span class="k">return</span> <span class="kc">None</span>
+<a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>
+<a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="n">backend</span> <span class="o">=</span> <span class="n">CallbackBackend</span><span class="p">(</span><span class="n">authenticate</span><span class="p">)</span>
 </code></pre></div>
 <p>Use <code>AsyncCallbackBackend</code> for async upstreams:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">chatlogin</span><span class="w"> </span><span class="kn">import</span> <span class="n">AsyncCallbackBackend</span><span class="p">,</span> <span class="n">Principal</span>
-<a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>
-<a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">authenticate</span><span class="p">(</span><span class="n">username</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">password</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Principal</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-<a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a>    <span class="n">row</span> <span class="o">=</span> <span class="k">await</span> <span class="n">upstream</span><span class="o">.</span><span class="n">verify</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">)</span>
-<a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a>    <span class="k">return</span> <span class="n">Principal</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">display_name</span><span class="p">)</span> <span class="k">if</span> <span class="n">row</span> <span class="k">else</span> <span class="kc">None</span>
-<a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a>
-<a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="n">backend</span> <span class="o">=</span> <span class="n">AsyncCallbackBackend</span><span class="p">(</span><span class="n">authenticate</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">chatlogin</span><span class="w"> </span><span class="kn">import</span> <span class="n">AsyncCallbackBackend</span><span class="p">,</span> <span class="n">Principal</span>
+<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
+<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">authenticate</span><span class="p">(</span><span class="n">username</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">password</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Principal</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a>    <span class="n">row</span> <span class="o">=</span> <span class="k">await</span> <span class="n">upstream</span><span class="o">.</span><span class="n">verify</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">password</span><span class="p">)</span>
+<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a>    <span class="k">return</span> <span class="n">Principal</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">row</span><span class="o">.</span><span class="n">display_name</span><span class="p">)</span> <span class="k">if</span> <span class="n">row</span> <span class="k">else</span> <span class="kc">None</span>
+<a id="__codelineno-7-6" name="__codelineno-7-6" href="#__codelineno-7-6"></a>
+<a id="__codelineno-7-7" name="__codelineno-7-7" href="#__codelineno-7-7"></a><span class="n">backend</span> <span class="o">=</span> <span class="n">AsyncCallbackBackend</span><span class="p">(</span><span class="n">authenticate</span><span class="p">)</span>
 </code></pre></div>
 <p>Both sync and async callbacks validate username/password UTF-8 byte limits before calling host code. Invalid input is not passed to the callback; host code must return an authenticated <code>Principal</code> or <code>None</code>, and guest/other objects fail closed.</p>
 <p>The host continues to own its account table, password material, resource owners, and policies. ChatLogin creates no default production account and never treats <code>admin</code> as permission to read every resource.</p>
 <h2 id="runtime-paths">Runtime Paths<a class="headerlink" href="#runtime-paths" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">chatlogin</span><span class="w"> </span><span class="kn">import</span> <span class="n">PrivateSQLite</span><span class="p">,</span> <span class="n">SQLiteSessionStore</span><span class="p">,</span> <span class="n">state_paths</span>
-<a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>
-<a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a><span class="n">paths</span> <span class="o">=</span> <span class="n">state_paths</span><span class="p">(</span><span class="s2">"my-site"</span><span class="p">)</span>
-<a id="__codelineno-7-4" name="__codelineno-7-4" href="#__codelineno-7-4"></a><span class="n">store</span> <span class="o">=</span> <span class="n">SQLiteSessionStore</span><span class="o">.</span><span class="n">for_instance</span><span class="p">(</span><span class="s2">"my-site"</span><span class="p">)</span>
-<a id="__codelineno-7-5" name="__codelineno-7-5" href="#__codelineno-7-5"></a><span class="n">private</span> <span class="o">=</span> <span class="n">PrivateSQLite</span><span class="p">(</span><span class="n">paths</span><span class="o">.</span><span class="n">directory</span> <span class="o">/</span> <span class="s2">"leaf-package.sqlite3"</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-8-1" name="__codelineno-8-1" href="#__codelineno-8-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">chatlogin</span><span class="w"> </span><span class="kn">import</span> <span class="n">PrivateSQLite</span><span class="p">,</span> <span class="n">SQLiteSessionStore</span><span class="p">,</span> <span class="n">state_paths</span>
+<a id="__codelineno-8-2" name="__codelineno-8-2" href="#__codelineno-8-2"></a>
+<a id="__codelineno-8-3" name="__codelineno-8-3" href="#__codelineno-8-3"></a><span class="n">paths</span> <span class="o">=</span> <span class="n">state_paths</span><span class="p">(</span><span class="s2">"my-site"</span><span class="p">)</span>
+<a id="__codelineno-8-4" name="__codelineno-8-4" href="#__codelineno-8-4"></a><span class="n">store</span> <span class="o">=</span> <span class="n">SQLiteSessionStore</span><span class="o">.</span><span class="n">for_instance</span><span class="p">(</span><span class="s2">"my-site"</span><span class="p">)</span>
+<a id="__codelineno-8-5" name="__codelineno-8-5" href="#__codelineno-8-5"></a><span class="n">private</span> <span class="o">=</span> <span class="n">PrivateSQLite</span><span class="p">(</span><span class="n">paths</span><span class="o">.</span><span class="n">directory</span> <span class="o">/</span> <span class="s2">"leaf-package.sqlite3"</span><span class="p">)</span>
 </code></pre></div>
 <p>The default session path is <code>&lt;ChatArch home&gt;/chatlogin/instances/&lt;instance&gt;/sessions.sqlite3</code>. Importing the package or calculating paths creates nothing; initializing <code>PrivateSQLite</code> or the store securely creates missing private directories and the main database. Leaf packages can reuse the boundary with <code>with private.connect() as connection:</code>. A normal context exit commits, an exception rolls back, and <code>immediate=True</code> runs <code>BEGIN IMMEDIATE</code> before yielding the connection.</p>
 <p>The POSIX implementation traverses every ancestor no-follow and validates ownership/write access; the final data directory must be service-UID-owned and exactly <code>0700</code>. It opens the main database at its real file URI with <code>mode=rw</code>. Existing main databases and sidecars must be service-UID-owned, single-link, regular files with exact mode <code>0600</code> and are never chmodded; only safe sidecars newly created by SQLite inside the trusted parent may be normalized to <code>0600</code>. The boundary does not rely on an fd alias and does not exclude same-UID processes; same-UID processes and root are trusted here.</p>

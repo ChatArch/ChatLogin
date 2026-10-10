@@ -291,6 +291,25 @@
   
   
   
+    <li class="md-tabs__item">
+      <a href="../managed-users/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Managed Users
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
     
     
       <li class="md-tabs__item">
@@ -439,6 +458,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#managed-users-demo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Managed Users Demo
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#what-you-can-exercise" class="md-nav__link">
     <span class="md-ellipsis">
       What You Can Exercise
@@ -532,6 +560,28 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="../managed-users/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Managed Users
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
     
     
     
@@ -548,10 +598,10 @@
         
           
         
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
         
           
-          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
             
   
   
@@ -564,8 +614,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_5">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
             <span class="md-nav__icon md-icon"></span>
             Commands and APIs
           </label>
@@ -683,6 +733,15 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#managed-users-demo" class="md-nav__link">
+    <span class="md-ellipsis">
+      Managed Users Demo
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#what-you-can-exercise" class="md-nav__link">
     <span class="md-ellipsis">
       What You Can Exercise
@@ -756,7 +815,8 @@
 <a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>  --host TEXT           Bind address; loopback by default.  [default: 127.0.0.1]
 <a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>  --port INTEGER RANGE  TCP port.  [default: 8765; 1&lt;=x&lt;=65535]
 <a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>  --origin TEXT         Fixed trusted public origin for browser Host/Origin checks.
-<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>  --help                Show this message and exit.
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>  --managed-demo        Serve the disposable managed-users demonstration.
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>  --help                Show this message and exit.
 </code></pre></div>
 <p>When a reverse proxy terminates TLS, keep the process on loopback and explicitly provide the origin browsers use:</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>chatlogin<span class="w"> </span>serve<span class="w"> </span><span class="se">\</span>
@@ -765,6 +825,11 @@
 <a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span>--origin<span class="w"> </span>https://login.example.com
 </code></pre></div>
 <p><code>--origin</code> is fixed security configuration. It is never inferred from <code>Host</code>, <code>X-Forwarded-Host</code>, or <code>X-Forwarded-Proto</code>. Proxy policy, TLS, process supervision, and public rate limiting remain deployment responsibilities.</p>
+<h2 id="managed-users-demo">Managed Users Demo<a class="headerlink" href="#managed-users-demo" title="Permanent link">&para;</a></h2>
+<p>Default <code>chatlogin serve</code> remains the four legacy-backend demo described on this page. To exercise the new instance-local owner/admin/user preset, select it explicitly:</p>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>chatlogin<span class="w"> </span>serve<span class="w"> </span>--managed-demo
+</code></pre></div>
+<p>It creates a current-process-only <code>ManagedUsers.in_memory(...)</code> lifetime that closes at shutdown, then uses real <code>bootstrap_owner</code>, <code>authenticate</code>, and <code>create_user</code> calls for three <strong>public synthetic</strong> owner, admin, and user accounts. Its landing page lists those deliberately public fixtures, role boundaries, and login/manage/profile entries; management and profile still use the default <code>UserAdminUI</code> / <code>UserProfileUI</code> and protected APIs. It reads no ChatEnv home/profile, production account database, or production sessions. <code>GET /health</code> contains only the installed version, <code>mode: "managed-demo"</code>, and <code>synthetic: true</code>; <code>GET /api/managed-demo/accounts</code> contains only deliberately public synthetic values. See <a href="../managed-users/">Managed Users</a>.</p>
 <h2 id="what-you-can-exercise">What You Can Exercise<a class="headerlink" href="#what-you-can-exercise" title="Permanent link">&para;</a></h2>
 <p>The development preview exposes public synthetic A/B accounts. Choose one in the login form and use <strong>Fill Demo</strong>. Neither identity maps to real customer data; see the <a href="#user-isolation">isolation lab</a>.</p>
 <table>
@@ -806,8 +871,8 @@
 <p>Each mode has a separate cookie name and session namespace. The post-login workspace renders a safe identity, host-owned synthetic records, real ownership checks, protected-read/CSRF checks, and logout actions. Pages and logs do not render session tokens, cookies, password hashes, or CSRF values. CSRF is returned only in same-origin session/login JSON for safe writes; session tokens are delivered through HttpOnly cookies.</p>
 <p>The template playground at <code>/templates</code> is generated by real <code>LoginUI.render()</code>. It accepts only three palettes, two layouts, <code>light</code>/<code>dark</code>/<code>system</code>, and a guest toggle, then produces exact copyable Python configuration. It accepts no arbitrary HTML or filesystem path.</p>
 <p>Health and version readback:</p>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>GET /health   -&gt; {"status":"ok","version":"0.1.6"}
-<a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>GET /version  -&gt; {"version":"0.1.6"}
+<div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>GET /health   -&gt; {"status":"ok","version":"&lt;installed-version&gt;"}
+<a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>GET /version  -&gt; {"version":"&lt;installed-version&gt;"}
 </code></pre></div>
 <h2 id="user-isolation">Multiple Accounts and Data Isolation<a class="headerlink" href="#user-isolation" title="Permanent link">&para;</a></h2>
 <p>The A/B isolation lab is available starting in <code>0.1.6</code>. The <code>0.1.5</code> authentication core already supports multiple accounts, but its bundled demo exposes only one identity. Check the site header or <code>chatlogin --version</code>.</p>
@@ -857,7 +922,7 @@
 <li><a href="../capability-map/">Capability Map</a>: implemented and explicitly excluded behavior.</li>
 <li><a href="../interface-tree/">Python Interface Tree</a>: actual constructor signatures and HTTP routes.</li>
 </ul>
-<p>ChatLogin provides no default production password, OAuth, SSO, MFA, email/SMS code, QR login, account console, or cross-product identity center.</p>
+<p>ChatLogin provides no default production password, OAuth, SSO, MFA, email/SMS code, QR login, or cross-product identity center. Managed users provide only instance-local account administration; fixed accounts, callbacks, and the ChatVoice adapter still have no account console.</p>
 
 
 

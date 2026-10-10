@@ -288,6 +288,25 @@
   
   
   
+  
+    <li class="md-tabs__item">
+      <a href="../managed-users/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  托管用户
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
     
   
   
@@ -443,6 +462,28 @@
       
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../managed-users/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    托管用户
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
     
   
   
@@ -464,10 +505,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
         
           
-          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
             
   
   
@@ -480,8 +521,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_5">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6">
             <span class="md-nav__icon md-icon"></span>
             命令与接口
           </label>
@@ -744,6 +785,11 @@
 <td><code>chatlogin serve</code>、四类真实后端体验、模板游乐场与可复制接入示例；不连接生产数据</td>
 </tr>
 <tr>
+<td>托管用户预设</td>
+<td><code>0.2.0</code></td>
+<td><code>ManagedUsers</code>、每实例 owner/admin/user、默认登录/管理/本人资料 UI/API；需显式采用，不迁移旧账户库</td>
+</tr>
+<tr>
 <td>身份与授权</td>
 <td>已实现</td>
 <td><code>Principal</code>、<code>Role</code>、401/403、<code>require_role</code>、<code>require_owner</code>；admin 不自动绕过 owner</td>
@@ -802,21 +848,22 @@
 </table>
 <h2 id="_3">接入选择<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <ol>
-<li><strong>新网站</strong>：默认 UI + <code>PasswordBackend</code> 或宿主回调即可起步。</li>
+<li><strong>新网站且需要应用自管账户</strong>：显式采用 <code>ManagedUsers</code> + <code>create_managed_auth</code>，先由操作员 bootstrap 首个 owner。</li>
+<li><strong>新网站且账户仍归宿主</strong>：默认 UI + <code>PasswordBackend</code> 或宿主回调即可起步。</li>
 <li><strong>需要自有视觉</strong>：保留 FastAPI adapter，替换 <code>LoginUI</code> 的模板目录、模板名或 renderer。</li>
 <li><strong>已有 ChatVoice schema</strong>：直接选用 <code>ChatVoiceAuth</code>；保留原 HTTP/前端，或将 <code>backend</code> / <code>manager</code> 交给通用 FastAPI adapter。默认 UI、宿主覆盖和 headless 均可使用。</li>
 </ol>
 <p>后端选择：固定/多账号 <code>PasswordBackend</code>；同步宿主库 <code>CallbackBackend</code>；异步宿主库 <code>AsyncCallbackBackend</code>；ChatVoice schema 用现成 <code>ChatVoiceAuth</code>。详见 <a href="../integration/">选择矩阵</a>。</p>
 <h2 id="_4">不在当前范围<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <ul>
-<li>不提供独立生产登录微服务、SSO、OAuth/邮箱登录、MFA 或账户管理后台。</li>
+<li>不提供独立生产登录微服务、SSO、OAuth/邮箱登录或 MFA。托管用户提供实例内账户管理；固定、回调和 ChatVoice adapter 的账户管理仍归宿主。</li>
 <li>不接管会议、文件、卡片等业务数据；每个宿主继续定义资源 owner 和 policy。</li>
 <li>不把 guest 当成数据库账户；访客体验由宿主显式声明。</li>
 <li>不提供万能 ORM 或后端注册中心；ChatVoice 兼容后端来自自有桥接实现，并以旧 schema 合成测试验证。</li>
 <li>不把 secret、cookie、CSRF token、Authorization header 或生产凭据写入日志或页面。CSRF 仅通过同源 session/login JSON 交给浏览器，用于受保护写操作。</li>
 </ul>
 <h2 id="_5">多用户边界<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
-<p>多账号认证已由账号映射、回调及ChatVoice兼容后端提供。<code>require_owner</code>只是宿主可复用的归属校验，不是自动数据库行级权限。不同账号必须返回不同的稳定user_id。<a href="../demo/#user-isolation">A/B实验及责任划分</a>。</p>
+<p>多账号认证已由账号映射、回调、ChatVoice兼容后端和托管用户预设提供。<code>require_owner</code>只是宿主可复用的归属校验，不是自动数据库行级权限；托管 <code>owner</code> 也不绕过它。不同账号必须返回不同的稳定user_id。见<a href="../managed-users/">托管用户</a>与<a href="../demo/#user-isolation">A/B实验及责任划分</a>。</p>
 
 
 

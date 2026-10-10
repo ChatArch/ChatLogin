@@ -288,6 +288,25 @@
   
   
   
+  
+    <li class="md-tabs__item">
+      <a href="../managed-users/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Managed Users
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
     
   
   
@@ -443,6 +462,28 @@
       
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../managed-users/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    Managed Users
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
     
   
   
@@ -464,10 +505,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" checked>
         
           
-          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="">
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="">
             
   
   
@@ -480,8 +521,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_5">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_6">
             <span class="md-nav__icon md-icon"></span>
             Commands and APIs
           </label>
@@ -744,6 +785,11 @@
 <td><code>chatlogin serve</code>, four backend experiences, a template playground, and copyable integration examples; no production data</td>
 </tr>
 <tr>
+<td>Managed-users preset</td>
+<td><code>0.2.0</code></td>
+<td><code>ManagedUsers</code>, per-instance owner/admin/user, and default login/management/profile UI/API; explicit adoption only, with no old-store migration</td>
+</tr>
+<tr>
 <td>Identity and authorization</td>
 <td>Implemented</td>
 <td><code>Principal</code>, <code>Role</code>, 401/403, <code>require_role</code>, and <code>require_owner</code>; admin does not bypass ownership</td>
@@ -802,21 +848,22 @@
 </table>
 <h2 id="integration-choices">Integration Choices<a class="headerlink" href="#integration-choices" title="Permanent link">&para;</a></h2>
 <ol>
-<li><strong>New site:</strong> start with default UI plus <code>PasswordBackend</code> or a host callback.</li>
+<li><strong>New site with application-managed accounts:</strong> explicitly adopt <code>ManagedUsers</code> + <code>create_managed_auth</code>, then let an operator bootstrap the first owner.</li>
+<li><strong>New site whose accounts remain host-owned:</strong> start with default UI plus <code>PasswordBackend</code> or a host callback.</li>
 <li><strong>Custom visual identity:</strong> keep the FastAPI adapter and replace template directories, template name, or renderer through <code>LoginUI</code>.</li>
 <li><strong>Existing ChatVoice schema:</strong> select <code>ChatVoiceAuth</code>; keep host HTTP/frontend or pass its <code>backend</code> / <code>manager</code> to the generic FastAPI adapter. Default UI, overrides and headless are all supported.</li>
 </ol>
 <p>Backend selection: fixed/multiple accounts use <code>PasswordBackend</code>; sync host databases use <code>CallbackBackend</code>; async host databases use <code>AsyncCallbackBackend</code>; the ChatVoice schema uses ready-made <code>ChatVoiceAuth</code>. See the <a href="../integration/">selection matrix</a>.</p>
 <h2 id="out-of-scope">Out of Scope<a class="headerlink" href="#out-of-scope" title="Permanent link">&para;</a></h2>
 <ul>
-<li>No standalone production login microservice, SSO, OAuth/email login, MFA, or admin console.</li>
+<li>No standalone production login microservice, SSO, OAuth/email login, or MFA. Managed users provide instance-local account administration; fixed, callback, and ChatVoice adapter account management remains host-owned.</li>
 <li>ChatLogin does not own meetings, files, cards, or other business data; hosts retain owner and policy decisions.</li>
 <li>Guest is not a database account; guest experiences must be explicitly declared by the host.</li>
 <li>No universal ORM or backend registry; the ChatVoice backend promotes our existing bridge with synthetic legacy-schema regression coverage.</li>
 <li>Secrets, cookies, CSRF tokens, Authorization headers, and production credentials are never logged.</li>
 </ul>
 <h2 id="multi-user-boundary">Multi-User Boundary<a class="headerlink" href="#multi-user-boundary" title="Permanent link">&para;</a></h2>
-<p>Account mappings, callbacks, and the ChatVoice-compatible backend support multiple identities. <code>require_owner</code> is a host-invoked ownership check, not automatic database row-level security. Different users require distinct stable user IDs. See the <a href="../demo/#user-isolation">A/B lab and responsibility split</a>.</p>
+<p>Account mappings, callbacks, the ChatVoice-compatible backend, and managed users support multiple identities. <code>require_owner</code> is a host-invoked ownership check, not automatic database row-level security; a managed <code>owner</code> does not bypass it. Different users require distinct stable user IDs. See <a href="../managed-users/">Managed Users</a> and the <a href="../demo/#user-isolation">A/B lab and responsibility split</a>.</p>
 
 
 

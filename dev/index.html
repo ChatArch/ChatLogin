@@ -289,6 +289,25 @@
   
   
   
+    <li class="md-tabs__item">
+      <a href="managed-users/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  托管用户
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
     
     
       <li class="md-tabs__item">
@@ -521,6 +540,28 @@
   
   
   
+    <li class="md-nav__item">
+      <a href="managed-users/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    托管用户
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
     
     
     
@@ -537,10 +578,10 @@
         
           
         
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_5" >
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_6" >
         
           
-          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
             
   
   
@@ -553,8 +594,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_5">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
             <span class="md-nav__icon md-icon"></span>
             命令与接口
           </label>
@@ -739,13 +780,18 @@
 <p><a href="demo/">打开演示指南</a></p>
 </li>
 <li>
+<p><strong>应用自管用户目录</strong></p>
+<p>需要 owner/admin/user、管理页面和本人资料时，采用 <code>ManagedUsers</code> 与默认 FastAPI 预设；业务数据授权仍归宿主。</p>
+<p><a href="managed-users/">查看托管用户</a></p>
+</li>
+<li>
 <p><strong>保留现有网站样式</strong></p>
 <p>默认模板、宿主模板覆盖、headless JSON 三种接入层级；ChatVoice 首个集成验收走 headless。</p>
 <p><a href="capability-map/">查看能力边界</a></p>
 </li>
 <li>
 <p><strong>校对 CLI 与包边界</strong></p>
-<p>CLI 提供版本、命令树、只读路径解析和隔离的 <code>serve</code> 产品演示；可复用认证能力仍是 Python API。</p>
+<p>CLI 提供版本、命令树、只读路径解析、首次 owner bootstrap，以及默认或 managed 的隔离 <code>serve</code> 产品演示；可复用认证能力仍是 Python API。</p>
 <p><a href="cli-tree/">查看 CLI 树</a></p>
 </li>
 </ul>
@@ -784,6 +830,7 @@
 <a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a>    <span class="k">return</span> <span class="n">principal</span><span class="o">.</span><span class="n">as_dict</span><span class="p">()</span>
 </code></pre></div>
 <p>完整可运行示例见仓库 <code>examples/demo_fastapi.py</code>，仅使用临时合成账号。</p>
+<p>需要应用自管账户时，新消费者显式依赖 <code>ChatLogin&gt;=0.2.0,&lt;0.3.0</code>，由操作员先以环境变量名执行 <code>chatlogin users bootstrap</code>，再挂载 <code>create_managed_auth(instance=..., origin=...)</code>。它不会迁移旧用户库，也不替代宿主 <code>require_owner</code> 业务授权；见<a href="managed-users/">托管用户</a>。</p>
 <h2 id="_3">前端三种接入<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -814,7 +861,7 @@
 <p>样式只影响展示，不改变认证、CSRF、cookie、角色或资源 owner 校验。默认资源使用 scoped <code>.chatlogin</code> 类与 CSS variables，不全局重置宿主页面。</p>
 <h2 id="_4">安全默认值<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
 <ul>
-<li>服务端可信身份：<code>guest</code>、<code>user</code>、<code>admin</code>；登录请求不能自行提升角色。</li>
+<li>服务端可信身份：<code>guest</code>、<code>user</code>、<code>admin</code>，以及托管预设的 <code>owner</code>；登录请求不能自行提升角色。</li>
 <li>密码校验后端可注入；支持固定账号、多账号和宿主回调，兼容已有 PBKDF2 材料但不强制迁移。</li>
 <li>会话 token 使用安全随机值，数据库仅保存 SHA-256 摘要；支持到期、轮换、撤销和实例隔离。</li>
 <li>Cookie 默认 <code>HttpOnly</code>、<code>Secure</code>、<code>SameSite=Lax</code>；写操作需要同站 Origin 与 CSRF token。</li>
