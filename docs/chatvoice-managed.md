@@ -37,6 +37,10 @@ owner = adopt_owner(store, "admin@example.invalid")
 
 schema 初始化是显式、幂等、additive 的：为旧账号补充 role/status/revision 等管理列，默认旧账号为 enabled `USER`，并建立唯一有效 owner 约束。它不删除旧行、不复制账号到第二个用户库，也不改写业务归属。
 
+## 账号匹配规则
+
+启用 managed schema 后，`ChatVoiceAuth` 与 `ManagedUsers` 共用 `lower(account)` 账号键：ASCII 账号大小写变体可登录同一既有身份，原 `account` 字符串、ID、盐和密码哈希不改写。规范化键冲突时拒绝认证，不能选择任意匹配行；schema 初始化也会拒绝冲突，并在原表建立规范化唯一性约束。尚未启用管理元数据的旧库继续采用原来的精确账号匹配。
+
 ## Owner 采用
 
 `adopt_owner(store, exact_existing_account_or_id) -> UserRecord` 只用于一次性采用精确既有账号或 ID：

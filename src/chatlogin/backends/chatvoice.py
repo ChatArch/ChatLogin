@@ -188,15 +188,21 @@ class ChatVoiceAuth:
         with self.store.lock(), closing(self.store.connect()) as db:
             columns = _table_columns(db, "accounts")
             extra = ""
-            if {"role", "enabled", "deleted", "auth_revision"}.issubset(columns):
+            managed = {"role", "enabled", "deleted", "auth_revision"}.issubset(columns)
+            if managed:
                 extra = ", role, enabled, deleted, auth_revision"
             if "password_iterations" in columns:
                 extra += ", password_iterations"
-            row = db.execute(
+            # The managed facade indexes lower(account); use the same key only
+            # after explicit adoption, without rewriting legacy account bytes.
+            predicate = "lower(account) = lower(?)" if managed else "account = ?"
+            rows = db.execute(
                 "SELECT id AS user_id, display_name, password_salt, password_hash" + extra
-                + " FROM accounts WHERE account = ?",
+                + " FROM accounts WHERE " + predicate,
                 (account,),
-            ).fetchone()
+            ).fetchmany(2)
+            # Fail closed if host metadata exists without its uniqueness guard.
+            row = rows[0] if len(rows) == 1 else None
         # Missing users still incur the same legacy PBKDF2 work; no dummy account.
         salt, digest = (row["password_salt"], row["password_hash"]) if row else (b"\0" * 16, b"\0" * 32)
         iterations = _valid_iterations(row["password_iterations"]) if row and _has_column(row, "password_iterations") else PASSWORD_ITERATIONS

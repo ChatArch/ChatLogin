@@ -37,6 +37,10 @@ owner = adopt_owner(store, "admin@example.invalid")
 
 Schema initialization is explicit, idempotent, and additive. It adds management columns such as role/status/revision to legacy accounts, defaults old accounts to enabled `USER`, and installs the one-enabled-owner constraint. It does not delete old rows, copy accounts into a second user database, or rewrite business ownership.
 
+## Account Matching
+
+After managed schema adoption, `ChatVoiceAuth` and `ManagedUsers` share the `lower(account)` key: ASCII case variants authenticate the same existing identity without rewriting the original account text, ID, salt, or password hash. Ambiguous normalized keys are rejected rather than selecting an arbitrary row; schema initialization also rejects collisions and adds a normalized unique constraint on the authoritative table. Legacy databases without management metadata retain exact account matching.
+
 ## Owner Adoption
 
 `adopt_owner(store, exact_existing_account_or_id) -> UserRecord` is only for one-time adoption of an exact existing account or id:
