@@ -135,23 +135,12 @@ class FastAPIAuth:
         return request.client.host if request.client else "unknown"
 
     async def _json_body(self, request: Request) -> dict:
-        content_types = request.headers.getlist("content-type")
-        if len(content_types) != 1 or content_types[0].split(";", 1)[0].strip().lower() != "application/json":
-            raise _http(status_code=415, detail="Content-Type must be application/json")
-        body = bytearray()
-        async for chunk in request.stream():
-            if len(body) + len(chunk) > self.max_body_bytes:
-                raise _http(status_code=413, detail="Request body too large")
-            body.extend(chunk)
-        try:
-            payload = json.loads(body.decode("utf-8"), object_pairs_hook=_json_object, parse_constant=_invalid_json)
-        except (UnicodeDecodeError, ValueError, RecursionError):
-            raise _http(status_code=400, detail="Invalid JSON") from None
-        if not isinstance(payload, dict):
-            raise _http(status_code=400, detail="JSON object required")
-        extra = set(payload) - {"username", "password", "next"}
-        if extra:
-            raise _http(status_code=400, detail="Unsupported login fields")
+        payload = await _json_object_body(
+            request,
+            max_body_bytes=self.max_body_bytes,
+            allowed_fields={"username", "password", "next"},
+            unsupported_detail="Unsupported login fields",
+        )
         username = payload.get("username")
         password = payload.get("password")
         if not valid_credentials(username, password):
@@ -322,6 +311,39 @@ def _json_object(pairs: list) -> dict:
 
 def _invalid_json(value: str):
     raise ValueError("Invalid JSON constant")
+
+
+async def _json_object_body(
+    request: Request,
+    *,
+    max_body_bytes: int,
+    allowed_fields: set[str] | frozenset[str],
+    unsupported_detail: str,
+) -> dict:
+    """Read one bounded JSON object with the login parser's fail-closed rules.
+
+    Endpoint-specific validation deliberately remains with each transport handler;
+    this helper only owns streaming, UTF-8, duplicate-key, JSON-constant and
+    top-level/object-field checks shared by login and managed-account APIs.
+    """
+    content_types = request.headers.getlist("content-type")
+    if len(content_types) != 1 or content_types[0].split(";", 1)[0].strip().lower() != "application/json":
+        raise _http(status_code=415, detail="Content-Type must be application/json")
+    body = bytearray()
+    async for chunk in request.stream():
+        if len(body) + len(chunk) > max_body_bytes:
+            raise _http(status_code=413, detail="Request body too large")
+        body.extend(chunk)
+    try:
+        payload = json.loads(body.decode("utf-8"), object_pairs_hook=_json_object, parse_constant=_invalid_json)
+    except (UnicodeDecodeError, ValueError, RecursionError):
+        raise _http(status_code=400, detail="Invalid JSON") from None
+    if not isinstance(payload, dict):
+        raise _http(status_code=400, detail="JSON object required")
+    extra = set(payload) - allowed_fields
+    if extra:
+        raise _http(status_code=400, detail=unsupported_detail)
+    return payload
 
 
 async def _call(function, *args, **kwargs):
