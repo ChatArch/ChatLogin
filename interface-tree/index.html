@@ -706,9 +706,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#chatvoice-facade" class="md-nav__link">
+  <a href="#chatvoice-facade020" class="md-nav__link">
     <span class="md-ellipsis">
-      ChatVoice 托管 facade（未发布预览）
+      ChatVoice 托管 facade（0.2.0）
     </span>
   </a>
   
@@ -847,9 +847,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#chatvoice-facade" class="md-nav__link">
+  <a href="#chatvoice-facade020" class="md-nav__link">
     <span class="md-ellipsis">
-      ChatVoice 托管 facade（未发布预览）
+      ChatVoice 托管 facade（0.2.0）
     </span>
   </a>
   
@@ -1010,14 +1010,14 @@
 <a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>    └── purge_expired(instance, now)
 </code></pre></div>
 <p>核心包即可导入，两类也从 <code>chatlogin.backends</code> 导出。固定 ChatVoice schema / <code>chatvoice</code> 命名空间，只产生 USER 身份；不建表、不迁移、不负责账号创建、HTTP 或 owner 权限。接入与三种 UI 模式见 <a href="../integration/">接入文档</a>。</p>
-<h2 id="chatvoice-facade">ChatVoice 托管 facade（未发布预览）<a class="headerlink" href="#chatvoice-facade" title="Permanent link">&para;</a></h2>
+<h2 id="chatvoice-facade020">ChatVoice 托管 facade（0.2.0）<a class="headerlink" href="#chatvoice-facade020" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>chatlogin.backends
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>├── ChatVoiceManagedStore(connect, lock, clock, *, max_users=10000, max_sessions=10000)
 <a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>│   └── initialize()
 <a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>├── initialize_chatvoice_managed_schema(connection) -&gt; None
 <a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>└── adopt_owner(store, exact_existing_account_or_id) -&gt; UserRecord
 </code></pre></div>
-<p>该 facade 面向受信任同进程 ChatVoice 宿主，复用原 <code>accounts</code> 与 <code>auth_sessions</code>。schema 初始化是显式、幂等、additive 的；owner 采用只接受精确既有账号或 ID，已有 owner 时失败。完整边界见 <a href="../chatvoice-managed/">ChatVoice legacy schema 集成</a>。</p>
+<p>该 facade 面向受信任同进程 ChatVoice 宿主，复用原 <code>accounts</code> 与 <code>auth_sessions</code>。schema 初始化是显式、幂等、additive 的；owner 采用只接受精确既有账号或 ID，已有 owner 时失败。启用管理元数据后，legacy 登录使用 metadata-aware 账号键匹配大小写变体并保留原账号文本、ID、盐和哈希；未启用管理元数据的旧库继续精确账号匹配。完整边界见 <a href="../chatvoice-managed/">ChatVoice legacy schema 集成</a>。</p>
 <h2 id="fastapi">FastAPI 适配层<a class="headerlink" href="#fastapi" title="Permanent link">&para;</a></h2>
 <p>安装 <code>ChatLogin[web]</code> 后可用。<code>FastAPIAuth</code> 可接收同步 <code>CredentialBackend</code> 或异步 <code>AsyncCredentialBackend</code>；同步调用会在线程池执行，异步调用会被 await。</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>chatlogin.fastapi

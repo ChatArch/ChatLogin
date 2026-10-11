@@ -706,9 +706,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#chatvoice-managed-facade-unreleased-preview" class="md-nav__link">
+  <a href="#chatvoice-managed-facade-020" class="md-nav__link">
     <span class="md-ellipsis">
-      ChatVoice Managed Facade (Unreleased Preview)
+      ChatVoice Managed Facade (0.2.0)
     </span>
   </a>
   
@@ -847,9 +847,9 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#chatvoice-managed-facade-unreleased-preview" class="md-nav__link">
+  <a href="#chatvoice-managed-facade-020" class="md-nav__link">
     <span class="md-ellipsis">
-      ChatVoice Managed Facade (Unreleased Preview)
+      ChatVoice Managed Facade (0.2.0)
     </span>
   </a>
   
@@ -1010,14 +1010,14 @@
 <a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a>    └── purge_expired(instance, now)
 </code></pre></div>
 <p>Available in the core package, also exported from <code>chatlogin.backends</code>. Fixed ChatVoice schema / <code>chatvoice</code> namespace, USER identities only; no table creation, migration, account management, HTTP or owner policy. See <a href="../integration/">Integration</a> for all three UI modes.</p>
-<h2 id="chatvoice-managed-facade-unreleased-preview">ChatVoice Managed Facade (Unreleased Preview)<a class="headerlink" href="#chatvoice-managed-facade-unreleased-preview" title="Permanent link">&para;</a></h2>
+<h2 id="chatvoice-managed-facade-020">ChatVoice Managed Facade (0.2.0)<a class="headerlink" href="#chatvoice-managed-facade-020" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a>chatlogin.backends
 <a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a>├── ChatVoiceManagedStore(connect, lock, clock, *, max_users=10000, max_sessions=10000)
 <a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a>│   └── initialize()
 <a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a>├── initialize_chatvoice_managed_schema(connection) -&gt; None
 <a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a>└── adopt_owner(store, exact_existing_account_or_id) -&gt; UserRecord
 </code></pre></div>
-<p>This facade is for a trusted same-process ChatVoice host and reuses the original <code>accounts</code> and <code>auth_sessions</code> tables. Schema initialization is explicit, idempotent, and additive. Owner adoption accepts only an exact existing account or id and fails when an owner already exists. See <a href="../chatvoice-managed/">ChatVoice legacy schema integration</a> for boundaries.</p>
+<p>This facade is for a trusted same-process ChatVoice host and reuses the original <code>accounts</code> and <code>auth_sessions</code> tables. Schema initialization is explicit, idempotent, and additive. Owner adoption accepts only an exact existing account or id and fails when an owner already exists. After management metadata is enabled, legacy login uses a metadata-aware account key for case variants while preserving the original account text, ID, salt, and hash; legacy databases without management metadata retain exact account matching. See <a href="../chatvoice-managed/">ChatVoice legacy schema integration</a> for boundaries.</p>
 <h2 id="fastapi-adapter">FastAPI Adapter<a class="headerlink" href="#fastapi-adapter" title="Permanent link">&para;</a></h2>
 <p>Available with <code>ChatLogin[web]</code>. <code>FastAPIAuth</code> accepts a sync <code>CredentialBackend</code> or an async <code>AsyncCredentialBackend</code>; sync calls run in the threadpool and async calls are awaited.</p>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>chatlogin.fastapi

@@ -825,24 +825,26 @@
 
 
 <h1 id="chatvoice-legacy-schema">ChatVoice legacy schema 集成<a class="headerlink" href="#chatvoice-legacy-schema" title="Permanent link">&para;</a></h1>
-<div class="admonition warning">
-<p class="admonition-title">未发布预览</p>
-<p>本页描述候选 provider/consumer 配对能力。公开的 ChatLogin 0.1.6 与 ChatVoice 0.4.1 不一定包含这些新 API；预览环境应使用已审查的匹配 wheel 对。稳定安装在匹配发布后再按正式版本约束采用。</p>
+<div class="admonition note">
+<p class="admonition-title">ChatLogin 0.2.0 提供方能力</p>
+<p>本页描述 ChatLogin provider <code>0.2.0</code> 提供的 legacy schema 托管接入面。既有消费方若仍固定 <code>&lt;0.2</code> 不会改变；采用该能力时需由消费方显式升级依赖并在自己的发布中接入。</p>
 </div>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">"ChatLogin[web]==0.2.0"</span>
+</code></pre></div>
 <p>该集成面向已经使用 ChatVoice/Speakr SQLite <code>accounts</code> 与 <code>auth_sessions</code> 的宿主。目标是保留原账号、密码材料、会话表关系、业务 <code>owner_id</code>、API token 归属、会议/对话/录音等数据，同时把同一账户目录暴露给 ChatLogin managed users 的 owner/admin/user 管理能力。</p>
 <h2 id="schema">支持的 schema 采用方式<a class="headerlink" href="#schema" title="Permanent link">&para;</a></h2>
-<div class="highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">chatlogin.backends</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
-<a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>    <span class="n">ChatVoiceManagedStore</span><span class="p">,</span>
-<a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>    <span class="n">adopt_owner</span><span class="p">,</span>
-<a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>    <span class="n">initialize_chatvoice_managed_schema</span><span class="p">,</span>
-<a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="p">)</span>
-<a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="kn">from</span><span class="w"> </span><span class="nn">chatlogin.managed</span><span class="w"> </span><span class="kn">import</span> <span class="n">ManagedUsers</span>
-<a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>
-<a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a><span class="n">store</span> <span class="o">=</span> <span class="n">ChatVoiceManagedStore</span><span class="p">(</span><span class="n">connect</span><span class="p">,</span> <span class="n">lock</span><span class="p">,</span> <span class="n">clock</span><span class="p">,</span> <span class="n">max_users</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">max_sessions</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span>
-<a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a><span class="n">store</span><span class="o">.</span><span class="n">initialize</span><span class="p">()</span>
-<a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a><span class="n">users</span> <span class="o">=</span> <span class="n">ManagedUsers</span><span class="p">(</span><span class="n">store</span><span class="p">,</span> <span class="n">session_namespace</span><span class="o">=</span><span class="s2">"chatvoice"</span><span class="p">,</span> <span class="n">ttl</span><span class="o">=</span><span class="mi">86400</span><span class="p">,</span> <span class="n">clock</span><span class="o">=</span><span class="n">clock</span><span class="p">)</span>
-<a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>
-<a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="n">owner</span> <span class="o">=</span> <span class="n">adopt_owner</span><span class="p">(</span><span class="n">store</span><span class="p">,</span> <span class="s2">"admin@example.invalid"</span><span class="p">)</span>
+<div class="highlight"><pre><span></span><code><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="kn">from</span><span class="w"> </span><span class="nn">chatlogin.backends</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+<a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a>    <span class="n">ChatVoiceManagedStore</span><span class="p">,</span>
+<a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    <span class="n">adopt_owner</span><span class="p">,</span>
+<a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>    <span class="n">initialize_chatvoice_managed_schema</span><span class="p">,</span>
+<a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="p">)</span>
+<a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="kn">from</span><span class="w"> </span><span class="nn">chatlogin.managed</span><span class="w"> </span><span class="kn">import</span> <span class="n">ManagedUsers</span>
+<a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>
+<a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="n">store</span> <span class="o">=</span> <span class="n">ChatVoiceManagedStore</span><span class="p">(</span><span class="n">connect</span><span class="p">,</span> <span class="n">lock</span><span class="p">,</span> <span class="n">clock</span><span class="p">,</span> <span class="n">max_users</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">max_sessions</span><span class="o">=</span><span class="mi">10000</span><span class="p">)</span>
+<a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="n">store</span><span class="o">.</span><span class="n">initialize</span><span class="p">()</span>
+<a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="n">users</span> <span class="o">=</span> <span class="n">ManagedUsers</span><span class="p">(</span><span class="n">store</span><span class="p">,</span> <span class="n">session_namespace</span><span class="o">=</span><span class="s2">"chatvoice"</span><span class="p">,</span> <span class="n">ttl</span><span class="o">=</span><span class="mi">86400</span><span class="p">,</span> <span class="n">clock</span><span class="o">=</span><span class="n">clock</span><span class="p">)</span>
+<a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>
+<a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="n">owner</span> <span class="o">=</span> <span class="n">adopt_owner</span><span class="p">(</span><span class="n">store</span><span class="p">,</span> <span class="s2">"admin@example.invalid"</span><span class="p">)</span>
 </code></pre></div>
 <p><code>connect</code>、<code>lock</code> 与 <code>clock</code> 由受信任同进程宿主提供，并指向同一个 ChatVoice 数据库和互斥边界。<code>initialize_chatvoice_managed_schema(connection)</code> 可在宿主的显式数据库 setup 中调用；迁移不是 import side effect，也不是公开 HTTP bootstrap。</p>
 <h2 id="_1">数据保留<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
@@ -882,7 +884,7 @@
 </table>
 <p>schema 初始化是显式、幂等、additive 的：为旧账号补充 role/status/revision 等管理列，默认旧账号为 enabled <code>USER</code>，并建立唯一有效 owner 约束。它不删除旧行、不复制账号到第二个用户库，也不改写业务归属。</p>
 <h2 id="_2">账号匹配规则<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
-<p>启用 managed schema 后，<code>ChatVoiceAuth</code> 与 <code>ManagedUsers</code> 共用 <code>lower(account)</code> 账号键：ASCII 账号大小写变体可登录同一既有身份，原 <code>account</code> 字符串、ID、盐和密码哈希不改写。规范化键冲突时拒绝认证，不能选择任意匹配行；schema 初始化也会拒绝冲突，并在原表建立规范化唯一性约束。尚未启用管理元数据的旧库继续采用原来的精确账号匹配。管理资料、角色、状态、密码与删除操作也保持原账号字符串；初始化会在调用方事务内替换曾改写账号的旧版 package-owned update trigger，不修改既有账号行，已修正 trigger 不重复替换。</p>
+<p>启用 managed schema 后，<code>ChatVoiceAuth</code> 与 <code>ManagedUsers</code> 共用 metadata-aware 的 <code>lower(account)</code> 账号键：ASCII 账号大小写变体可登录同一既有身份，原 <code>account</code> 字符串、ID、盐和密码哈希不改写。规范化键冲突时拒绝认证，不能选择任意匹配行；schema 初始化也会拒绝冲突，并在原表建立规范化唯一性约束。尚未启用管理元数据的旧库继续采用原来的精确账号匹配。管理资料、角色、状态、密码与删除操作也保持原账号字符串；初始化会在调用方事务内替换曾改写账号的旧版 package-owned update trigger，不修改既有账号行，已修正 trigger 不重复替换。</p>
 <h2 id="owner">Owner 采用<a class="headerlink" href="#owner" title="Permanent link">&para;</a></h2>
 <p><code>adopt_owner(store, exact_existing_account_or_id) -&gt; UserRecord</code> 只用于一次性采用精确既有账号或 ID：</p>
 <ul>
