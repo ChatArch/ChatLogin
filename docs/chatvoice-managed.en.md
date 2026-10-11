@@ -1,7 +1,11 @@
 # ChatVoice Legacy Schema Integration
 
-!!! warning "Unreleased preview"
-    This page describes a candidate provider/consumer pair. Public ChatLogin 0.1.6 and ChatVoice 0.4.1 do not necessarily include these new APIs. Preview environments should use the reviewed matching wheel pair. Stable installation should adopt the capability after a matching release.
+!!! note "ChatLogin 0.2.0 provider capability"
+    This page describes the legacy-schema managed integration provided by ChatLogin provider `0.2.0`. Existing consumers pinned `<0.2` do not change; adopting this capability requires each consumer to explicitly upgrade its dependency and integrate it in its own release.
+
+```bash
+python -m pip install "ChatLogin[web]==0.2.0"
+```
 
 This integration is for hosts that already use ChatVoice/Speakr SQLite `accounts` and `auth_sessions`. It preserves original accounts, password material, session relationships, business `owner_id`, API-token ownership, meetings, conversations, and recordings while exposing the same account directory through ChatLogin managed users.
 
@@ -39,7 +43,7 @@ Schema initialization is explicit, idempotent, and additive. It adds management 
 
 ## Account Matching
 
-After managed schema adoption, `ChatVoiceAuth` and `ManagedUsers` share the `lower(account)` key: ASCII case variants authenticate the same existing identity without rewriting the original account text, ID, salt, or password hash. Ambiguous normalized keys are rejected rather than selecting an arbitrary row; schema initialization also rejects collisions and adds a normalized unique constraint on the authoritative table. Legacy databases without management metadata retain exact account matching. Profile, role, status, password and deletion operations also preserve the original account text. Initialization replaces the historical package-owned account-rewriting update trigger within the caller's transaction without modifying existing account rows; an already-corrected trigger is not repeatedly replaced.
+After managed schema adoption, `ChatVoiceAuth` and `ManagedUsers` share the metadata-aware `lower(account)` key: ASCII case variants authenticate the same existing identity without rewriting the original account text, ID, salt, or password hash. Ambiguous normalized keys are rejected rather than selecting an arbitrary row; schema initialization also rejects collisions and adds a normalized unique constraint on the authoritative table. Legacy databases without management metadata retain exact account matching. Profile, role, status, password and deletion operations also preserve the original account text. Initialization replaces the historical package-owned account-rewriting update trigger within the caller's transaction without modifying existing account rows; an already-corrected trigger is not repeatedly replaced.
 
 ## Owner Adoption
 
@@ -64,4 +68,3 @@ After managed schema adoption, `ChatVoiceAuth` and `ManagedUsers` share the `low
 | Owner transfer | Handled by the managed-users owner-only atomic transfer flow |
 
 The host still enforces business authorization on routes, such as meeting `owner_id`, voice-job ownership, read-token scopes, and denial for disabled/deleted accounts.
-

@@ -89,7 +89,7 @@ chatlogin.backends.chatvoice
 
 核心包即可导入，两类也从 `chatlogin.backends` 导出。固定 ChatVoice schema / `chatvoice` 命名空间，只产生 USER 身份；不建表、不迁移、不负责账号创建、HTTP 或 owner 权限。接入与三种 UI 模式见 [接入文档](integration.md)。
 
-## ChatVoice 托管 facade（未发布预览）
+## ChatVoice 托管 facade（0.2.0）
 
 ```text
 chatlogin.backends
@@ -99,7 +99,7 @@ chatlogin.backends
 └── adopt_owner(store, exact_existing_account_or_id) -> UserRecord
 ```
 
-该 facade 面向受信任同进程 ChatVoice 宿主，复用原 `accounts` 与 `auth_sessions`。schema 初始化是显式、幂等、additive 的；owner 采用只接受精确既有账号或 ID，已有 owner 时失败。完整边界见 [ChatVoice legacy schema 集成](chatvoice-managed.md)。
+该 facade 面向受信任同进程 ChatVoice 宿主，复用原 `accounts` 与 `auth_sessions`。schema 初始化是显式、幂等、additive 的；owner 采用只接受精确既有账号或 ID，已有 owner 时失败。启用管理元数据后，legacy 登录使用 metadata-aware 账号键匹配大小写变体并保留原账号文本、ID、盐和哈希；未启用管理元数据的旧库继续精确账号匹配。完整边界见 [ChatVoice legacy schema 集成](chatvoice-managed.md)。
 
 ## FastAPI 适配层
 

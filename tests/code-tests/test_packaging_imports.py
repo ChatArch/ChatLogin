@@ -90,19 +90,44 @@ def test_web_compatibility_install_command_quotes_each_requirement():
     assert result.stdout.splitlines()[-2:] == ["<fastapi>=0.110,<1.0>", "<starlette>=0.40,<1.0>"]
 
 
-def test_distribution_exports_new_public_apis():
-    script = ("import chatlogin as cl; assert cl.__version__ == '0.1.6'; "
+def test_distribution_exports_new_public_apis(tmp_path):
+    script = ("import chatlogin as cl; assert cl.__version__ == '0.2.0'; "
               "assert cl.AsyncCallbackBackend; assert cl.AsyncCredentialBackend; "
               "assert cl.PrivateSQLite")
-    subprocess.run([sys.executable, "-c", script], cwd="/tmp", check=True)
+    subprocess.run([sys.executable, "-c", script], cwd=tmp_path, check=True)
 
 
-def test_core_import_does_not_load_optional_web_modules():
+def test_core_import_does_not_load_optional_web_modules(tmp_path):
     script = (
         "import sys, chatlogin; "
         "assert 'fastapi' not in sys.modules; "
         "assert 'starlette' not in sys.modules; "
         "assert 'jinja2' not in sys.modules; "
-        "assert chatlogin.__version__ == '0.1.6'"
+        "assert chatlogin.__version__ == '0.2.0'"
     )
-    subprocess.run([sys.executable, "-c", script], cwd="/tmp", check=True)
+    subprocess.run([sys.executable, "-c", script], cwd=tmp_path, check=True)
+
+
+def test_formal_release_docs_do_not_describe_020_as_preview():
+    release_pages = [
+        ROOT / "README.md",
+        ROOT / "README.en.md",
+        ROOT / "CHANGELOG.md",
+        ROOT / "docs" / "capability-map.md",
+        ROOT / "docs" / "capability-map.en.md",
+        ROOT / "docs" / "chatvoice-managed.md",
+        ROOT / "docs" / "chatvoice-managed.en.md",
+        ROOT / "docs" / "interface-tree.md",
+        ROOT / "docs" / "interface-tree.en.md",
+    ]
+    combined = "\n".join(path.read_text() for path in release_pages)
+    forbidden = [
+        "Unreleased",
+        "unreleased preview",
+        "候选 wheel",
+        "candidate wheel",
+        "paired candidate",
+        "预留",
+    ]
+    for phrase in forbidden:
+        assert phrase not in combined
