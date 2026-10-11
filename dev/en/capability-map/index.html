@@ -832,8 +832,8 @@
 </tr>
 <tr>
 <td>ChatVoice legacy managed facade</td>
-<td>Unreleased preview</td>
-<td>Additive initialization over existing <code>accounts</code> / <code>auth_sessions</code>, one-time owner adoption, and managed-users CRUD; requires a matching candidate provider/consumer pair</td>
+<td><code>0.2.0</code></td>
+<td>Additive initialization over existing <code>accounts</code> / <code>auth_sessions</code>, one-time owner adoption, metadata-aware account matching, and managed-users CRUD; explicit consumer adoption required</td>
 </tr>
 <tr>
 <td>Identity and authorization</td>
@@ -897,7 +897,7 @@
 <li><strong>New site with application-managed accounts:</strong> explicitly adopt <code>ManagedUsers</code> + <code>create_managed_auth</code>, then let an operator bootstrap the first owner.</li>
 <li><strong>New site whose accounts remain host-owned:</strong> start with default UI plus <code>PasswordBackend</code> or a host callback.</li>
 <li><strong>Custom visual identity:</strong> keep the FastAPI adapter and replace template directories, template name, or renderer through <code>LoginUI</code>.</li>
-<li><strong>Existing ChatVoice schema:</strong> select <code>ChatVoiceAuth</code>; keep host HTTP/frontend or pass its <code>backend</code> / <code>manager</code> to the generic FastAPI adapter. Default UI, overrides and headless are all supported.</li>
+<li><strong>Existing ChatVoice schema:</strong> select <code>ChatVoiceAuth</code>; to add user management on the same legacy schema, explicitly initialize <code>ChatVoiceManagedStore</code> and adopt one existing owner. Default UI, overrides and headless are all supported.</li>
 </ol>
 <p>Backend selection: fixed/multiple accounts use <code>PasswordBackend</code>; sync host databases use <code>CallbackBackend</code>; async host databases use <code>AsyncCallbackBackend</code>; the ChatVoice schema uses ready-made <code>ChatVoiceAuth</code>. See the <a href="../integration/">selection matrix</a>.</p>
 <h2 id="out-of-scope">Out of Scope<a class="headerlink" href="#out-of-scope" title="Permanent link">&para;</a></h2>
