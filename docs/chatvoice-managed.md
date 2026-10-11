@@ -1,7 +1,11 @@
 # ChatVoice legacy schema 集成
 
-!!! warning "未发布预览"
-    本页描述候选 provider/consumer 配对能力。公开的 ChatLogin 0.1.6 与 ChatVoice 0.4.1 不一定包含这些新 API；预览环境应使用已审查的匹配 wheel 对。稳定安装在匹配发布后再按正式版本约束采用。
+!!! note "ChatLogin 0.2.0 提供方能力"
+    本页描述 ChatLogin provider `0.2.0` 提供的 legacy schema 托管接入面。既有消费方若仍固定 `<0.2` 不会改变；采用该能力时需由消费方显式升级依赖并在自己的发布中接入。
+
+```bash
+python -m pip install "ChatLogin[web]==0.2.0"
+```
 
 该集成面向已经使用 ChatVoice/Speakr SQLite `accounts` 与 `auth_sessions` 的宿主。目标是保留原账号、密码材料、会话表关系、业务 `owner_id`、API token 归属、会议/对话/录音等数据，同时把同一账户目录暴露给 ChatLogin managed users 的 owner/admin/user 管理能力。
 
@@ -39,7 +43,7 @@ schema 初始化是显式、幂等、additive 的：为旧账号补充 role/stat
 
 ## 账号匹配规则
 
-启用 managed schema 后，`ChatVoiceAuth` 与 `ManagedUsers` 共用 `lower(account)` 账号键：ASCII 账号大小写变体可登录同一既有身份，原 `account` 字符串、ID、盐和密码哈希不改写。规范化键冲突时拒绝认证，不能选择任意匹配行；schema 初始化也会拒绝冲突，并在原表建立规范化唯一性约束。尚未启用管理元数据的旧库继续采用原来的精确账号匹配。管理资料、角色、状态、密码与删除操作也保持原账号字符串；初始化会在调用方事务内替换曾改写账号的旧版 package-owned update trigger，不修改既有账号行，已修正 trigger 不重复替换。
+启用 managed schema 后，`ChatVoiceAuth` 与 `ManagedUsers` 共用 metadata-aware 的 `lower(account)` 账号键：ASCII 账号大小写变体可登录同一既有身份，原 `account` 字符串、ID、盐和密码哈希不改写。规范化键冲突时拒绝认证，不能选择任意匹配行；schema 初始化也会拒绝冲突，并在原表建立规范化唯一性约束。尚未启用管理元数据的旧库继续采用原来的精确账号匹配。管理资料、角色、状态、密码与删除操作也保持原账号字符串；初始化会在调用方事务内替换曾改写账号的旧版 package-owned update trigger，不修改既有账号行，已修正 trigger 不重复替换。
 
 ## Owner 采用
 
@@ -64,4 +68,3 @@ schema 初始化是显式、幂等、additive 的：为旧账号补充 role/stat
 | owner 交接 | 由 managed users 的 owner-only 原子交接处理 |
 
 宿主仍需在业务路由中执行原来的记录归属检查，例如会议 `owner_id`、声音任务所属账号、只读 token scope 与禁用/删除账号拒绝策略。
-

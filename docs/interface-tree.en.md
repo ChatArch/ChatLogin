@@ -89,7 +89,7 @@ chatlogin.backends.chatvoice
 
 Available in the core package, also exported from `chatlogin.backends`. Fixed ChatVoice schema / `chatvoice` namespace, USER identities only; no table creation, migration, account management, HTTP or owner policy. See [Integration](integration.en.md) for all three UI modes.
 
-## ChatVoice Managed Facade (Unreleased Preview)
+## ChatVoice Managed Facade (0.2.0)
 
 ```text
 chatlogin.backends
@@ -99,7 +99,7 @@ chatlogin.backends
 └── adopt_owner(store, exact_existing_account_or_id) -> UserRecord
 ```
 
-This facade is for a trusted same-process ChatVoice host and reuses the original `accounts` and `auth_sessions` tables. Schema initialization is explicit, idempotent, and additive. Owner adoption accepts only an exact existing account or id and fails when an owner already exists. See [ChatVoice legacy schema integration](chatvoice-managed.en.md) for boundaries.
+This facade is for a trusted same-process ChatVoice host and reuses the original `accounts` and `auth_sessions` tables. Schema initialization is explicit, idempotent, and additive. Owner adoption accepts only an exact existing account or id and fails when an owner already exists. After management metadata is enabled, legacy login uses a metadata-aware account key for case variants while preserving the original account text, ID, salt, and hash; legacy databases without management metadata retain exact account matching. See [ChatVoice legacy schema integration](chatvoice-managed.en.md) for boundaries.
 
 ## FastAPI Adapter
 

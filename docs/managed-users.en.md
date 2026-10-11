@@ -1,6 +1,6 @@
 # Managed Users
 
-This page describes the managed-users preset planned for `0.2.0`. New adopters should explicitly require `ChatLogin>=0.2.0,<0.3.0`. Existing fixed-account, callback, and ChatVoice-compatible integrations do not need to change. A legacy ChatVoice consumer's `<0.2` dependency remains unaffected unless it deliberately adopts managed users.
+This page describes the managed-users preset provided by `0.2.0`. New adopters should explicitly require `ChatLogin>=0.2.0,<0.3.0`. Existing fixed-account, callback, and ChatVoice-compatible integrations do not need to change. A legacy ChatVoice consumer's `<0.2` dependency remains unaffected unless it deliberately adopts managed users or the ChatVoice legacy-schema managed facade.
 
 ## Choose the Right Entry Point
 

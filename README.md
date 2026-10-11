@@ -59,11 +59,11 @@ chatlogin serve --host 127.0.0.1 --port 8765 --origin https://login.example.com
 
 核心包不要求网站采用包内页面。已有静态 HTML/原生 JS 的网站可以只挂载 JSON 路由，继续保留原登录入口和用户数据库；标准库 HTTP 宿主也可以只使用 `LoginUI` 渲染登录页。
 
-## 托管用户（0.2.0 目标）
+## 托管用户（0.2.0）
 
 需要应用内 owner/admin/user、登录页、本人资料和用户管理时，新消费者显式采用 `ChatLogin>=0.2.0,<0.3.0`，并使用 `ManagedUsers` 与 `create_managed_auth`。第一个 owner 必须由操作员执行 `chatlogin users bootstrap USERNAME --instance NAME --password-env KEY` 创建；KEY 是环境变量名，绝不把密码放进 argv。它只允许空实例首次初始化，没有迁移、`--force` 或默认生产凭据。见[托管用户指南](docs/managed-users.md)。
 
-固定账号、同步/异步回调与 ChatVoice 兼容 adapter 保持原有账户管理边界；既有 ChatVoice 消费方的 `<0.2` 依赖不受影响，主动采用新预设时才升级。ChatVoice legacy schema 托管集成仍处于未发布预览；稳定安装只在匹配 provider/consumer 发布后包含该能力，本预览应使用已审查的成对候选 wheel。
+固定账号、同步/异步回调与 ChatVoice 兼容 adapter 保持原有账户管理边界；既有 ChatVoice 消费方的 `<0.2` 依赖不受影响，主动采用 `0.2` 的新预设或 ChatVoice legacy schema 托管 facade 时才显式升级。ChatVoice legacy schema 托管集成随 ChatLogin provider `0.2.0` 提供；消费方是否采用由各自发布节奏决定，不代表任何既有 ChatVoice 消费方已经发布对应版本。
 
 ## 选择认证入口
 
@@ -107,4 +107,4 @@ mkdocs build --strict
 
 ### 多用户与数据隔离
 
-认证后端支持多个账号，每个用户需要不同且稳定的 `user_id`。会话归ChatLogin，业务资源授权归宿主；接入登录组件并不自动隔离所有业务数据。开发预览提供A/B账号的真实读写隔离实验，参见[演示说明](docs/demo.md#user-isolation)。
+认证后端支持多个账号，每个用户需要不同且稳定的 `user_id`。会话归 ChatLogin，业务资源授权归宿主；接入登录组件并不自动隔离所有业务数据。包内演示提供 A/B 账号的真实读写隔离实验，参见[演示说明](docs/demo.md#user-isolation)。

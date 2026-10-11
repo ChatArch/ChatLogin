@@ -6,7 +6,7 @@
 | --- | --- | --- |
 | 包内演示站 | 已实现（`demo` extra） | `chatlogin serve`、四类真实后端体验、模板游乐场与可复制接入示例；不连接生产数据 |
 | 托管用户预设 | `0.2.0` | `ManagedUsers`、每实例 owner/admin/user、默认登录/管理/本人资料 UI/API；需显式采用，不迁移旧账户库 |
-| ChatVoice legacy 托管 facade | 未发布预览 | 保留原 `accounts` / `auth_sessions` 的 additive 初始化、一次性 owner 采用和 managed users CRUD；需匹配候选 provider/consumer |
+| ChatVoice legacy 托管 facade | `0.2.0` | 保留原 `accounts` / `auth_sessions` 的 additive 初始化、一次性 owner 采用、metadata-aware 账号匹配和 managed users CRUD；需消费方显式采用 |
 | 身份与授权 | 已实现 | `Principal`、`Role`、401/403、`require_role`、`require_owner`；admin 不自动绕过 owner |
 | 认证后端 | 已实现 | `PasswordBackend` 支持一个或多个显式账号；`CallbackBackend` 接入宿主用户库；`AsyncCallbackBackend` await 异步上游校验 |
 | ChatVoice 兼容后端 | 已实现（核心包，按需导入） | `ChatVoiceAuth` / `ChatVoiceSessionStore`；仅现有 ChatVoice schema、固定命名空间与 USER，不建表/迁移，无 ChatVoice/web 依赖 |
@@ -24,7 +24,7 @@
 1. **新网站且需要应用自管账户**：显式采用 `ManagedUsers` + `create_managed_auth`，先由操作员 bootstrap 首个 owner。
 2. **新网站且账户仍归宿主**：默认 UI + `PasswordBackend` 或宿主回调即可起步。
 3. **需要自有视觉**：保留 FastAPI adapter，替换 `LoginUI` 的模板目录、模板名或 renderer。
-4. **已有 ChatVoice schema**：直接选用 `ChatVoiceAuth`；保留原 HTTP/前端，或将 `backend` / `manager` 交给通用 FastAPI adapter。默认 UI、宿主覆盖和 headless 均可使用。
+4. **已有 ChatVoice schema**：直接选用 `ChatVoiceAuth`；如要在同一 legacy schema 上接入用户管理，显式初始化 `ChatVoiceManagedStore` 并采用一个既有 owner。默认 UI、宿主覆盖和 headless 均可使用。
 
 后端选择：固定/多账号 `PasswordBackend`；同步宿主库 `CallbackBackend`；异步宿主库 `AsyncCallbackBackend`；ChatVoice schema 用现成 `ChatVoiceAuth`。详见 [选择矩阵](integration.md)。
 

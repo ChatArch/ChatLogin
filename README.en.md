@@ -59,11 +59,11 @@ chatlogin serve --host 127.0.0.1 --port 8765 --origin https://login.example.com
 
 The core package does not require adopting the packaged page. An existing static HTML/vanilla-JS site can mount only JSON routes and retain its current entry page and user database; a standard-library HTTP host can use `LoginUI` for rendering without installing FastAPI.
 
-## Managed Users (0.2.0 target)
+## Managed Users (0.2.0)
 
 For an application-owned owner/admin/user directory, login, profile, and user management, new consumers explicitly adopt `ChatLogin>=0.2.0,<0.3.0` with `ManagedUsers` and `create_managed_auth`. An operator creates the first owner with `chatlogin users bootstrap USERNAME --instance NAME --password-env KEY`; KEY is an environment-variable name, never a password in argv. Bootstrap works only for an empty instance and has no migration, `--force`, or default production credential. See [Managed Users](docs/managed-users.en.md).
 
-Fixed accounts, synchronous/asynchronous callbacks, and the ChatVoice compatibility adapter retain their existing account-management boundary. A legacy ChatVoice consumer's `<0.2` dependency remains unaffected until it deliberately adopts the new preset. The ChatVoice legacy-schema managed integration is an unreleased preview; stable installation includes it only after a matching provider/consumer release. For this preview, use the reviewed paired candidate wheels.
+Fixed accounts, synchronous/asynchronous callbacks, and the ChatVoice compatibility adapter retain their existing account-management boundary. A legacy ChatVoice consumer's `<0.2` dependency remains unaffected until it deliberately adopts the `0.2` preset or the ChatVoice legacy-schema managed facade. The ChatVoice legacy-schema managed integration is provided by ChatLogin provider `0.2.0`; consumer adoption still depends on each consumer's own release and does not imply an existing ChatVoice consumer has published a matching version.
 
 ## Choose an Authentication Entry Point
 
@@ -107,4 +107,4 @@ A runnable FastAPI synthetic-account example is available in `examples/demo_fast
 
 ### Multiple Users and Data Isolation
 
-Authentication backends support multiple accounts with distinct stable `user_id` values. ChatLogin owns sessions; the host owns authorization for business resources. Installing login does not automatically isolate every business table. The development preview provides a real A/B read/write isolation lab; see the [demo guide](docs/demo.en.md#user-isolation).
+Authentication backends support multiple accounts with distinct stable `user_id` values. ChatLogin owns sessions; the host owns authorization for business resources. Installing login does not automatically isolate every business table. The packaged demo provides a real A/B read/write isolation lab; see the [demo guide](docs/demo.en.md#user-isolation).
