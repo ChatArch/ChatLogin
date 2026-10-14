@@ -309,6 +309,25 @@
   
   
     <li class="md-tabs__item">
+      <a href="../service-onboarding/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  新服务接入
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
       <a href="../chatvoice-managed/" class="md-tabs__link">
         
   
@@ -506,6 +525,28 @@
   
   
     <li class="md-nav__item">
+      <a href="../service-onboarding/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    新服务接入
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../chatvoice-managed/" class="md-nav__link">
         
   
@@ -546,10 +587,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" checked>
         
           
-          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
             
   
   
@@ -562,8 +603,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_7">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_8">
             <span class="md-nav__icon md-icon"></span>
             命令与接口
           </label>
@@ -829,6 +870,11 @@
 <td>托管用户预设</td>
 <td><code>0.2.0</code></td>
 <td><code>ManagedUsers</code>、每实例 owner/admin/user、默认登录/管理/本人资料 UI/API；需显式采用，不迁移旧账户库</td>
+</tr>
+<tr>
+<td>新服务发现与导航</td>
+<td><code>0.2.1</code></td>
+<td><code>GET {prefix}/api</code> 列出真实操作与能力；<code>AccountMenuUI</code> 复用角色入口，headless 不虚报页面；见<a href="../service-onboarding/">新服务接入</a></td>
 </tr>
 <tr>
 <td>ChatVoice legacy 托管 facade</td>
