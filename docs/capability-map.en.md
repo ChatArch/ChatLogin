@@ -1,5 +1,7 @@
 # Capability Map
 
+ChatLogin 0.2.1 adds truthful `GET {prefix}/api` discovery and `AccountMenuUI` role-aware host navigation; headless does not advertise pages. See [New Service Onboarding](service-onboarding.en.md).
+
 ## Implemented Capabilities
 
 | Capability | Status | Boundary |

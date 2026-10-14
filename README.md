@@ -59,7 +59,9 @@ chatlogin serve --host 127.0.0.1 --port 8765 --origin https://login.example.com
 
 核心包不要求网站采用包内页面。已有静态 HTML/原生 JS 的网站可以只挂载 JSON 路由，继续保留原登录入口和用户数据库；标准库 HTTP 宿主也可以只使用 `LoginUI` 渲染登录页。
 
-## 托管用户（0.2.0）
+## 托管用户（0.2.1）
+
+新服务可通过 `GET {prefix}/api` 发现真实注册路由，并把 `AccountMenuUI` 齿轮/链接菜单放进宿主页；完整 factory、`/admin` 前缀、headless 与自有模板示例见[新服务接入](docs/service-onboarding.md)。这不是跨服务 SSO。
 
 需要应用内 owner/admin/user、登录页、本人资料和用户管理时，新消费者显式采用 `ChatLogin>=0.2.0,<0.3.0`，并使用 `ManagedUsers` 与 `create_managed_auth`。第一个 owner 必须由操作员执行 `chatlogin users bootstrap USERNAME --instance NAME --password-env KEY` 创建；KEY 是环境变量名，绝不把密码放进 argv。它只允许空实例首次初始化，没有迁移、`--force` 或默认生产凭据。见[托管用户指南](docs/managed-users.md)。
 

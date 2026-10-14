@@ -67,6 +67,8 @@ This is an explicit application-account preset; it does not migrate fixed-accoun
 
 ## Embeddable Managed-user Plugin
 
+0.2.1: `FastAPIAuth` and `ManagedAuth` expose `api_discovery(request)`, `navigation_from_request(request)`, and `render_account_menu(request, ui=None)`; optional `chatlogin.account_ui.AccountMenuUI(mode="gear" | "links", template_dirs=None, template_name=..., renderer=None)` renders the fragment. Discover HTTP operations through `GET {prefix}/api`; see [New Service Onboarding](service-onboarding.en.md).
+
 `create_managed_auth(..., pages=True)` mounts default pages and APIs; `pages=False` mounts APIs only and preserves the host frontend. See [plugin integration](managed-users.md#plugin).
 
 ## Built-in Optional ChatVoice Backend

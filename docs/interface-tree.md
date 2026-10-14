@@ -67,6 +67,8 @@ chatlogin.managed_web
 
 ## 可内嵌托管用户插件
 
+0.2.1：`FastAPIAuth` 与 `ManagedAuth` 增加 `api_discovery(request)`、`navigation_from_request(request)`、`render_account_menu(request, ui=None)`；可选 UI 类 `chatlogin.account_ui.AccountMenuUI(mode="gear" | "links", template_dirs=None, template_name=..., renderer=None)`。HTTP 操作见 `GET {prefix}/api` 和[新服务接入](service-onboarding.md)。
+
 `create_managed_auth(..., pages=True)` 挂载默认页面与接口；`pages=False` 只挂载接口，保留宿主前端。详见[插件集成](managed-users.md#plugin)。
 
 ## 内建可选 ChatVoice 后端

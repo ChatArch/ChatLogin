@@ -1,5 +1,7 @@
 # Integration and Security Boundaries
 
+For the 0.2.1 read-only `GET {prefix}/api`, role-aware navigation, and composable menu, see [New Service Onboarding](service-onboarding.en.md). Discovery is not a session endpoint; retain the existing `GET /session` and CSRF/Origin contract.
+
 Start with the [complete quick integration](quickstart.md). To explore the components first, install `ChatLogin[demo]` and run `chatlogin serve`; see [Demo](demo.md).
 
 ## Choose an Integration Level

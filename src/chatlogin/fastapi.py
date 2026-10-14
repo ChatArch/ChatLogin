@@ -10,6 +10,7 @@ from ipaddress import IPv6Address
 from urllib.parse import urlsplit
 
 from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi.routing import APIRoute
 from fastapi.responses import HTMLResponse, JSONResponse, Response
 from starlette.concurrency import run_in_threadpool
 
@@ -20,7 +21,7 @@ from .sessions import SessionManager, StoreFull
 from .ui import LoginUI
 
 _COOKIE_RE = re.compile(r"^[A-Za-z0-9_][A-Za-z0-9_.-]{0,127}$")
-_ALLOWED_ASSETS = {"login.css": "text/css; charset=utf-8", "login.js": "application/javascript; charset=utf-8"}
+_ALLOWED_ASSETS = {"login.css": "text/css; charset=utf-8", "login.js": "application/javascript; charset=utf-8", "account-menu.css": "text/css; charset=utf-8"}
 
 
 @dataclass(frozen=True)
@@ -90,12 +91,49 @@ class FastAPIAuth:
         self._install_routes()
 
     def _install_routes(self) -> None:
+        self.router.add_api_route("/api", self.api_discovery, methods=["GET"])
         self.router.add_api_route("/session", self.session, methods=["GET"])
         self.router.add_api_route("/login", self.login, methods=["POST"])
         self.router.add_api_route("/logout", self.logout, methods=["POST"])
         if self.ui is not None:
             self.router.add_api_route("/", self.login_page, methods=["GET"], response_class=HTMLResponse)
             self.router.add_api_route("/assets/{name}", self.asset, methods=["GET"])
+
+    def _mount_prefix(self, request: Request) -> str:
+        root_path = request.scope.get("root_path", "")
+        return root_path.rstrip("/") + self.prefix
+
+    def _page_paths(self, request: Request) -> dict[str, str]:
+        return {"login": f"{self._mount_prefix(request)}/"} if self.ui is not None else {}
+
+    def _capabilities(self) -> dict[str, bool]:
+        return {"login": True, "managed_users": False, "profile": False}
+
+    async def api_discovery(self, request: Request) -> JSONResponse:
+        self._check_host(request)
+        root_path = request.scope.get("root_path", "").rstrip("/")
+        operations = [
+            {"method": method, "path": root_path + route.path}
+            for route in self.router.routes if isinstance(route, APIRoute)
+            for method in sorted(route.methods or ())
+        ]
+        from . import __version__
+        return self._response({"version": __version__, "schema_version": 1, "operations": operations,
+                               "pages": self._page_paths(request), "capabilities": self._capabilities()})
+
+    async def navigation_from_request(self, request: Request) -> dict[str, object]:
+        self._check_host(request)
+        session = await _call(self.sessions.resolve, request.cookies.get(self.cookie.name))
+        principal = session.principal if session is not None else None
+        pages = self._page_paths(request)
+        links = [{"key": "login", "label": "Login", "url": pages["login"]}] if principal is None and "login" in pages else []
+        return {"identity": principal.display_name or principal.user_id if principal else "Guest",
+                "role": principal.role.value if principal else "guest", "links": links,
+                "assets_path": f"{self._mount_prefix(request)}/assets" if self.ui else ""}
+
+    async def render_account_menu(self, request: Request, *, ui=None) -> str:
+        from .account_ui import AccountMenuUI
+        return (ui if ui is not None else AccountMenuUI()).render(await self.navigation_from_request(request))
 
     def _check_host(self, request: Request) -> None:
         hosts = request.headers.getlist("host")

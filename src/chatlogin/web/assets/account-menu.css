@@ -1,0 +1,16 @@
+.chatlogin-account-menu { display: inline-flex; align-items: center; gap: .5em; font: inherit; max-inline-size: 100%; color: inherit; }
+.chatlogin-account-menu, .chatlogin-account-menu * { box-sizing: border-box; }
+.chatlogin-account-menu details { position: relative; }
+.chatlogin-account-menu summary { display: inline-flex; align-items: center; gap: .4em; cursor: pointer; list-style: none; padding: .55em .75em; border: 1px solid var(--cl-border, var(--_cl-border, #cbd5e1)); border-radius: .7em; font: inherit; font-weight: 600; color: inherit; background: transparent; }
+.chatlogin-account-menu summary::-webkit-details-marker { display: none; }
+.chatlogin-account-menu summary:focus-visible, .chatlogin-account-menu__link:focus-visible { outline: 3px solid var(--cl-ring, var(--_cl-ring, #a5b4fc)); outline-offset: 2px; }
+.chatlogin-account-menu details[open] { z-index: 20; }
+.chatlogin-account-menu__panel { position: absolute; inset-block-start: calc(100% + .4em); inset-inline-end: 0; display: flex; flex-direction: column; gap: .15em; inline-size: max-content; max-inline-size: min(18em, calc(100vw - 2rem)); min-inline-size: 9em; padding: .5em; text-align: start; border: 1px solid var(--cl-border, var(--_cl-border, #cbd5e1)); border-radius: .8em; background: var(--cl-card, var(--_cl-card, Canvas)); color: var(--cl-text, var(--_cl-text, CanvasText)); box-shadow: 0 8px 26px rgb(15 23 42 / 15%); }
+.chatlogin-account-menu__identity { display: block; overflow-wrap: anywhere; font-size: .9em; color: var(--cl-muted, var(--_cl-muted, #64748b)); padding: .4em .65em; }
+.chatlogin-account-menu .chatlogin-account-menu__link { display: block; padding: .55em .65em; margin: 0; border-radius: .45em; color: inherit; text-decoration: none; font: inherit; white-space: nowrap; }
+.chatlogin-account-menu .chatlogin-account-menu__link:hover { background: var(--cl-bg, var(--_cl-bg, #eef2ff)); }
+.chatlogin-account-menu--links { flex-wrap: wrap; }
+.chatlogin-account-menu--links .chatlogin-account-menu__identity { padding-inline: 0; }
+@media (max-width: 720px) {
+  .chatlogin-users__header .chatlogin-account-menu__panel { inset-inline-end: auto; inset-inline-start: 0; }
+}

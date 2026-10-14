@@ -21,9 +21,10 @@
           <p class="chatlogin__subtitle">{{ subtitle }}</p>
         </div>
         <div class="chatlogin-users__identity">
+          {{ account_menu | safe }}
           <p id="cl-profile-current-user" class="chatlogin-users__identity-name" aria-live="polite">{% if language == "en" %}Checking your session…{% else %}正在验证身份…{% endif %}</p>
           <nav aria-label="{% if language == "en" %}Account links{% else %}账号链接{% endif %}">
-            <a id="cl-profile-users-link" href="{{ users_url }}" hidden>{% if language == "en" %}User management{% else %}用户管理{% endif %}</a>
+            {% if not account_menu %}<a id="cl-profile-users-link" {% if account_menu_users %}href="{{ users_url }}"{% endif %} hidden>{% if language == "en" %}User management{% else %}用户管理{% endif %}</a>{% endif %}
             <button id="cl-logout" type="button">{% if language == "en" %}Sign out{% else %}退出登录{% endif %}</button>
           </nav>
         </div>

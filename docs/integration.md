@@ -1,5 +1,7 @@
 # 接入与安全边界
 
+0.2.1 的只读发现入口 `GET {prefix}/api`、角色感知导航和可组合菜单见[新服务接入](service-onboarding.md)。发现不是当前会话 API，仍使用现有 `GET /session` 与 CSRF/Origin 契约。
+
 先按 [完整快速接入](quickstart.md) 跑通一个应用；只想体验组件时安装 `ChatLogin[demo]` 并运行 `chatlogin serve`，参见 [演示站](demo.md)。
 
 ## 选择接入层级

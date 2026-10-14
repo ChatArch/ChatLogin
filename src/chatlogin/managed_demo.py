@@ -50,14 +50,9 @@ def _fixture_payload() -> list[dict[str, str]]:
     ]
 
 
-def _render_landing(*, root_path: str) -> str:
+def _render_landing(*, account_menu: str) -> str:
     template = (resources.files("chatlogin.demo_site") / "templates" / "managed.html").read_text(encoding="utf-8")
-    prefix = root_path.rstrip("/") + "/auth"
-    links = {
-        "LOGIN_URL": f"{prefix}/",
-        "USERS_URL": f"{prefix}/users",
-        "PROFILE_URL": f"{prefix}/profile",
-    }
+    links = {"ACCOUNT_MENU": account_menu}
     fixtures = "".join(
         "<tr id=\"managed-demo-{}\"><td>{}</td><td><code>{}</code></td><td><code>{}</code></td></tr>".format(
             escape(fixture.role),
@@ -150,17 +145,19 @@ def create_managed_demo_app(*, origin: str):
         result.headers["X-Content-Type-Options"] = "nosniff"
         return result
 
-    @app.get("/", response_class=HTMLResponse)
     async def landing(request: Request):
-        page = HTMLResponse(_render_landing(root_path=request.scope.get("root_path", "")))
+        page = HTMLResponse(_render_landing(account_menu=await auth.render_account_menu(request)))
         page.headers["Cache-Control"] = "no-store"
         page.headers["Pragma"] = "no-cache"
         page.headers["Content-Security-Policy"] = (
-            "default-src 'self'; style-src 'unsafe-inline'; base-uri 'none'; frame-ancestors 'none'"
+            "default-src 'self'; style-src 'self' 'unsafe-inline'; base-uri 'none'; frame-ancestors 'none'"
         )
         page.headers["X-Content-Type-Options"] = "nosniff"
         page.headers["Referrer-Policy"] = "no-referrer"
         return page
+
+    landing.__annotations__["request"] = Request
+    app.add_api_route("/", landing, methods=["GET"], response_class=HTMLResponse)
 
     @app.get("/health")
     async def health():
