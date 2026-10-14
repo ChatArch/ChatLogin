@@ -1,5 +1,11 @@
 # 更新日志
 
+## 0.2.1 — 2026-10-14
+
+- 新增 Host 校验、no-store 的 `GET {prefix}/api`，按真实路由和可信 ASGI mount 发现操作、页面和能力；headless 不声明页面。
+- 新增可组合 `AccountMenuUI` 齿轮/链接片段、scoped CSS 和角色感知导航；默认用户管理、本人资料和 managed demo 宿主页复用。
+- 新增无默认生产账号的新服务 factory 示例与中英文接入说明；保持既有请求、CSRF、Origin、角色和 URL 契约。
+
 ## 0.2.0 — 2026-10-11
 
 - 新增应用显式采用的 managed users 接入面：首个 owner 的环境变量 bootstrap、`ManagedUsers` / `create_managed_auth` 指引、owner/admin/user 角色矩阵，以及默认登录、用户管理和本人资料路由说明。

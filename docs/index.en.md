@@ -1,5 +1,7 @@
 # ChatLogin Documentation
 
+**0.2.1 new-service path:** [Complete factory, account discovery, and gear/links navigation](service-onboarding.en.md).
+
 ChatLogin makes the backend security contract for website login reusable in Python while leaving presentation under host control. Use the packaged page, override templates/CSS, or keep an existing HTML/vanilla-JS frontend and use the headless JSON API.
 
 Site entry: <https://arch.gh.wzhecnu.cn/ChatLogin/en/>

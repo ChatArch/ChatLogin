@@ -1,5 +1,7 @@
 # 快速接入自己的项目
 
+新服务需要统一账号发现与宿主页入口时，优先阅读[新服务接入](service-onboarding.md)：完整 factory、`/admin` 前缀、齿轮/链接菜单及 headless 接法。
+
 <div class="grid cards" markdown>
 
 - **新建 FastAPI 网站**：复制下方完整应用，先完成一次真实登录。

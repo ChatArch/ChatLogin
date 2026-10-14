@@ -1,5 +1,7 @@
 # ChatLogin 文档
 
+**0.2.1 新服务接入：**[查看完整 factory、账号发现和齿轮/链接菜单](service-onboarding.md)。
+
 ChatLogin 把网站登录中的**后端安全契约**做成可复用 Python 能力，同时把前端外观留给宿主网站：可以用包内默认登录页，也可以只覆盖模板/CSS，还可以完全保留宿主原生 HTML/JS，以 headless 方式调用 JSON 接口。
 
 站点入口：<https://arch.gh.wzhecnu.cn/ChatLogin/>

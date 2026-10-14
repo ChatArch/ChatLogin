@@ -155,6 +155,27 @@ class ManagedAuth(FastAPIAuth):
         self.router.add_api_route("/api/profile/password", self.change_profile_password_api, methods=["POST"])
         self.router.add_api_route("/api/owner/transfer", self.transfer_owner_api, methods=["POST"])
 
+    def _page_paths(self, request: Request) -> dict[str, str]:
+        pages = super()._page_paths(request)
+        if self.pages:
+            prefix = self._mount_prefix(request)
+            pages.update({"profile": f"{prefix}/profile", "users": f"{prefix}/users"})
+        return pages
+
+    def _capabilities(self) -> dict[str, bool]:
+        return {"login": True, "managed_users": True, "profile": True}
+
+    async def navigation_from_request(self, request: Request) -> dict[str, object]:
+        navigation = await super().navigation_from_request(request)
+        if navigation["role"] != "guest":
+            pages = self._page_paths(request)
+            links: Any = navigation["links"]
+            if "profile" in pages:
+                links.append({"key": "profile", "label": "My profile", "url": pages["profile"]})
+            if "users" in pages and navigation["role"] in {"admin", "owner"}:
+                links.append({"key": "users", "label": "Manage users", "url": pages["users"]})
+        return navigation
+
     async def asset(self, name: str) -> Response:
         content_type = _MANAGED_ASSETS.get(name)
         if content_type is None:
@@ -249,7 +270,11 @@ class ManagedAuth(FastAPIAuth):
             if exc.status_code == 401:
                 return self._login_redirect(request, "/users")
             raise
-        response = HTMLResponse(self.admin_ui.render(self._page_context(request)))
+        context = self._page_context(request)
+        from .account_ui import AccountMenuUI
+        context["account_menu"] = await self.render_account_menu(request, ui=AccountMenuUI(language=self.admin_ui.language))
+        context["account_menu_users"] = True
+        response = HTMLResponse(self.admin_ui.render(context))
         _private_html(response)
         return response
 
@@ -260,7 +285,12 @@ class ManagedAuth(FastAPIAuth):
             if exc.status_code == 401:
                 return self._login_redirect(request, "/profile")
             raise
-        response = HTMLResponse(self.profile_ui.render(self._page_context(request)))
+        context = self._page_context(request)
+        navigation = await self.navigation_from_request(request)
+        from .account_ui import AccountMenuUI
+        context["account_menu"] = AccountMenuUI(language=self.profile_ui.language).render(navigation)
+        context["account_menu_users"] = navigation["role"] in {"admin", "owner"}
+        response = HTMLResponse(self.profile_ui.render(context))
         _private_html(response)
         return response
 

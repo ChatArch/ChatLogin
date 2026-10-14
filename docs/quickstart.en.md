@@ -1,5 +1,7 @@
 # Integrate Your Own Project
 
+For discovery and host-page navigation, start with [New Service Onboarding](service-onboarding.en.md): a complete factory, `/admin` prefix, gear/links menu, and headless options.
+
 <div class="grid cards" markdown>
 
 - **New FastAPI host**: copy the complete application below and perform a real login.

@@ -6,6 +6,7 @@
 | --- | --- | --- |
 | 包内演示站 | 已实现（`demo` extra） | `chatlogin serve`、四类真实后端体验、模板游乐场与可复制接入示例；不连接生产数据 |
 | 托管用户预设 | `0.2.0` | `ManagedUsers`、每实例 owner/admin/user、默认登录/管理/本人资料 UI/API；需显式采用，不迁移旧账户库 |
+| 新服务发现与导航 | `0.2.1` | `GET {prefix}/api` 列出真实操作与能力；`AccountMenuUI` 复用角色入口，headless 不虚报页面；见[新服务接入](service-onboarding.md) |
 | ChatVoice legacy 托管 facade | `0.2.0` | 保留原 `accounts` / `auth_sessions` 的 additive 初始化、一次性 owner 采用、metadata-aware 账号匹配和 managed users CRUD；需消费方显式采用 |
 | 身份与授权 | 已实现 | `Principal`、`Role`、401/403、`require_role`、`require_owner`；admin 不自动绕过 owner |
 | 认证后端 | 已实现 | `PasswordBackend` 支持一个或多个显式账号；`CallbackBackend` 接入宿主用户库；`AsyncCallbackBackend` await 异步上游校验 |

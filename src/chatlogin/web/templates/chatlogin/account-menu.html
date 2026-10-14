@@ -1,0 +1,10 @@
+{% if assets_path %}<link rel="stylesheet" href="{{ assets_path }}/account-menu.css">{% endif %}
+<nav class="chatlogin-account-menu chatlogin-account-menu--{{ mode }}" aria-label="{{ settings_label }}">
+{% if mode == "gear" %}<details>
+  <summary aria-label="{{ settings_label }}" title="{{ settings_label }}"><span aria-hidden="true">⚙</span><span>{{ settings_label }}</span></summary>
+  <div class="chatlogin-account-menu__panel">
+{% endif %}
+  <span class="chatlogin-account-menu__identity">{{ identity }}</span>
+  {% for link in links %}<a class="chatlogin-account-menu__link" href="{{ link.url }}">{{ link.label }}</a>{% endfor %}
+{% if mode == "gear" %}</div></details>{% endif %}
+</nav>

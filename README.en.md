@@ -59,7 +59,9 @@ chatlogin serve --host 127.0.0.1 --port 8765 --origin https://login.example.com
 
 The core package does not require adopting the packaged page. An existing static HTML/vanilla-JS site can mount only JSON routes and retain its current entry page and user database; a standard-library HTTP host can use `LoginUI` for rendering without installing FastAPI.
 
-## Managed Users (0.2.0)
+## Managed Users (0.2.1)
+
+New services can discover registered routes through `GET {prefix}/api` and embed the `AccountMenuUI` gear/links fragment. See [New Service Onboarding](docs/service-onboarding.en.md) for a complete factory, `/admin` prefix, headless and host-template options. This is not cross-service SSO.
 
 For an application-owned owner/admin/user directory, login, profile, and user management, new consumers explicitly adopt `ChatLogin>=0.2.0,<0.3.0` with `ManagedUsers` and `create_managed_auth`. An operator creates the first owner with `chatlogin users bootstrap USERNAME --instance NAME --password-env KEY`; KEY is an environment-variable name, never a password in argv. Bootstrap works only for an empty instance and has no migration, `--force`, or default production credential. See [Managed Users](docs/managed-users.en.md).
 
