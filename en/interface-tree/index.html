@@ -307,6 +307,25 @@
   
   
     <li class="md-tabs__item">
+      <a href="../service-onboarding/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  New Service Onboarding
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
       <a href="../chatvoice-managed/" class="md-tabs__link">
         
   
@@ -504,6 +523,28 @@
   
   
     <li class="md-nav__item">
+      <a href="../service-onboarding/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    New Service Onboarding
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../chatvoice-managed/" class="md-nav__link">
         
   
@@ -544,10 +585,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" checked>
         
           
-          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
             
   
   
@@ -560,8 +601,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_7">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_8">
             <span class="md-nav__icon md-icon"></span>
             Commands and APIs
           </label>
@@ -993,6 +1034,7 @@
 </code></pre></div>
 <p>This is an explicit application-account preset; it does not migrate fixed-account, callback, or ChatVoice user stores. <code>in_memory</code> is demo/test-only and must close at shutdown; roles do not change the host meaning of <code>require_owner</code>. See <a href="../managed-users/">Managed Users</a> for routes and details.</p>
 <h2 id="embeddable-managed-user-plugin">Embeddable Managed-user Plugin<a class="headerlink" href="#embeddable-managed-user-plugin" title="Permanent link">&para;</a></h2>
+<p>0.2.1: <code>FastAPIAuth</code> and <code>ManagedAuth</code> expose <code>api_discovery(request)</code>, <code>navigation_from_request(request)</code>, and <code>render_account_menu(request, ui=None)</code>; optional <code>chatlogin.account_ui.AccountMenuUI(mode="gear" | "links", template_dirs=None, template_name=..., renderer=None)</code> renders the fragment. Discover HTTP operations through <code>GET {prefix}/api</code>; see <a href="../service-onboarding/">New Service Onboarding</a>.</p>
 <p><code>create_managed_auth(..., pages=True)</code> mounts default pages and APIs; <code>pages=False</code> mounts APIs only and preserves the host frontend. See <a href="../managed-users/#plugin">plugin integration</a>.</p>
 <h2 id="built-in-optional-chatvoice-backend">Built-in Optional ChatVoice Backend<a class="headerlink" href="#built-in-optional-chatvoice-backend" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>chatlogin.backends.chatvoice

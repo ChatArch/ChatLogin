@@ -307,6 +307,25 @@
   
   
     <li class="md-tabs__item">
+      <a href="../service-onboarding/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  新服务接入
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
       <a href="../chatvoice-managed/" class="md-tabs__link">
         
   
@@ -504,6 +523,28 @@
   
   
     <li class="md-nav__item">
+      <a href="../service-onboarding/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    新服务接入
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../chatvoice-managed/" class="md-nav__link">
         
   
@@ -544,10 +585,10 @@
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" checked>
         
           
-          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
             
   
   
@@ -560,8 +601,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
-          <label class="md-nav__title" for="__nav_7">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_8">
             <span class="md-nav__icon md-icon"></span>
             命令与接口
           </label>
@@ -993,6 +1034,7 @@
 </code></pre></div>
 <p>这是显式采用的应用账户预设，不迁移固定账号、回调或 ChatVoice 用户库。<code>in_memory</code> 仅用于演示/测试且必须在 shutdown 关闭；角色不改变宿主 <code>require_owner</code> 的业务语义。完整接口与路由见<a href="../managed-users/">托管用户</a>。</p>
 <h2 id="_2">可内嵌托管用户插件<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>0.2.1：<code>FastAPIAuth</code> 与 <code>ManagedAuth</code> 增加 <code>api_discovery(request)</code>、<code>navigation_from_request(request)</code>、<code>render_account_menu(request, ui=None)</code>；可选 UI 类 <code>chatlogin.account_ui.AccountMenuUI(mode="gear" | "links", template_dirs=None, template_name=..., renderer=None)</code>。HTTP 操作见 <code>GET {prefix}/api</code> 和<a href="../service-onboarding/">新服务接入</a>。</p>
 <p><code>create_managed_auth(..., pages=True)</code> 挂载默认页面与接口；<code>pages=False</code> 只挂载接口，保留宿主前端。详见<a href="../managed-users/#plugin">插件集成</a>。</p>
 <h2 id="chatvoice">内建可选 ChatVoice 后端<a class="headerlink" href="#chatvoice" title="Permanent link">&para;</a></h2>
 <div class="highlight"><pre><span></span><code><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a>chatlogin.backends.chatvoice
