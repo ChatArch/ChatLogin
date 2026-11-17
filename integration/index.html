@@ -330,6 +330,25 @@
   
   
     <li class="md-tabs__item">
+      <a href="../frontend/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  TypeScript 与 React 前端
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
       <a href="../chatvoice-managed/" class="md-tabs__link">
         
   
@@ -685,6 +704,28 @@
   
   
     <li class="md-nav__item">
+      <a href="../frontend/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    TypeScript 与 React 前端
+    
+  </span>
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../chatvoice-managed/" class="md-nav__link">
         
   
@@ -722,10 +763,10 @@
         
           
         
-        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_8" >
+        <input class="md-nav__toggle md-toggle md-toggle--indeterminate" type="checkbox" id="__nav_9" >
         
           
-          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
             
   
   
@@ -738,8 +779,8 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
-          <label class="md-nav__title" for="__nav_8">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
             <span class="md-nav__icon md-icon"></span>
             命令与接口
           </label>
@@ -1085,6 +1126,7 @@
 </code></pre></div>
 <p>通用 HTTP adapter 保留原 JSON 字段与 Origin/Host、cookie、CSRF、限流策略，不自动变成 ChatVoice HTTP 接口。保留旧 HTTP 时，宿主继续负责 cookie 与响应映射、Origin/CSRF 检查、账户创建和所有业务 owner/policy；<code>resolve_row</code> 的 <code>_chatlogin_session</code> 供服务端 CSRF 校验，不能整行序列化或记录敏感字段。</p>
 <p>如果不使用 FastAPI，只安装 <code>ChatLogin[ui]</code> 并调用 <code>LoginUI.render()</code>；此模式只负责模板渲染，安全 HTTP 行为仍由宿主实现。</p>
+<p>采用 Python 0.2.2 模板的标准库或自定义 HTTP 宿主，还须在同一 <code>assets_path</code> 下提供 <code>login.css</code>、<code>login.js</code>、<code>client.js</code>、<code>ui.js</code>（以及需要时的 <code>account-menu.css</code>），其中 JavaScript 使用正确的 MIME。<code>login.js</code> 现在是 ES module；自有整页 renderer 引用它时须使用 <code>&lt;script type="module" src="…/login.js"&gt;&lt;/script&gt;</code>，不能保留仅允许 CSS/旧脚本的静态资源白名单。FastAPIAuth 已自动注册这些资源，无需 Node 运行时。npm 对 Python 0.2.1/schema v1 的 JSON 兼容底线，与这次新 Python 模板资源的部署要求是两件事；使用旧模板或自有 headless 前端无需为 npm 客户端更换原页面。</p>
 <h2 id="browser-contract">浏览器 HTTP 契约<a class="headerlink" href="#browser-contract" title="Permanent link">&para;</a></h2>
 <p>默认前缀是 <code>/auth</code>，可显式改为 <code>/api/auth</code> 等固定本地前缀。</p>
 <table>
