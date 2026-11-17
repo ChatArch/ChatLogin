@@ -990,6 +990,7 @@
 <p>TypeScript 源码位于 <code>packages/chatlogin/src/</code>。构建将 <code>client.ts</code> 与共享 <code>ui.ts</code> 生成到 Python 的 <code>web/assets/client.js</code>、<code>ui.js</code>；默认 Python 登录页直接使用这些模块。React 组件和默认页因此共享 HTTP 客户端及文案规则，不各自维护一套登录请求实现。</p>
 <p>CSS 以 Python <code>src/chatlogin/web/assets/</code> 为单源，构建复制到 npm 的 <code>styles/</code>。保持相同的类名、主题变量与视觉选项；CSS 仅作用于组件或显式选择加入的独立页面，不重置嵌入应用的 body。</p>
 <p>修改协议或样式时，同步契约测试、文档和生成产物。使用包内 <code>npm run build</code> 生成、<code>npm run check:shared</code> 检查漂移，再运行客户端、React 与真实 Python ASGI 契约检查。Python 安装包携带已生成模块，服务启动无需 Node.js；npm 分发携带编译后的 ESM、类型和 CSS，基础消费者无需 React。</p>
+<p>ASGI 契约工具使用 TestClient，测试环境除 <code>ChatLogin[web]</code> 外须安装 <code>httpx&gt;=0.27,&lt;1.0</code>（开发用 <code>[dev]</code> 已包含）。它是测试传输依赖，不加入生产 <code>web</code> extra。</p>
 <h2 id="headlamp">Headlamp 为什么继续采用认证代理<a class="headerlink" href="#headlamp" title="Permanent link">&para;</a></h2>
 <p>Headlamp 支持 HTTP 认证代理。Python ChatLogin 可以提供同源登录页与会话校验，由受控代理向 Go Headlamp 传入已验证身份；两端不需要使用相同语言。后端监听、身份头覆盖和 Kubernetes ServiceAccount 权限仍由部署方管理。</p>
 <p>npm 包解决自有前端的复用问题，不会替第三方应用验证服务端请求，也不自动建立集中式身份服务、跨站共享 Cookie 或 SSO。无需为了安装 npm 包而修改 Headlamp 前端或重写 Node.js 认证服务。</p>
