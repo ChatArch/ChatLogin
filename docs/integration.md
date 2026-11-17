@@ -81,6 +81,8 @@ app.include_router(web.router)
 
 如果不使用 FastAPI，只安装 `ChatLogin[ui]` 并调用 `LoginUI.render()`；此模式只负责模板渲染，安全 HTTP 行为仍由宿主实现。
 
+采用本次未发布模板更新的标准库或自定义 HTTP 宿主，还须在同一 `assets_path` 下提供 `login.css`、`login.js`、`client.js`、`ui.js`（以及需要时的 `account-menu.css`），其中 JavaScript 使用正确的 MIME。`login.js` 现在是 ES module；自有整页 renderer 引用它时须使用 `<script type="module" src="…/login.js"></script>`，不能保留仅允许 CSS/旧脚本的静态资源白名单。FastAPIAuth 已自动注册这些资源，无需 Node 运行时。npm 对 Python 0.2.1/schema v1 的 JSON 兼容底线，与这次新 Python 模板资源的部署要求是两件事；使用旧模板或自有 headless 前端无需为 npm 客户端更换原页面。
+
 ## 浏览器 HTTP 契约 {#browser-contract}
 
 默认前缀是 `/auth`，可显式改为 `/api/auth` 等固定本地前缀。

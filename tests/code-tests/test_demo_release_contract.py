@@ -3,6 +3,8 @@ from fastapi.testclient import TestClient
 import pytest
 from chatlogin.demo import create_demo_app
 from chatlogin.ui import LoginUI
+from urllib.parse import urljoin
+import re
 
 
 def test_script_url_preserves_existing_positional_renderer_argument():
@@ -48,3 +50,17 @@ def test_template_destination_can_render_inside_own_demo_frame(path):
         assert response.status_code == 200
         assert "frame-ancestors 'self'" in response.headers['content-security-policy']
         assert 'target="_top"' in response.text
+
+
+@pytest.mark.parametrize('path', ['/demo/password/', '/demo/callback/', '/demo/chatvoice/', '/playground/preview'])
+def test_default_and_overridden_pages_load_the_shared_module_graph(path):
+    with TestClient(create_demo_app(origin='http://demo.test'), base_url='http://demo.test') as client:
+        page = client.get(path)
+        match = re.search(r'<script type="module" src="([^"]+/login\.js)"', page.text)
+        assert match, 'Default and custom renderers must load login.js as a module'
+        entry = match.group(1)
+        assert client.get(entry).status_code == 200
+        for name in ['client.js', 'ui.js']:
+            response = client.get(urljoin(entry, name))
+            assert response.status_code == 200
+            assert 'javascript' in response.headers['content-type']

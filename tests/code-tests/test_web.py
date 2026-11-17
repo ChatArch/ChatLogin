@@ -189,11 +189,15 @@ def test_default_palettes_layouts_scoped_css_and_html_escaping(web):
             assert 'script-src \'self\'' in result.headers["content-security-policy"]
     css = client.get("/api/auth/assets/login.css")
     script = client.get("/api/auth/assets/login.js")
-    assert css.status_code == script.status_code == 200
+    shared_client = client.get("/api/auth/assets/client.js")
+    shared_ui = client.get("/api/auth/assets/ui.js")
+    assert css.status_code == script.status_code == shared_client.status_code == shared_ui.status_code == 200
     assert ".chatlogin" in css.text and "--cl-" in css.text
     assert ":root" not in css.text and "@media" in css.text
     assert "localStorage" not in script.text
-    assert "textContent" in script.text and "credentials" in script.text
+    assert "textContent" in script.text and "createChatLoginClient" in script.text
+    assert "credentials: 'same-origin'" in shared_client.text
+    assert "localStorage" not in shared_client.text and "sessionStorage" not in shared_client.text
     assert client.get("/api/auth/assets/missing.js").status_code == 404
     with pytest.raises(ValueError):
         ui_module.LoginUI(palette="missing")

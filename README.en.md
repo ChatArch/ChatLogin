@@ -27,6 +27,7 @@ Documentation: <https://arch.gh.wzhecnu.cn/ChatLogin/en/>
 | Application-owned owner/admin/user directory | [Managed Users](docs/managed-users.en.md) |
 | Existing ChatVoice account database with management | [ChatVoice legacy schema integration](docs/chatvoice-managed.en.md) |
 | Default UI, overrides, and headless mode | [Capability Map](docs/capability-map.en.md) |
+| TypeScript client and optional React components | [Frontend Integration](docs/frontend.en.md) |
 | CLI version and command tree | `docs/cli-tree.en.md` |
 
 ## Install
@@ -60,6 +61,8 @@ chatlogin serve --host 127.0.0.1 --port 8765 --origin https://login.example.com
 The core package does not require adopting the packaged page. An existing static HTML/vanilla-JS site can mount only JSON routes and retain its current entry page and user database; a standard-library HTTP host can use `LoginUI` for rendering without installing FastAPI.
 
 ## Managed Users (0.2.1)
+
+Custom JS/TS frontends can use the source package [`@chatarch/chatlogin`](packages/chatlogin/README.md): a framework-neutral discovery/session/login/logout/CSRF client with an optional React entry. The Python page and npm share client code and styles; Python remains responsible for authentication and authorization. Registry publishing is a separate npm release step, not an automatic part of this source change. Go applications such as Headlamp can still use a Python HTTP authentication proxy without a language match. See [Frontend Integration](docs/frontend.en.md).
 
 New services can discover registered routes through `GET {prefix}/api` and embed the `AccountMenuUI` gear/links fragment. See [New Service Onboarding](docs/service-onboarding.en.md) for a complete factory, `/admin` prefix, headless and host-template options. This is not cross-service SSO.
 

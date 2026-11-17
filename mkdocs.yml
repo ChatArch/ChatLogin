@@ -44,6 +44,7 @@ plugins:
             演示站与快速开始: Demo and Quick Start
             托管用户: Managed Users
             新服务接入: New Service Onboarding
+            TypeScript 与 React 前端: TypeScript and React Frontends
             ChatVoice legacy schema 集成: ChatVoice Legacy Schema Integration
 markdown_extensions:
   - admonition
@@ -73,6 +74,7 @@ nav:
   - 接入与安全: integration.md
   - 托管用户: managed-users.md
   - 新服务接入: service-onboarding.md
+  - TypeScript 与 React 前端: frontend.md
   - ChatVoice legacy schema 集成: chatvoice-managed.md
   - 命令与接口:
       - CLI 树: cli-tree.md

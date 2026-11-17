@@ -8,3 +8,5 @@ site/
 .env
 .env.*
 .DS_Store
+node_modules/
+*.tgz

@@ -90,13 +90,15 @@ def load_page(page, ui, *, status=401, network=False, preflight_status=200):
             request.fulfill(body=(ASSETS / name).read_text(), content_type="text/css" if name.endswith("css") else "application/javascript")
         elif path == "/auth/session":
             calls.append(("session", request.request))
-            request.fulfill(status=preflight_status, json={"authenticated": True, "csrf_token": "synthetic-csrf"})
+            request.fulfill(status=preflight_status, json={"authenticated": True, "csrf_token": "synthetic-csrf",
+                                                        "user": {"user_id": "synthetic-user", "display_name": "Synthetic", "role": "user"}})
         elif path == "/auth/login":
             calls.append(("login", request.request))
             if network:
                 request.abort()
             else:
-                request.fulfill(status=status, json={"next": "/private"})
+                request.fulfill(status=status, json={"next": "/private", "authenticated": True, "csrf_token": "synthetic-csrf",
+                                                   "user": {"user_id": "synthetic-user", "display_name": "Synthetic", "role": "user"}})
         elif path == "/host.css":
             request.fulfill(body="body { --cl-accent: rgb(17, 34, 51); }", content_type="text/css")
         else:

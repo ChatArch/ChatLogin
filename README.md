@@ -27,6 +27,7 @@ ChatLogin 是面向应用的可内嵌认证插件／集成组件，而不是独�
 | 应用自管 owner/admin/user | [托管用户](docs/managed-users.md) |
 | 既有 ChatVoice 账号库接入管理 | [ChatVoice legacy schema 集成](docs/chatvoice-managed.md) |
 | 默认 UI、模板覆盖与 headless | [能力地图](docs/capability-map.md) |
+| TypeScript 客户端与可选 React 组件 | [前端接入](docs/frontend.md) |
 | CLI 版本和命令树 | [CLI 树](docs/cli-tree.md) |
 
 ## 安装
@@ -60,6 +61,8 @@ chatlogin serve --host 127.0.0.1 --port 8765 --origin https://login.example.com
 核心包不要求网站采用包内页面。已有静态 HTML/原生 JS 的网站可以只挂载 JSON 路由，继续保留原登录入口和用户数据库；标准库 HTTP 宿主也可以只使用 `LoginUI` 渲染登录页。
 
 ## 托管用户（0.2.1）
+
+自有 JS/TS 前端可使用源码包 [`@chatarch/chatlogin`](packages/chatlogin/README.md)：无框架客户端覆盖发现、会话、登录、退出与 CSRF 请求，React 组件通过可选子入口复用。默认 Python 页与 npm 共用客户端和样式；Python 继续负责认证与授权。包的 registry 发布按独立 npm 流程进行，本变更不自动发布。Headlamp 等 Go 应用仍可通过 Python HTTP 认证代理接入，不要求双方使用同一种语言。见[前端接入](docs/frontend.md)。
 
 新服务可通过 `GET {prefix}/api` 发现真实注册路由，并把 `AccountMenuUI` 齿轮/链接菜单放进宿主页；完整 factory、`/admin` 前缀、headless 与自有模板示例见[新服务接入](docs/service-onboarding.md)。这不是跨服务 SSO。
 

@@ -21,7 +21,12 @@ from .sessions import SessionManager, StoreFull
 from .ui import LoginUI
 
 _COOKIE_RE = re.compile(r"^[A-Za-z0-9_][A-Za-z0-9_.-]{0,127}$")
-_ALLOWED_ASSETS = {"login.css": "text/css; charset=utf-8", "login.js": "application/javascript; charset=utf-8", "account-menu.css": "text/css; charset=utf-8"}
+_ALLOWED_ASSETS = {
+    "login.css": "text/css; charset=utf-8", "account-menu.css": "text/css; charset=utf-8",
+    "login.js": "application/javascript; charset=utf-8",
+    # Generated from packages/chatlogin/src; Python wheels need no Node runtime.
+    "client.js": "application/javascript; charset=utf-8", "ui.js": "application/javascript; charset=utf-8",
+}
 
 
 @dataclass(frozen=True)

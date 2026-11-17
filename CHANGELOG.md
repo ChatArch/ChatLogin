@@ -1,5 +1,13 @@
 # 更新日志
 
+## 未发布
+
+- 新增源码 npm 包 `@chatarch/chatlogin`（0.1.0）：无运行时依赖的同源 TypeScript 客户端，覆盖 schema v1 发现、会话、登录、退出和 fresh-CSRF 请求；可选 React 18/19 子入口提供登录与账号菜单。
+- Python 默认登录页复用同一 TypeScript 客户端生成的浏览器模块；CSS 保持 Python 资源单源，同步到 npm 包，并增加漂移检查、真实 ASGI fixtures、干净 tarball 消费者及独立前端 CI。
+- 默认 `login.js` 改为 ES module；FastAPI 与包内整页示例已同步。自定义 HTTP/标准库宿主采用新模板时须同源提供 `client.js`、`ui.js` 并使用 module script；此模板迁移要求独立于 npm 对已发布 Python 0.2.1 JSON/schema v1 的兼容。
+- 登录/退出在同一客户端实例串行，避免在途登录晚于退出恢复 Cookie；固定账号、托管角色和 headless 能力分别呈现。Python 的密码、会话、权限边界与 CLI 保持不变，不引入跨站 SSO、共享 Cookie 或 Node 认证后端。
+- 增加中英文前端接入文档与无框架/React 示例；npm 发布须另行走组织的发布流程，此变更不执行 registry 发布。
+
 ## 0.2.1 — 2026-10-14
 
 - 新增 Host 校验、no-store 的 `GET {prefix}/api`，按真实路由和可信 ASGI mount 发现操作、页面和能力；headless 不声明页面。
