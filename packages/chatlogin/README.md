@@ -71,7 +71,7 @@ Python 的已构建 wheel 包含生成的浏览器资源，生产安装不需要
 cd packages/chatlogin
 npm ci --ignore-scripts
 npm run build
-python scripts/http_contract.py --check # use a Python env with ChatLogin[web]
+python scripts/http_contract.py --check # Python test env: ChatLogin[web] + httpx
 npm run check:shared
 npm test
 npm run typecheck

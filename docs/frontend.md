@@ -85,6 +85,8 @@ CSS 以 Python `src/chatlogin/web/assets/` 为单源，构建复制到 npm 的 `
 
 修改协议或样式时，同步契约测试、文档和生成产物。使用包内 `npm run build` 生成、`npm run check:shared` 检查漂移，再运行客户端、React 与真实 Python ASGI 契约检查。Python 安装包携带已生成模块，服务启动无需 Node.js；npm 分发携带编译后的 ESM、类型和 CSS，基础消费者无需 React。
 
+ASGI 契约工具使用 TestClient，测试环境除 `ChatLogin[web]` 外须安装 `httpx>=0.27,<1.0`（开发用 `[dev]` 已包含）。它是测试传输依赖，不加入生产 `web` extra。
+
 ## Headlamp 为什么继续采用认证代理
 
 Headlamp 支持 HTTP 认证代理。Python ChatLogin 可以提供同源登录页与会话校验，由受控代理向 Go Headlamp 传入已验证身份；两端不需要使用相同语言。后端监听、身份头覆盖和 Kubernetes ServiceAccount 权限仍由部署方管理。

@@ -85,6 +85,8 @@ Python's `src/chatlogin/web/assets/` owns CSS. The build copies it into npm `sty
 
 When changing contracts or styles, update tests, documentation, and generated files together. Run package-local `npm run build`, `npm run check:shared`, client/React tests, and real Python ASGI contract checks. Python distributions include generated modules and need no Node.js at service startup. npm distributions contain compiled ESM, declarations, and CSS; base consumers do not need React.
 
+The ASGI contract tool uses TestClient. Its Python test environment needs `httpx>=0.27,<1.0` alongside `ChatLogin[web]` (`[dev]` already includes it). HTTPX is a test transport, not an added production `web` dependency.
+
 ## Why Headlamp still uses an authentication proxy
 
 Headlamp supports HTTP authentication proxies. Python ChatLogin can supply same-origin login and session checks while a controlled proxy passes verified identity to Go Headlamp. Authentication and application components do not need the same implementation language. The deployment still owns backend binding, identity-header replacement, and Kubernetes ServiceAccount permissions.
