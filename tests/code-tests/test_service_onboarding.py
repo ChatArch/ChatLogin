@@ -23,7 +23,7 @@ def test_base_discovery_is_truthful_and_host_checked():
         assert response.status_code == 200
         assert response.headers["cache-control"] == "no-store"
         manifest = response.json()
-        assert manifest["version"] == "0.2.1"
+        assert manifest["version"] == "0.2.2"
         assert manifest["capabilities"]["managed_users"] is False
         assert manifest["pages"] == {}
         assert {("GET", "/admin/session"), ("POST", "/admin/login"), ("POST", "/admin/logout")} <= {

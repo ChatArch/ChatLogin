@@ -2,7 +2,7 @@
 
 ChatLogin 的同源浏览器客户端，以及可选 React 登录和账号菜单。Python provider 继续校验密码、管理账号和会话、检查 CSRF 与权限；此包不提供认证后端或跨站 SSO。
 
-源码包版本 `0.1.0`，使用 Python ChatLogin `0.2.1` 引入的 HTTP schema v1。npm 与 Python 独立版本；此源码变更不自动发布 registry，首次发布前可按下面的打包流程安装本地 `.tgz`。
+源码包版本 `0.1.0`，使用 Python ChatLogin `0.2.1` 引入的 HTTP schema v1。npm 与 Python 独立版本；Python 默认页面资源从 0.2.2 起共用该实现。npm 通过独立 `npm-v<version>` 标签发布；正式首发完成前可按下面的打包流程安装本地 `.tgz`。
 
 ## 基础客户端
 
@@ -79,3 +79,7 @@ npm run pack:check
 ```
 
 `pack:check` 检查 tarball 白名单，在无 React 的干净消费者中安装并导入基础包、编译其公开类型。它不调用 publish。更多说明见仓库 [frontend.md](https://github.com/ChatArch/ChatLogin/blob/main/docs/frontend.md)，接入示例见 [examples/](https://github.com/ChatArch/ChatLogin/tree/main/examples/frontend)。Headlamp 等 Go 服务仍通过 HTTP 认证代理保护；npm 包用于自有 JS/TS 界面复用，无法替代服务器密码与权限校验。
+
+## 发布维护
+
+Python 和 npm 分别使用 `v<python-version>` 与 `npm-v<npm-version>`，标签须指向已合并的 `main` 提交。Python 沿用 `publish.yml` 的 PyPI Trusted Publisher；npm 的 Trusted Publisher 绑定 `ChatArch/ChatLogin`、工作流 `publish-npm.yml`，在 GitHub-hosted runner 通过 OIDC/provenance 发布，不读取长期 `NPM_TOKEN`。首次 npm 项目需先按 npm 官方流程完成组织身份和首发，再配置该信任关系；workflow 文件本身不构成 registry 授权。

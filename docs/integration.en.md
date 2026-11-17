@@ -82,7 +82,7 @@ The generic HTTP adapter keeps its existing JSON fields, Origin/Host, cookie, CS
 
 Without FastAPI, install `ChatLogin[ui]` and call `LoginUI.render()`. That mode only renders templates; secure HTTP behavior remains the host's responsibility.
 
-Standard-library or custom HTTP hosts adopting this unreleased template update must also serve `login.css`, `login.js`, `client.js`, and `ui.js` under the same `assets_path` (plus `account-menu.css` when used), with JavaScript MIME types. `login.js` is now an ES module: a whole-page renderer must use `<script type="module" src="…/login.js"></script>` and expand any CSS/old-script-only asset allowlist. FastAPIAuth already registers these assets; no Node runtime is needed. The npm client's Python 0.2.1/schema-v1 JSON compatibility floor is separate from deployment of the new Python template assets. Older templates or host-owned headless frontends need not change just to use the npm client.
+Standard-library or custom HTTP hosts adopting the Python 0.2.2 template must also serve `login.css`, `login.js`, `client.js`, and `ui.js` under the same `assets_path` (plus `account-menu.css` when used), with JavaScript MIME types. `login.js` is now an ES module: a whole-page renderer must use `<script type="module" src="…/login.js"></script>` and expand any CSS/old-script-only asset allowlist. FastAPIAuth already registers these assets; no Node runtime is needed. The npm client's Python 0.2.1/schema-v1 JSON compatibility floor is separate from deployment of the new Python template assets. Older templates or host-owned headless frontends need not change just to use the npm client.
 
 ## Browser HTTP Contract {#browser-contract}
 

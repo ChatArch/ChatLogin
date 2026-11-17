@@ -1,8 +1,8 @@
 {
-  "provider_version": "0.2.1",
+  "provider_version": "0.2.2",
   "fixed": {
     "discovery": {
-      "version": "0.2.1",
+      "version": "0.2.2",
       "schema_version": 1,
       "operations": [
         {
@@ -74,7 +74,7 @@
   },
   "managed": {
     "discovery": {
-      "version": "0.2.1",
+      "version": "0.2.2",
       "schema_version": 1,
       "operations": [
         {
@@ -182,7 +182,7 @@
       }
     },
     "headless_discovery": {
-      "version": "0.2.1",
+      "version": "0.2.2",
       "schema_version": 1,
       "operations": [
         {
