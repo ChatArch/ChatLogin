@@ -6,7 +6,7 @@
   <title>{{ title }}</title>
   <link rel="stylesheet" href="{{ assets_path }}/login.css">
   {% if stylesheet_url %}<link rel="stylesheet" href="{{ stylesheet_url }}">{% endif %}
-  <script defer src="{{ assets_path }}/login.js"></script>
+  <script type="module" src="{{ assets_path }}/login.js"></script>
   {% if script_url %}<script defer src="{{ script_url }}"></script>{% endif %}
 </head>
 <body class="chatlogin-page">

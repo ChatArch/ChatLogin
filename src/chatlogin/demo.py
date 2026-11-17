@@ -150,7 +150,7 @@ def _host_override(context: dict) -> str:
 <link rel="stylesheet" href="{escape(str(context['assets_path']))}/login.css">
 <link rel="stylesheet" href="/assets/demo.css">
 <link rel="stylesheet" href="/assets/demo-login.css">
-<script defer src="{escape(str(context['assets_path']))}/login.js"></script>
+<script type="module" src="{escape(str(context['assets_path']))}/login.js"></script>
 <script defer src="/assets/demo-login.js"></script></head>
 <body class="host-override"><main class="chatlogin host-login" data-palette="forest" data-layout="card"
  data-appearance="light" data-login-url="{escape(str(context['login_url']))}"

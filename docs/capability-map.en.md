@@ -8,6 +8,7 @@ ChatLogin 0.2.1 adds truthful `GET {prefix}/api` discovery and `AccountMenuUI` r
 | --- | --- | --- |
 | Packaged demo | Implemented (`demo` extra) | `chatlogin serve`, four backend experiences, a template playground, and copyable integration examples; no production data |
 | Managed-users preset | `0.2.0` | `ManagedUsers`, per-instance owner/admin/user, and default login/management/profile UI/API; explicit adoption only, with no old-store migration |
+| npm frontend reuse | Source package `@chatarch/chatlogin` 0.1.0 | Framework-neutral TypeScript client and optional React login/account menu; shared protocol/CSS, Python authentication authority; see [Frontend Integration](frontend.en.md); registry release is separate |
 | ChatVoice legacy managed facade | `0.2.0` | Additive initialization over existing `accounts` / `auth_sessions`, one-time owner adoption, metadata-aware account matching, and managed-users CRUD; explicit consumer adoption required |
 | Identity and authorization | Implemented | `Principal`, `Role`, 401/403, `require_role`, and `require_owner`; admin does not bypass ownership |
 | Credential backends | Implemented | `PasswordBackend` supports one or more explicit accounts; `CallbackBackend` integrates host user stores; `AsyncCallbackBackend` awaits async upstream verification |

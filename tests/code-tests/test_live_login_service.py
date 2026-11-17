@@ -62,7 +62,8 @@ def test_real_tcp_login_service():
         assert page.status_code == 200
         assert 'class="chatlogin__form"' in page.text
         assert 'data-layout="split"' in page.text
-        for name, media in [("login.css", "text/css"), ("login.js", "javascript")]:
+        for name, media in [("login.css", "text/css"), ("login.js", "javascript"),
+                            ("client.js", "javascript"), ("ui.js", "javascript")]:
             asset = client.get("/auth/assets/" + name)
             assert asset.status_code == 200 and media in asset.headers["content-type"]
         body = {"username": "test-user", "password": "synthetic-test-password", "next": "/private"}

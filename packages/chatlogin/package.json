@@ -1,0 +1,39 @@
+{
+  "name": "@chatarch/chatlogin",
+  "version": "0.1.0",
+  "description": "Same-origin ChatLogin HTTP client with optional React login and account components",
+  "type": "module",
+  "license": "MIT",
+  "repository": {"type": "git", "url": "git+https://github.com/ChatArch/ChatLogin.git", "directory": "packages/chatlogin"},
+  "homepage": "https://github.com/ChatArch/ChatLogin/tree/main/packages/chatlogin",
+  "engines": {"node": ">=18"},
+  "exports": {
+    ".": {"types": "./dist/index.d.ts", "import": "./dist/index.js"},
+    "./react": {"types": "./dist/react.d.ts", "import": "./dist/react.js"},
+    "./styles/login.css": "./styles/login.css",
+    "./styles/account-menu.css": "./styles/account-menu.css",
+    "./package.json": "./package.json"
+  },
+  "types": "./dist/index.d.ts",
+  "files": ["dist", "styles", "README.md", "LICENSE"],
+  "sideEffects": ["./styles/*.css"],
+  "publishConfig": {"access": "public", "registry": "https://registry.npmjs.org/"},
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "check:shared": "node scripts/build.mjs --check",
+    "test": "npm run build && node --test --test-concurrency=1 tests/*.test.mjs",
+    "typecheck": "tsc --noEmit -p tests/tsconfig.json",
+    "pack:check": "node scripts/pack-check.mjs",
+    "prepack": "npm run build"
+  },
+  "peerDependencies": {"react": "^18.2.0 || ^19.0.0"},
+  "peerDependenciesMeta": {"react": {"optional": true}},
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "react-test-renderer": "19.3.1",
+    "typescript": "5.9.3"
+  }
+}

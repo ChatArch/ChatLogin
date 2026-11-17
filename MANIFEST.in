@@ -1,6 +1,12 @@
 include README.en.md CHANGELOG.md DEVELOP.md mkdocs.yml
 recursive-include tests *.py *.md
 recursive-include examples *.py
+recursive-include examples/frontend *.ts *.tsx *.md
+recursive-include packages/chatlogin/src *.ts *.tsx
+recursive-include packages/chatlogin/scripts *.mjs *.py
+recursive-include packages/chatlogin/tests *.mjs *.ts *.tsx *.json
+recursive-include packages/chatlogin/styles *.css
+include packages/chatlogin/package.json packages/chatlogin/package-lock.json packages/chatlogin/tsconfig.json packages/chatlogin/README.md packages/chatlogin/LICENSE
 recursive-include docs *.md
 recursive-include src/chatlogin/web *.html *.css *.js
 recursive-include src/chatlogin/demo_site *.html *.css *.js

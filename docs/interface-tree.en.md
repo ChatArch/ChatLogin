@@ -127,6 +127,9 @@ When `LoginUI` is provided, these routes are also registered:
 GET {prefix}/                  # packaged or host-overridden login page
 GET {prefix}/assets/login.css
 GET {prefix}/assets/login.js
+GET {prefix}/assets/client.js   # compiled TypeScript client shared by the default page
+GET {prefix}/assets/ui.js       # shared copy and visual options
+GET {prefix}/assets/account-menu.css
 ```
 
 Without `LoginUI`, no page or asset route is registered. This is the headless mode for hosts that keep their own HTML and JavaScript.

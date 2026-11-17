@@ -127,6 +127,9 @@ chatlogin.fastapi
 GET {prefix}/                  # 默认或宿主覆盖的登录页
 GET {prefix}/assets/login.css
 GET {prefix}/assets/login.js
+GET {prefix}/assets/client.js   # 默认页共用的 TypeScript 编译模块
+GET {prefix}/assets/ui.js       # 默认页与 React 共用文案/视觉选项
+GET {prefix}/assets/account-menu.css
 ```
 
 不传 `LoginUI` 时没有页面和静态资源，适合宿主保留原前端的 headless 接入。

@@ -20,6 +20,15 @@
 - Keep `README.md`, `docs/`, and `CHANGELOG.md` in sync with user-facing changes.
 - Keep managed-user CLI trees and bilingual `managed-users` guidance synchronized with actual registered commands and provider APIs.
 
+## Frontend Package
+
+- Keep the framework-neutral client under `packages/chatlogin/src/client.ts`; React stays in the optional `@chatarch/chatlogin/react` subpath. Never add frontend credential/session persistence or Node authentication policy.
+- Build with `cd packages/chatlogin && npm ci --ignore-scripts && npm run build`. Commit generated Python `web/assets/client.js` and `ui.js`; Python installation must not require Node.
+- Python `web/assets/login.css` and `account-menu.css` are the CSS source. Build copies them to npm `styles/`; do not edit the copies directly.
+- Verify `python packages/chatlogin/scripts/http_contract.py --check` in a Python environment with `ChatLogin[web]` plus the test transport `httpx>=0.27,<1.0`, then package-local `npm run check:shared`, `npm test`, `npm run typecheck`, and `npm run pack:check`. HTTPX is a test dependency, not a production web requirement.
+- When changing the HTTP contract, regenerate fixtures with `python packages/chatlogin/scripts/http_contract.py`, review the diff, and update docs and both frontends together. Same-origin Cookie/CSRF and server-side authorization remain authoritative.
+- Registry publishing is a distinct reviewed release. Do not equate a source commit, local tarball, or green package CI with an npm release.
+
 ## Automation
 
 - Keep automation small and reviewable.
